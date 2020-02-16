@@ -1,25 +1,12 @@
 {
-  "name": "telegram-api-js",
-  "version": "1.2.9",
+  "name": "telegram-mtproto-javascript",
+  "version": "1.0.0",
   "description": "JavaScript library for using Telegram API.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sunriselink/TelegramApi.git"
+    "url": "git+https://github.com/awibox/telegram-mtproto-javascript.git"
   },
-  "author": {
-    "name": "Infinnity Solutions",
-    "email": "info@infinnity.ru"
-  },
-  "contributors": [
-    {
-      "name": "Maxim Sadofyev",
-      "email": "m.sadofyev@infinnity.ru"
-    },
-    {
-      "name": "Dinara Zaripova",
-      "email": "d.zaripova@infinnity.ru"
-    }
-  ],
+  "author": "awibox",
   "license": "GPL-3.0",
   "keywords": [
     "telegram",
@@ -50,5 +37,14 @@
     "long": "3.2.0",
     "rusha": "0.8.4",
     "zlibjs": "0.2.0"
+  },
+  "bugs": {
+    "url": "https://github.com/awibox/telegram-mtproto-javascript/issues"
+  },
+  "homepage": "https://github.com/awibox/telegram-mtproto-javascript#readme",
+  "main": "dist/telegramApi.js",
+  "directories": {
+    "doc": "docs",
+    "example": "example"
   }
 }

@@ -1,5 +1,5 @@
 /**
- * telegram-api v1.2.9
+ * telegram-api v1.0.0
  * Infinnity Solutions
  */
 (function(){
@@ -56,10 +56,10 @@ d=(h[l++]|h[l++]<<8|h[l++]<<16|h[l++]<<24)>>>0;(a.length&4294967295)!==d&&n(Erro
 !function(r){if("object"==typeof exports)module.exports=r();else if("function"==typeof define&&define.amd)define(r);else{var e;"undefined"!=typeof window?e=window:"undefined"!=typeof global?e=global:"undefined"!=typeof self&&(e=self),e.ContainerModule=r()}}(function(){return function r(e,n,t){function i(s,u){if(!n[s]){if(!e[s]){var f="function"==typeof require&&require;if(!u&&f)return f(s,!0);if(o)return o(s,!0);throw new Error("Cannot find module '"+s+"'")}var R=n[s]={exports:{}};e[s][0].call(R.exports,function(r){var n=e[s][1][r];return i(n?n:r)},R,R.exports,r,e,n,t)}return n[s].exports}for(var o="function"==typeof require&&require,s=0;s<t.length;s++)i(t[s]);return i}({1:[function(r,e,n){e.exports=r("./lib/ioc")},{"./lib/ioc":2}],2:[function(r,e,n){function t(){this._modules={}}function i(r,e,n){if(!r.isReady()){if(e.indexOf(r._name)!==-1)throw new Error(s.format(u.ERROR_CIRCULAR_DEPENDENCY,[r._name]));var t=[];r._deps.forEach(function(o){var f=n[o];if(!s.isDefined(f))throw new Error(s.format(u.ERROR_MODULE_NOT_FOUND,[o]));f.isReady()||(e.push(r._name),i(f,e,n),e.pop()),t.push(f.getInstance())}),r.build(t)}}var o=r("./module"),s=r("./utils"),u=r("./strings");t.prototype.register=function(r,e,n){if(!s.isString(r))throw new Error(u.ERROR_MODULE_NAME_INCORRECT);if(s.isDefined(this._modules[r]))throw new Error(s.format(u.ERROR_MODULE_ALREADY_DEFINED,[r]));if(s.isFunction(e)&&(n=e,e=[]),!s.isArray(e)||!s.isFunction(n))throw new Error(u.ERROR_PARAMETERS_INCORRECT);return s.isArray(n.dependencies)&&(e=s.union(e,n.dependencies)),this._modules[r]=new o(r,e,n),this},t.prototype.resolve=function(r){if(!s.isDefined(this._modules[r]))throw new Error(s.format(u.ERROR_MODULE_NOT_FOUND,[r]));return this._modules[r].getInstance()},t.prototype.init=function(){for(var r in this._modules)this._modules.hasOwnProperty(r)&&i(this._modules[r],[],this._modules);return this},e.exports=t},{"./module":3,"./strings":4,"./utils":5}],3:[function(r,e,n){function t(r,e,n){this._name=r,this._deps=e,this._ctor=n}var i=r("./utils"),o=r("./strings");t.prototype.isReady=function(){return i.isDefined(this._instance)},t.prototype.build=function(r){if(this.isReady())throw new Error(i.format(o.ERROR_MODULE_ALREADY_INITIALIZED,[this._name]));if(this._instance=this._ctor.apply(null,r),!this.isReady())throw new Error(i.format(o.ERROR_MODULE_INITIALIZE,[this._name]))},t.prototype.getInstance=function(){if(!this.isReady())throw new Error(i.format(o.ERROR_MODULE_NOT_INITIALIZED,[this._name]));return this._instance},e.exports=t},{"./strings":4,"./utils":5}],4:[function(r,e,n){e.exports={ERROR_CIRCULAR_DEPENDENCY:"{0}: Circular dependency",ERROR_MODULE_ALREADY_DEFINED:"{0}: Module is already defined",ERROR_MODULE_ALREADY_INITIALIZED:"{0}: Module is already initialized",ERROR_MODULE_INITIALIZE:"{0}: Module return empty result",ERROR_MODULE_NAME_INCORRECT:"Incorrect module name",ERROR_MODULE_NOT_INITIALIZED:"{0}: Module is not initialized",ERROR_MODULE_NOT_FOUND:"{0}: Module not found",ERROR_PARAMETERS_INCORRECT:"Incorrect parameters"}},{}],5:[function(r,e,n){function t(r){return"string"==typeof r}function i(r){return"function"==typeof r}function o(r){return Array.isArray(r)}function s(r){return"undefined"!=typeof r}function u(r,e){return r.replace(/\{(\d+)}/g,function(r,n){return e[parseInt(n)]})}function f(){for(var r=Array.prototype.slice.call(arguments),e=r[0],n=1;n<r.length;n++){var t=r[n];for(var i in t)t.hasOwnProperty(i)&&s(t[i])&&(e[i]=t[i])}return e}function R(){for(var r=Array.prototype.slice.call(arguments),e=[],n=0;n<r.length;n++){var t=r[n];if(!o(t))throw new Error(u("Argument {0} is not array",[n+1]));for(var i=0;i<t.length;i++)e.push(t[i])}return e}n.isString=t,n.isFunction=i,n.isArray=o,n.isDefined=s,n.format=u,n.extend=f,n.union=R},{}]},{},[1])(1)});
 var CryptoJS=CryptoJS||function(a,b){var c={},d=c.lib={},e=d.Base=function(){function a(){}return{extend:function(b){a.prototype=this;var c=new a;return b&&c.mixIn(b),c.hasOwnProperty("init")||(c.init=function(){c.$super.init.apply(this,arguments)}),c.init.prototype=c,c.$super=this,c},create:function(){var a=this.extend();return a.init.apply(a,arguments),a},init:function(){},mixIn:function(a){for(var b in a)a.hasOwnProperty(b)&&(this[b]=a[b]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.init.prototype.extend(this)}}}(),f=d.WordArray=e.extend({init:function(a,c){a=this.words=a||[],c!=b?this.sigBytes=c:this.sigBytes=4*a.length},toString:function(a){return(a||h).stringify(this)},concat:function(a){var b=this.words,c=a.words,d=this.sigBytes,e=a.sigBytes;if(this.clamp(),d%4)for(var f=0;e>f;f++){var g=c[f>>>2]>>>24-f%4*8&255;b[d+f>>>2]|=g<<24-(d+f)%4*8}else if(c.length>65535)for(var f=0;e>f;f+=4)b[d+f>>>2]=c[f>>>2];else for(var f=0;f<c.length;f++)b.push(c[f]);return this.sigBytes+=e,this},clamp:function(){var b=this.words,c=this.sigBytes;b[c>>>2]&=4294967295<<32-c%4*8,b.length=a.ceil(c/4)},clone:function(){var a=e.clone.call(this);return a.words=this.words.slice(0),a},random:function(b){for(var c=[],d=0;b>d;d+=4)c.push(4294967296*a.random()|0);return new f.init(c,b)}}),g=c.enc={},h=g.Hex={stringify:function(a){for(var b=a.words,c=a.sigBytes,d=[],e=0;c>e;e++){var f=b[e>>>2]>>>24-e%4*8&255;d.push((f>>>4).toString(16)),d.push((15&f).toString(16))}return d.join("")},parse:function(a){for(var b=a.length,c=[],d=0;b>d;d+=2)c[d>>>3]|=parseInt(a.substr(d,2),16)<<24-d%8*4;return new f.init(c,b/2)}},i=g.Latin1={stringify:function(a){for(var b=a.words,c=a.sigBytes,d=[],e=0;c>e;e++){var f=b[e>>>2]>>>24-e%4*8&255;d.push(String.fromCharCode(f))}return d.join("")},parse:function(a){for(var b=a.length,c=[],d=0;b>d;d++)c[d>>>2]|=(255&a.charCodeAt(d))<<24-d%4*8;return new f.init(c,b)}},j=g.Utf8={stringify:function(a){try{return decodeURIComponent(escape(i.stringify(a)))}catch(b){throw new Error("Malformed UTF-8 data")}},parse:function(a){return i.parse(unescape(encodeURIComponent(a)))}},k=d.BufferedBlockAlgorithm=e.extend({reset:function(){this._data=new f.init,this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=j.parse(a)),this._data.concat(a),this._nDataBytes+=a.sigBytes},_process:function(b){var c=this._data,d=c.words,e=c.sigBytes,g=this.blockSize,h=4*g,i=e/h;i=b?a.ceil(i):a.max((0|i)-this._minBufferSize,0);var j=i*g,k=a.min(4*j,e);if(j){for(var l=0;j>l;l+=g)this._doProcessBlock(d,l);var m=d.splice(0,j);c.sigBytes-=k}return new f.init(m,k)},clone:function(){var a=e.clone.call(this);return a._data=this._data.clone(),a},_minBufferSize:0}),l=(d.Hasher=k.extend({cfg:e.extend(),init:function(a){this.cfg=this.cfg.extend(a),this.reset()},reset:function(){k.reset.call(this),this._doReset()},update:function(a){return this._append(a),this._process(),this},finalize:function(a){a&&this._append(a);var b=this._doFinalize();return b},blockSize:16,_createHelper:function(a){return function(b,c){return new a.init(c).finalize(b)}},_createHmacHelper:function(a){return function(b,c){return new l.HMAC.init(a,c).finalize(b)}}}),c.algo={});return c}(Math);CryptoJS.lib.Cipher||function(a){var b=CryptoJS,c=b.lib,d=c.Base,e=c.WordArray,f=c.BufferedBlockAlgorithm,g=b.enc,h=(g.Utf8,g.Base64),i=b.algo,j=i.EvpKDF,k=c.Cipher=f.extend({cfg:d.extend(),createEncryptor:function(a,b){return this.create(this._ENC_XFORM_MODE,a,b)},createDecryptor:function(a,b){return this.create(this._DEC_XFORM_MODE,a,b)},init:function(a,b,c){this.cfg=this.cfg.extend(c),this._xformMode=a,this._key=b,this.reset()},reset:function(){f.reset.call(this),this._doReset()},process:function(a){return this._append(a),this._process()},finalize:function(a){a&&this._append(a);var b=this._doFinalize();return b},keySize:4,ivSize:4,_ENC_XFORM_MODE:1,_DEC_XFORM_MODE:2,_createHelper:function(){function a(a){return"string"==typeof a?w:t}return function(b){return{encrypt:function(c,d,e){return a(d).encrypt(b,c,d,e)},decrypt:function(c,d,e){return a(d).decrypt(b,c,d,e)}}}}()}),l=(c.StreamCipher=k.extend({_doFinalize:function(){var a=this._process(!0);return a},blockSize:1}),b.mode={}),m=c.BlockCipherMode=d.extend({createEncryptor:function(a,b){return this.Encryptor.create(a,b)},createDecryptor:function(a,b){return this.Decryptor.create(a,b)},init:function(a,b){this._cipher=a,this._iv=b}}),n=l.CBC=function(){function b(b,c,d){var e=this._iv;if(e){var f=e;this._iv=a}else var f=this._prevBlock;for(var g=0;d>g;g++)b[c+g]^=f[g]}var c=m.extend();return c.Encryptor=c.extend({processBlock:function(a,c){var d=this._cipher,e=d.blockSize;b.call(this,a,c,e),d.encryptBlock(a,c),this._prevBlock=a.slice(c,c+e)}}),c.Decryptor=c.extend({processBlock:function(a,c){var d=this._cipher,e=d.blockSize,f=a.slice(c,c+e);d.decryptBlock(a,c),b.call(this,a,c,e),this._prevBlock=f}}),c}(),o=(l.IGE=function(){function b(a,b,c,d){for(var e=0;d>e;e++)a[c+e]^=b[e]}var c=m.extend();return c.Encryptor=c.extend({processBlock:function(c,d){var e=this._cipher,f=e.blockSize;this._ivp===a&&(this._ivp=this._iv.slice(0,f),this._iv2p=this._iv.slice(f,f+f));var g=c.slice(d,d+f);b(c,this._ivp,d,f),e.encryptBlock(c,d),b(c,this._iv2p,d,f),this._ivp=c.slice(d,d+f),this._iv2p=g}}),c.Decryptor=c.extend({processBlock:function(c,d){var e=this._cipher,f=e.blockSize;this._ivp===a&&(this._ivp=this._iv.slice(0,f),this._iv2p=this._iv.slice(f,2*f));var g=c.slice(d,d+f);b(c,this._iv2p,d,f),e.decryptBlock(c,d),b(c,this._ivp,d,f),this._ivp=g,this._iv2p=c.slice(d,d+f)}}),c}(),b.pad={}),p=o.Pkcs7={pad:function(a,b){for(var c=4*b,d=c-a.sigBytes%c,f=d<<24|d<<16|d<<8|d,g=[],h=0;d>h;h+=4)g.push(f);var i=e.create(g,d);a.concat(i)},unpad:function(a){var b=255&a.words[a.sigBytes-1>>>2];a.sigBytes-=b}},q=(o.NoPadding={pad:function(){},unpad:function(){}},c.BlockCipher=k.extend({cfg:k.cfg.extend({mode:n,padding:p}),reset:function(){k.reset.call(this);var a=this.cfg,b=a.iv,c=a.mode;if(this._xformMode==this._ENC_XFORM_MODE)var d=c.createEncryptor;else{var d=c.createDecryptor;this._minBufferSize=1}this._mode=d.call(c,this,b&&b.words)},_doProcessBlock:function(a,b){this._mode.processBlock(a,b)},_doFinalize:function(){var a=this.cfg.padding;if(this._xformMode==this._ENC_XFORM_MODE){a.pad(this._data,this.blockSize);var b=this._process(!0)}else{var b=this._process(!0);a.unpad(b)}return b},blockSize:4}),c.CipherParams=d.extend({init:function(a){this.mixIn(a)},toString:function(a){return(a||this.formatter).stringify(this)}})),r=b.format={},s=r.OpenSSL={stringify:function(a){var b=a.ciphertext,c=a.salt;if(c)var d=e.create([1398893684,1701076831]).concat(c).concat(b);else var d=b;return d.toString(h)},parse:function(a){var b=h.parse(a),c=b.words;if(1398893684==c[0]&&1701076831==c[1]){var d=e.create(c.slice(2,4));c.splice(0,4),b.sigBytes-=16}return q.create({ciphertext:b,salt:d})}},t=c.SerializableCipher=d.extend({cfg:d.extend({format:s}),encrypt:function(a,b,c,d){d=this.cfg.extend(d);var e=a.createEncryptor(c,d),f=e.finalize(b),g=e.cfg;return q.create({ciphertext:f,key:c,iv:g.iv,algorithm:a,mode:g.mode,padding:g.padding,blockSize:a.blockSize,formatter:d.format})},decrypt:function(a,b,c,d){d=this.cfg.extend(d),b=this._parse(b,d.format);var e=a.createDecryptor(c,d).finalize(b.ciphertext);return e},_parse:function(a,b){return"string"==typeof a?b.parse(a,this):a}}),u=b.kdf={},v=u.OpenSSL={execute:function(a,b,c,d){d||(d=e.random(8));var f=j.create({keySize:b+c}).compute(a,d),g=e.create(f.words.slice(b),4*c);return f.sigBytes=4*b,q.create({key:f,iv:g,salt:d})}},w=c.PasswordBasedCipher=t.extend({cfg:t.cfg.extend({kdf:v}),encrypt:function(a,b,c,d){d=this.cfg.extend(d);var e=d.kdf.execute(c,a.keySize,a.ivSize);d.iv=e.iv;var f=t.encrypt.call(this,a,b,e.key,d);return f.mixIn(e),f},decrypt:function(a,b,c,d){d=this.cfg.extend(d),b=this._parse(b,d.format);var e=d.kdf.execute(c,a.keySize,a.ivSize,b.salt);d.iv=e.iv;var f=t.decrypt.call(this,a,b,e.key,d);return f}})}(),function(){var a=CryptoJS,b=a.lib,c=b.BlockCipher,d=a.algo,e=[],f=[],g=[],h=[],i=[],j=[],k=[],l=[],m=[],n=[];!function(){for(var a=[],b=0;256>b;b++)128>b?a[b]=b<<1:a[b]=b<<1^283;for(var c=0,d=0,b=0;256>b;b++){var o=d^d<<1^d<<2^d<<3^d<<4;o=o>>>8^255&o^99,e[c]=o,f[o]=c;var p=a[c],q=a[p],r=a[q],s=257*a[o]^16843008*o;g[c]=s<<24|s>>>8,h[c]=s<<16|s>>>16,i[c]=s<<8|s>>>24,j[c]=s;var s=16843009*r^65537*q^257*p^16843008*c;k[o]=s<<24|s>>>8,l[o]=s<<16|s>>>16,m[o]=s<<8|s>>>24,n[o]=s,c?(c=p^a[a[a[r^p]]],d^=a[a[d]]):c=d=1}}();var o=[0,1,2,4,8,16,32,64,128,27,54],p=d.AES=c.extend({_doReset:function(){for(var a=this._key,b=a.words,c=a.sigBytes/4,d=this._nRounds=c+6,f=4*(d+1),g=this._keySchedule=[],h=0;f>h;h++)if(c>h)g[h]=b[h];else{var i=g[h-1];h%c?c>6&&h%c==4&&(i=e[i>>>24]<<24|e[i>>>16&255]<<16|e[i>>>8&255]<<8|e[255&i]):(i=i<<8|i>>>24,i=e[i>>>24]<<24|e[i>>>16&255]<<16|e[i>>>8&255]<<8|e[255&i],i^=o[h/c|0]<<24),g[h]=g[h-c]^i}for(var j=this._invKeySchedule=[],p=0;f>p;p++){var h=f-p;if(p%4)var i=g[h];else var i=g[h-4];4>p||4>=h?j[p]=i:j[p]=k[e[i>>>24]]^l[e[i>>>16&255]]^m[e[i>>>8&255]]^n[e[255&i]]}},encryptBlock:function(a,b){this._doCryptBlock(a,b,this._keySchedule,g,h,i,j,e)},decryptBlock:function(a,b){var c=a[b+1];a[b+1]=a[b+3],a[b+3]=c,this._doCryptBlock(a,b,this._invKeySchedule,k,l,m,n,f);var c=a[b+1];a[b+1]=a[b+3],a[b+3]=c},_doCryptBlock:function(a,b,c,d,e,f,g,h){for(var i=this._nRounds,j=a[b]^c[0],k=a[b+1]^c[1],l=a[b+2]^c[2],m=a[b+3]^c[3],n=4,o=1;i>o;o++){var p=d[j>>>24]^e[k>>>16&255]^f[l>>>8&255]^g[255&m]^c[n++],q=d[k>>>24]^e[l>>>16&255]^f[m>>>8&255]^g[255&j]^c[n++],r=d[l>>>24]^e[m>>>16&255]^f[j>>>8&255]^g[255&k]^c[n++],s=d[m>>>24]^e[j>>>16&255]^f[k>>>8&255]^g[255&l]^c[n++];j=p,k=q,l=r,m=s}var p=(h[j>>>24]<<24|h[k>>>16&255]<<16|h[l>>>8&255]<<8|h[255&m])^c[n++],q=(h[k>>>24]<<24|h[l>>>16&255]<<16|h[m>>>8&255]<<8|h[255&j])^c[n++],r=(h[l>>>24]<<24|h[m>>>16&255]<<16|h[j>>>8&255]<<8|h[255&k])^c[n++],s=(h[m>>>24]<<24|h[j>>>16&255]<<16|h[k>>>8&255]<<8|h[255&l])^c[n++];a[b]=p,a[b+1]=q,a[b+2]=r,a[b+3]=s},keySize:8});a.AES=c._createHelper(p)}(),function(a){var b=CryptoJS,c=b.lib,d=c.WordArray,e=c.Hasher,f=b.algo,g=[],h=[];!function(){function b(b){for(var c=a.sqrt(b),d=2;c>=d;d++)if(!(b%d))return!1;return!0}function c(a){return 4294967296*(a-(0|a))|0}for(var d=2,e=0;64>e;)b(d)&&(8>e&&(g[e]=c(a.pow(d,.5))),h[e]=c(a.pow(d,1/3)),e++),d++}();var i=[],j=f.SHA256=e.extend({_doReset:function(){this._hash=new d.init(g.slice(0))},_doProcessBlock:function(a,b){for(var c=this._hash.words,d=c[0],e=c[1],f=c[2],g=c[3],j=c[4],k=c[5],l=c[6],m=c[7],n=0;64>n;n++){if(16>n)i[n]=0|a[b+n];else{var o=i[n-15],p=(o<<25|o>>>7)^(o<<14|o>>>18)^o>>>3,q=i[n-2],r=(q<<15|q>>>17)^(q<<13|q>>>19)^q>>>10;i[n]=p+i[n-7]+r+i[n-16]}var s=j&k^~j&l,t=d&e^d&f^e&f,u=(d<<30|d>>>2)^(d<<19|d>>>13)^(d<<10|d>>>22),v=(j<<26|j>>>6)^(j<<21|j>>>11)^(j<<7|j>>>25),w=m+v+s+h[n]+i[n],x=u+t;m=l,l=k,k=j,j=g+w|0,g=f,f=e,e=d,d=w+x|0}c[0]=c[0]+d|0,c[1]=c[1]+e|0,c[2]=c[2]+f|0,c[3]=c[3]+g|0,c[4]=c[4]+j|0,c[5]=c[5]+k|0,c[6]=c[6]+l|0,c[7]=c[7]+m|0},_doFinalize:function(){var b=this._data,c=b.words,d=8*this._nDataBytes,e=8*b.sigBytes;return c[e>>>5]|=128<<24-e%32,c[(e+64>>>9<<4)+14]=a.floor(d/4294967296),c[(e+64>>>9<<4)+15]=d,b.sigBytes=4*c.length,this._process(),this._hash},clone:function(){var a=e.clone.call(this);return a._hash=this._hash.clone(),a}});b.SHA256=e._createHelper(j),b.HmacSHA256=e._createHmacHelper(j)}(Math);
 function BigInteger(a,b,c){null!=a&&("number"==typeof a?this.fromNumber(a,b,c):null==b&&"string"!=typeof a?this.fromString(a,256):this.fromString(a,b))}function nbi(){return new BigInteger(null)}function am1(a,b,c,d,e,f){for(;--f>=0;){var g=b*this[a++]+c[d]+e;e=Math.floor(g/67108864),c[d++]=67108863&g}return e}function am2(a,b,c,d,e,f){for(var g=32767&b,h=b>>15;--f>=0;){var i=32767&this[a],j=this[a++]>>15,k=h*i+j*g;i=g*i+((32767&k)<<15)+c[d]+(1073741823&e),e=(i>>>30)+(k>>>15)+h*j+(e>>>30),c[d++]=1073741823&i}return e}function am3(a,b,c,d,e,f){for(var g=16383&b,h=b>>14;--f>=0;){var i=16383&this[a],j=this[a++]>>14,k=h*i+j*g;i=g*i+((16383&k)<<14)+c[d]+e,e=(i>>28)+(k>>14)+h*j,c[d++]=268435455&i}return e}function int2char(a){return BI_RM.charAt(a)}function intAt(a,b){var c=BI_RC[a.charCodeAt(b)];return null==c?-1:c}function bnpCopyTo(a){for(var b=this.t-1;b>=0;--b)a[b]=this[b];a.t=this.t,a.s=this.s}function bnpFromInt(a){this.t=1,this.s=0>a?-1:0,a>0?this[0]=a:-1>a?this[0]=a+this.DV:this.t=0}function nbv(a){var b=nbi();return b.fromInt(a),b}function bnpFromString(a,b,c){var d;if(16==b)d=4;else if(8==b)d=3;else if(256==b)d=8;else if(2==b)d=1;else if(32==b)d=5;else{if(4!=b)return void this.fromRadix(a,b);d=2}this.t=0,this.s=0;for(var e=a.length,f=!1,g=0;--e>=0;){var h=8==d?255&a[e]:intAt(a,e);0>h?"-"==a.charAt(e)&&(f=!0):(f=!1,0==g?this[this.t++]=h:g+d>this.DB?(this[this.t-1]|=(h&(1<<this.DB-g)-1)<<g,this[this.t++]=h>>this.DB-g):this[this.t-1]|=h<<g,g+=d,g>=this.DB&&(g-=this.DB))}8==d&&0!=(128&a[0])&&c&&(this.s=-1,g>0&&(this[this.t-1]|=(1<<this.DB-g)-1<<g)),this.clamp(),f&&BigInteger.ZERO.subTo(this,this)}function bnpClamp(){for(var a=this.s&this.DM;this.t>0&&this[this.t-1]==a;)--this.t}function bnToString(a){if(this.s<0)return"-"+this.negate().toString(a);var b;if(16==a)b=4;else if(8==a)b=3;else if(2==a)b=1;else if(32==a)b=5;else{if(4!=a)return this.toRadix(a);b=2}var c,d=(1<<b)-1,e=!1,f="",g=this.t,h=this.DB-g*this.DB%b;if(g-- >0)for(h<this.DB&&(c=this[g]>>h)>0&&(e=!0,f=int2char(c));g>=0;)b>h?(c=(this[g]&(1<<h)-1)<<b-h,c|=this[--g]>>(h+=this.DB-b)):(c=this[g]>>(h-=b)&d,0>=h&&(h+=this.DB,--g)),c>0&&(e=!0),e&&(f+=int2char(c));return e?f:"0"}function bnNegate(){var a=nbi();return BigInteger.ZERO.subTo(this,a),a}function bnAbs(){return this.s<0?this.negate():this}function bnCompareTo(a){var b=this.s-a.s;if(0!=b)return b;var c=this.t;if(b=c-a.t,0!=b)return this.s<0?-b:b;for(;--c>=0;)if(0!=(b=this[c]-a[c]))return b;return 0}function nbits(a){var b,c=1;return 0!=(b=a>>>16)&&(a=b,c+=16),0!=(b=a>>8)&&(a=b,c+=8),0!=(b=a>>4)&&(a=b,c+=4),0!=(b=a>>2)&&(a=b,c+=2),0!=(b=a>>1)&&(a=b,c+=1),c}function bnBitLength(){return this.t<=0?0:this.DB*(this.t-1)+nbits(this[this.t-1]^this.s&this.DM)}function bnpDLShiftTo(a,b){var c;for(c=this.t-1;c>=0;--c)b[c+a]=this[c];for(c=a-1;c>=0;--c)b[c]=0;b.t=this.t+a,b.s=this.s}function bnpDRShiftTo(a,b){for(var c=a;c<this.t;++c)b[c-a]=this[c];b.t=Math.max(this.t-a,0),b.s=this.s}function bnpLShiftTo(a,b){var c,d=a%this.DB,e=this.DB-d,f=(1<<e)-1,g=Math.floor(a/this.DB),h=this.s<<d&this.DM;for(c=this.t-1;c>=0;--c)b[c+g+1]=this[c]>>e|h,h=(this[c]&f)<<d;for(c=g-1;c>=0;--c)b[c]=0;b[g]=h,b.t=this.t+g+1,b.s=this.s,b.clamp()}function bnpRShiftTo(a,b){b.s=this.s;var c=Math.floor(a/this.DB);if(c>=this.t)return void(b.t=0);var d=a%this.DB,e=this.DB-d,f=(1<<d)-1;b[0]=this[c]>>d;for(var g=c+1;g<this.t;++g)b[g-c-1]|=(this[g]&f)<<e,b[g-c]=this[g]>>d;d>0&&(b[this.t-c-1]|=(this.s&f)<<e),b.t=this.t-c,b.clamp()}function bnpSubTo(a,b){for(var c=0,d=0,e=Math.min(a.t,this.t);e>c;)d+=this[c]-a[c],b[c++]=d&this.DM,d>>=this.DB;if(a.t<this.t){for(d-=a.s;c<this.t;)d+=this[c],b[c++]=d&this.DM,d>>=this.DB;d+=this.s}else{for(d+=this.s;c<a.t;)d-=a[c],b[c++]=d&this.DM,d>>=this.DB;d-=a.s}b.s=0>d?-1:0,-1>d?b[c++]=this.DV+d:d>0&&(b[c++]=d),b.t=c,b.clamp()}function bnpMultiplyTo(a,b){var c=this.abs(),d=a.abs(),e=c.t;for(b.t=e+d.t;--e>=0;)b[e]=0;for(e=0;e<d.t;++e)b[e+c.t]=c.am(0,d[e],b,e,0,c.t);b.s=0,b.clamp(),this.s!=a.s&&BigInteger.ZERO.subTo(b,b)}function bnpSquareTo(a){for(var b=this.abs(),c=a.t=2*b.t;--c>=0;)a[c]=0;for(c=0;c<b.t-1;++c){var d=b.am(c,b[c],a,2*c,0,1);(a[c+b.t]+=b.am(c+1,2*b[c],a,2*c+1,d,b.t-c-1))>=b.DV&&(a[c+b.t]-=b.DV,a[c+b.t+1]=1)}a.t>0&&(a[a.t-1]+=b.am(c,b[c],a,2*c,0,1)),a.s=0,a.clamp()}function bnpDivRemTo(a,b,c){var d=a.abs();if(!(d.t<=0)){var e=this.abs();if(e.t<d.t)return null!=b&&b.fromInt(0),void(null!=c&&this.copyTo(c));null==c&&(c=nbi());var f=nbi(),g=this.s,h=a.s,i=this.DB-nbits(d[d.t-1]);i>0?(d.lShiftTo(i,f),e.lShiftTo(i,c)):(d.copyTo(f),e.copyTo(c));var j=f.t,k=f[j-1];if(0!=k){var l=k*(1<<this.F1)+(j>1?f[j-2]>>this.F2:0),m=this.FV/l,n=(1<<this.F1)/l,o=1<<this.F2,p=c.t,q=p-j,r=null==b?nbi():b;for(f.dlShiftTo(q,r),c.compareTo(r)>=0&&(c[c.t++]=1,c.subTo(r,c)),BigInteger.ONE.dlShiftTo(j,r),r.subTo(f,f);f.t<j;)f[f.t++]=0;for(;--q>=0;){var s=c[--p]==k?this.DM:Math.floor(c[p]*m+(c[p-1]+o)*n);if((c[p]+=f.am(0,s,c,q,0,j))<s)for(f.dlShiftTo(q,r),c.subTo(r,c);c[p]<--s;)c.subTo(r,c)}null!=b&&(c.drShiftTo(j,b),g!=h&&BigInteger.ZERO.subTo(b,b)),c.t=j,c.clamp(),i>0&&c.rShiftTo(i,c),0>g&&BigInteger.ZERO.subTo(c,c)}}}function bnMod(a){var b=nbi();return this.abs().divRemTo(a,null,b),this.s<0&&b.compareTo(BigInteger.ZERO)>0&&a.subTo(b,b),b}function Classic(a){this.m=a}function cConvert(a){return a.s<0||a.compareTo(this.m)>=0?a.mod(this.m):a}function cRevert(a){return a}function cReduce(a){a.divRemTo(this.m,null,a)}function cMulTo(a,b,c){a.multiplyTo(b,c),this.reduce(c)}function cSqrTo(a,b){a.squareTo(b),this.reduce(b)}function bnpInvDigit(){if(this.t<1)return 0;var a=this[0];if(0==(1&a))return 0;var b=3&a;return b=b*(2-(15&a)*b)&15,b=b*(2-(255&a)*b)&255,b=b*(2-((65535&a)*b&65535))&65535,b=b*(2-a*b%this.DV)%this.DV,b>0?this.DV-b:-b}function Montgomery(a){this.m=a,this.mp=a.invDigit(),this.mpl=32767&this.mp,this.mph=this.mp>>15,this.um=(1<<a.DB-15)-1,this.mt2=2*a.t}function montConvert(a){var b=nbi();return a.abs().dlShiftTo(this.m.t,b),b.divRemTo(this.m,null,b),a.s<0&&b.compareTo(BigInteger.ZERO)>0&&this.m.subTo(b,b),b}function montRevert(a){var b=nbi();return a.copyTo(b),this.reduce(b),b}function montReduce(a){for(;a.t<=this.mt2;)a[a.t++]=0;for(var b=0;b<this.m.t;++b){var c=32767&a[b],d=c*this.mpl+((c*this.mph+(a[b]>>15)*this.mpl&this.um)<<15)&a.DM;for(c=b+this.m.t,a[c]+=this.m.am(0,d,a,b,0,this.m.t);a[c]>=a.DV;)a[c]-=a.DV,a[++c]++}a.clamp(),a.drShiftTo(this.m.t,a),a.compareTo(this.m)>=0&&a.subTo(this.m,a)}function montSqrTo(a,b){a.squareTo(b),this.reduce(b)}function montMulTo(a,b,c){a.multiplyTo(b,c),this.reduce(c)}function bnpIsEven(){return 0==(this.t>0?1&this[0]:this.s)}function bnpExp(a,b){if(a>4294967295||1>a)return BigInteger.ONE;var c=nbi(),d=nbi(),e=b.convert(this),f=nbits(a)-1;for(e.copyTo(c);--f>=0;)if(b.sqrTo(c,d),(a&1<<f)>0)b.mulTo(d,e,c);else{var g=c;c=d,d=g}return b.revert(c)}function bnModPowInt(a,b){var c;return c=256>a||b.isEven()?new Classic(b):new Montgomery(b),this.exp(a,c)}function bnClone(){var a=nbi();return this.copyTo(a),a}function bnIntValue(){if(this.s<0){if(1==this.t)return this[0]-this.DV;if(0==this.t)return-1}else{if(1==this.t)return this[0];if(0==this.t)return 0}return(this[1]&(1<<32-this.DB)-1)<<this.DB|this[0]}function bnByteValue(){return 0==this.t?this.s:this[0]<<24>>24}function bnShortValue(){return 0==this.t?this.s:this[0]<<16>>16}function bnpChunkSize(a){return Math.floor(Math.LN2*this.DB/Math.log(a))}function bnSigNum(){return this.s<0?-1:this.t<=0||1==this.t&&this[0]<=0?0:1}function bnpToRadix(a){if(null==a&&(a=10),0==this.signum()||2>a||a>36)return"0";var b=this.chunkSize(a),c=Math.pow(a,b),d=nbv(c),e=nbi(),f=nbi(),g="";for(this.divRemTo(d,e,f);e.signum()>0;)g=(c+f.intValue()).toString(a).substr(1)+g,e.divRemTo(d,e,f);return f.intValue().toString(a)+g}function bnpFromRadix(a,b){this.fromInt(0),null==b&&(b=10);for(var c=this.chunkSize(b),d=Math.pow(b,c),e=!1,f=0,g=0,h=0;h<a.length;++h){var i=intAt(a,h);0>i?"-"==a.charAt(h)&&0==this.signum()&&(e=!0):(g=b*g+i,++f>=c&&(this.dMultiply(d),this.dAddOffset(g,0),f=0,g=0))}f>0&&(this.dMultiply(Math.pow(b,f)),this.dAddOffset(g,0)),e&&BigInteger.ZERO.subTo(this,this)}function bnpFromNumber(a,b,c){if("number"==typeof b)if(2>a)this.fromInt(1);else for(this.fromNumber(a,c),this.testBit(a-1)||this.bitwiseTo(BigInteger.ONE.shiftLeft(a-1),op_or,this),this.isEven()&&this.dAddOffset(1,0);!this.isProbablePrime(b);)this.dAddOffset(2,0),this.bitLength()>a&&this.subTo(BigInteger.ONE.shiftLeft(a-1),this);else{var d=new Array,e=7&a;d.length=(a>>3)+1,b.nextBytes(d),e>0?d[0]&=(1<<e)-1:d[0]=0,this.fromString(d,256)}}function bnToByteArray(a){var b=this.t,c=new Array;c[0]=this.s;var d,e=this.DB-b*this.DB%8,f=0;if(b-- >0)for(e<this.DB&&(d=this[b]>>e)!=(this.s&this.DM)>>e&&(c[f++]=d|this.s<<this.DB-e);b>=0;)8>e?(d=(this[b]&(1<<e)-1)<<8-e,d|=this[--b]>>(e+=this.DB-8)):(d=this[b]>>(e-=8)&255,0>=e&&(e+=this.DB,--b)),a&&0!=(128&d)&&(d|=-256),0==f&&(128&this.s)!=(128&d)&&++f,(f>0||d!=this.s)&&(c[f++]=d);return c}function bnEquals(a){return 0==this.compareTo(a)}function bnMin(a){return this.compareTo(a)<0?this:a}function bnMax(a){return this.compareTo(a)>0?this:a}function bnpBitwiseTo(a,b,c){var d,e,f=Math.min(a.t,this.t);for(d=0;f>d;++d)c[d]=b(this[d],a[d]);if(a.t<this.t){for(e=a.s&this.DM,d=f;d<this.t;++d)c[d]=b(this[d],e);c.t=this.t}else{for(e=this.s&this.DM,d=f;d<a.t;++d)c[d]=b(e,a[d]);c.t=a.t}c.s=b(this.s,a.s),c.clamp()}function op_and(a,b){return a&b}function bnAnd(a){var b=nbi();return this.bitwiseTo(a,op_and,b),b}function op_or(a,b){return a|b}function bnOr(a){var b=nbi();return this.bitwiseTo(a,op_or,b),b}function op_xor(a,b){return a^b}function bnXor(a){var b=nbi();return this.bitwiseTo(a,op_xor,b),b}function op_andnot(a,b){return a&~b}function bnAndNot(a){var b=nbi();return this.bitwiseTo(a,op_andnot,b),b}function bnNot(){for(var a=nbi(),b=0;b<this.t;++b)a[b]=this.DM&~this[b];return a.t=this.t,a.s=~this.s,a}function bnShiftLeft(a){var b=nbi();return 0>a?this.rShiftTo(-a,b):this.lShiftTo(a,b),b}function bnShiftRight(a){var b=nbi();return 0>a?this.lShiftTo(-a,b):this.rShiftTo(a,b),b}function lbit(a){if(0==a)return-1;var b=0;return 0==(65535&a)&&(a>>=16,b+=16),0==(255&a)&&(a>>=8,b+=8),0==(15&a)&&(a>>=4,b+=4),0==(3&a)&&(a>>=2,b+=2),0==(1&a)&&++b,b}function bnGetLowestSetBit(){for(var a=0;a<this.t;++a)if(0!=this[a])return a*this.DB+lbit(this[a]);return this.s<0?this.t*this.DB:-1}function cbit(a){for(var b=0;0!=a;)a&=a-1,++b;return b}function bnBitCount(){for(var a=0,b=this.s&this.DM,c=0;c<this.t;++c)a+=cbit(this[c]^b);return a}function bnTestBit(a){var b=Math.floor(a/this.DB);return b>=this.t?0!=this.s:0!=(this[b]&1<<a%this.DB)}function bnpChangeBit(a,b){var c=BigInteger.ONE.shiftLeft(a);return this.bitwiseTo(c,b,c),c}function bnSetBit(a){return this.changeBit(a,op_or)}function bnClearBit(a){return this.changeBit(a,op_andnot)}function bnFlipBit(a){return this.changeBit(a,op_xor)}function bnpAddTo(a,b){for(var c=0,d=0,e=Math.min(a.t,this.t);e>c;)d+=this[c]+a[c],b[c++]=d&this.DM,d>>=this.DB;if(a.t<this.t){for(d+=a.s;c<this.t;)d+=this[c],b[c++]=d&this.DM,d>>=this.DB;d+=this.s}else{for(d+=this.s;c<a.t;)d+=a[c],b[c++]=d&this.DM,d>>=this.DB;d+=a.s}b.s=0>d?-1:0,d>0?b[c++]=d:-1>d&&(b[c++]=this.DV+d),b.t=c,b.clamp()}function bnAdd(a){var b=nbi();return this.addTo(a,b),b}function bnSubtract(a){var b=nbi();return this.subTo(a,b),b}function bnMultiply(a){var b=nbi();return this.multiplyTo(a,b),b}function bnSquare(){var a=nbi();return this.squareTo(a),a}function bnDivide(a){var b=nbi();return this.divRemTo(a,b,null),b}function bnRemainder(a){var b=nbi();return this.divRemTo(a,null,b),b}function bnDivideAndRemainder(a){var b=nbi(),c=nbi();return this.divRemTo(a,b,c),new Array(b,c)}function bnpDMultiply(a){this[this.t]=this.am(0,a-1,this,0,0,this.t),++this.t,this.clamp()}function bnpDAddOffset(a,b){if(0!=a){for(;this.t<=b;)this[this.t++]=0;for(this[b]+=a;this[b]>=this.DV;)this[b]-=this.DV,++b>=this.t&&(this[this.t++]=0),++this[b]}}function NullExp(){}function nNop(a){return a}function nMulTo(a,b,c){a.multiplyTo(b,c)}function nSqrTo(a,b){a.squareTo(b)}function bnPow(a){return this.exp(a,new NullExp)}function bnpMultiplyLowerTo(a,b,c){var d=Math.min(this.t+a.t,b);for(c.s=0,c.t=d;d>0;)c[--d]=0;var e;for(e=c.t-this.t;e>d;++d)c[d+this.t]=this.am(0,a[d],c,d,0,this.t);for(e=Math.min(a.t,b);e>d;++d)this.am(0,a[d],c,d,0,b-d);c.clamp()}function bnpMultiplyUpperTo(a,b,c){--b;var d=c.t=this.t+a.t-b;for(c.s=0;--d>=0;)c[d]=0;for(d=Math.max(b-this.t,0);d<a.t;++d)c[this.t+d-b]=this.am(b-d,a[d],c,0,0,this.t+d-b);c.clamp(),c.drShiftTo(1,c)}function Barrett(a){this.r2=nbi(),this.q3=nbi(),BigInteger.ONE.dlShiftTo(2*a.t,this.r2),this.mu=this.r2.divide(a),this.m=a}function barrettConvert(a){if(a.s<0||a.t>2*this.m.t)return a.mod(this.m);if(a.compareTo(this.m)<0)return a;var b=nbi();return a.copyTo(b),this.reduce(b),b}function barrettRevert(a){return a}function barrettReduce(a){for(a.drShiftTo(this.m.t-1,this.r2),a.t>this.m.t+1&&(a.t=this.m.t+1,a.clamp()),this.mu.multiplyUpperTo(this.r2,this.m.t+1,this.q3),this.m.multiplyLowerTo(this.q3,this.m.t+1,this.r2);a.compareTo(this.r2)<0;)a.dAddOffset(1,this.m.t+1);for(a.subTo(this.r2,a);a.compareTo(this.m)>=0;)a.subTo(this.m,a)}function barrettSqrTo(a,b){a.squareTo(b),this.reduce(b)}function barrettMulTo(a,b,c){a.multiplyTo(b,c),this.reduce(c)}function bnModPow(a,b){var c,d,e=a.bitLength(),f=nbv(1);if(0>=e)return f;c=18>e?1:48>e?3:144>e?4:768>e?5:6,d=8>e?new Classic(b):b.isEven()?new Barrett(b):new Montgomery(b);var g=new Array,h=3,i=c-1,j=(1<<c)-1;if(g[1]=d.convert(this),c>1){var k=nbi();for(d.sqrTo(g[1],k);j>=h;)g[h]=nbi(),d.mulTo(k,g[h-2],g[h]),h+=2}var l,m,n=a.t-1,o=!0,p=nbi();for(e=nbits(a[n])-1;n>=0;){for(e>=i?l=a[n]>>e-i&j:(l=(a[n]&(1<<e+1)-1)<<i-e,n>0&&(l|=a[n-1]>>this.DB+e-i)),h=c;0==(1&l);)l>>=1,--h;if((e-=h)<0&&(e+=this.DB,--n),o)g[l].copyTo(f),o=!1;else{for(;h>1;)d.sqrTo(f,p),d.sqrTo(p,f),h-=2;h>0?d.sqrTo(f,p):(m=f,f=p,p=m),d.mulTo(p,g[l],f)}for(;n>=0&&0==(a[n]&1<<e);)d.sqrTo(f,p),m=f,f=p,p=m,--e<0&&(e=this.DB-1,--n)}return d.revert(f)}function bnGCD(a){var b=this.s<0?this.negate():this.clone(),c=a.s<0?a.negate():a.clone();if(b.compareTo(c)<0){var d=b;b=c,c=d}var e=b.getLowestSetBit(),f=c.getLowestSetBit();if(0>f)return b;for(f>e&&(f=e),f>0&&(b.rShiftTo(f,b),c.rShiftTo(f,c));b.signum()>0;)(e=b.getLowestSetBit())>0&&b.rShiftTo(e,b),(e=c.getLowestSetBit())>0&&c.rShiftTo(e,c),b.compareTo(c)>=0?(b.subTo(c,b),b.rShiftTo(1,b)):(c.subTo(b,c),c.rShiftTo(1,c));return f>0&&c.lShiftTo(f,c),c}function bnpModInt(a){if(0>=a)return 0;var b=this.DV%a,c=this.s<0?a-1:0;if(this.t>0)if(0==b)c=this[0]%a;else for(var d=this.t-1;d>=0;--d)c=(b*c+this[d])%a;return c}function bnModInverse(a){var b=a.isEven();if(this.isEven()&&b||0==a.signum())return BigInteger.ZERO;for(var c=a.clone(),d=this.clone(),e=nbv(1),f=nbv(0),g=nbv(0),h=nbv(1);0!=c.signum();){for(;c.isEven();)c.rShiftTo(1,c),b?(e.isEven()&&f.isEven()||(e.addTo(this,e),f.subTo(a,f)),e.rShiftTo(1,e)):f.isEven()||f.subTo(a,f),f.rShiftTo(1,f);for(;d.isEven();)d.rShiftTo(1,d),b?(g.isEven()&&h.isEven()||(g.addTo(this,g),h.subTo(a,h)),g.rShiftTo(1,g)):h.isEven()||h.subTo(a,h),h.rShiftTo(1,h);c.compareTo(d)>=0?(c.subTo(d,c),b&&e.subTo(g,e),f.subTo(h,f)):(d.subTo(c,d),b&&g.subTo(e,g),h.subTo(f,h))}return 0!=d.compareTo(BigInteger.ONE)?BigInteger.ZERO:h.compareTo(a)>=0?h.subtract(a):h.signum()<0?(h.addTo(a,h),h.signum()<0?h.add(a):h):h}function bnIsProbablePrime(a){var b,c=this.abs();if(1==c.t&&c[0]<=lowprimes[lowprimes.length-1]){for(b=0;b<lowprimes.length;++b)if(c[0]==lowprimes[b])return!0;return!1}if(c.isEven())return!1;for(b=1;b<lowprimes.length;){for(var d=lowprimes[b],e=b+1;e<lowprimes.length&&lplim>d;)d*=lowprimes[e++];for(d=c.modInt(d);e>b;)if(d%lowprimes[b++]==0)return!1}return c.millerRabin(a)}function bnpMillerRabin(a){var b=this.subtract(BigInteger.ONE),c=b.getLowestSetBit();if(0>=c)return!1;var d=b.shiftRight(c);a=a+1>>1,a>lowprimes.length&&(a=lowprimes.length);for(var e=nbi(),f=0;a>f;++f){e.fromInt(lowprimes[Math.floor(Math.random()*lowprimes.length)]);var g=e.modPow(d,this);if(0!=g.compareTo(BigInteger.ONE)&&0!=g.compareTo(b)){for(var h=1;h++<c&&0!=g.compareTo(b);)if(g=g.modPowInt(2,this),0==g.compareTo(BigInteger.ONE))return!1;if(0!=g.compareTo(b))return!1}}return!0}function rng_seed_int(a){rng_pool[rng_pptr++]^=255&a,rng_pool[rng_pptr++]^=a>>8&255,rng_pool[rng_pptr++]^=a>>16&255,rng_pool[rng_pptr++]^=a>>24&255,rng_pptr>=rng_psize&&(rng_pptr-=rng_psize)}function rng_seed_time(){rng_seed_int((new Date).getTime())}function rng_get_byte(){if(null==rng_state){for(rng_seed_time(),rng_state=prng_newstate(),rng_state.init(rng_pool),rng_pptr=0;rng_pptr<rng_pool.length;++rng_pptr)rng_pool[rng_pptr]=0;rng_pptr=0}return rng_state.next()}function rng_get_bytes(a){var b;for(b=0;b<a.length;++b)a[b]=rng_get_byte()}function SecureRandom(){}function Arcfour(){this.i=0,this.j=0,this.S=new Array}function ARC4init(a){var b,c,d;for(b=0;256>b;++b)this.S[b]=b;for(c=0,b=0;256>b;++b)c=c+this.S[b]+a[b%a.length]&255,d=this.S[b],this.S[b]=this.S[c],this.S[c]=d;this.i=0,this.j=0}function ARC4next(){var a;return this.i=this.i+1&255,this.j=this.j+this.S[this.i]&255,a=this.S[this.i],this.S[this.i]=this.S[this.j],this.S[this.j]=a,this.S[a+this.S[this.i]&255]}function prng_newstate(){return new Arcfour}var dbits,canary=0xdeadbeefcafe,j_lm=15715070==(16777215&canary);j_lm&&"Microsoft Internet Explorer"==navigator.appName?(BigInteger.prototype.am=am2,dbits=30):j_lm&&"Netscape"!=navigator.appName?(BigInteger.prototype.am=am1,dbits=26):(BigInteger.prototype.am=am3,dbits=28),BigInteger.prototype.DB=dbits,BigInteger.prototype.DM=(1<<dbits)-1,BigInteger.prototype.DV=1<<dbits;var BI_FP=52;BigInteger.prototype.FV=Math.pow(2,BI_FP),BigInteger.prototype.F1=BI_FP-dbits,BigInteger.prototype.F2=2*dbits-BI_FP;var BI_RM="0123456789abcdefghijklmnopqrstuvwxyz",BI_RC=new Array,rr,vv;for(rr="0".charCodeAt(0),vv=0;9>=vv;++vv)BI_RC[rr++]=vv;for(rr="a".charCodeAt(0),vv=10;36>vv;++vv)BI_RC[rr++]=vv;for(rr="A".charCodeAt(0),vv=10;36>vv;++vv)BI_RC[rr++]=vv;Classic.prototype.convert=cConvert,Classic.prototype.revert=cRevert,Classic.prototype.reduce=cReduce,Classic.prototype.mulTo=cMulTo,Classic.prototype.sqrTo=cSqrTo,Montgomery.prototype.convert=montConvert,Montgomery.prototype.revert=montRevert,Montgomery.prototype.reduce=montReduce,Montgomery.prototype.mulTo=montMulTo,Montgomery.prototype.sqrTo=montSqrTo,BigInteger.prototype.copyTo=bnpCopyTo,BigInteger.prototype.fromInt=bnpFromInt,BigInteger.prototype.fromString=bnpFromString,BigInteger.prototype.clamp=bnpClamp,BigInteger.prototype.dlShiftTo=bnpDLShiftTo,BigInteger.prototype.drShiftTo=bnpDRShiftTo,BigInteger.prototype.lShiftTo=bnpLShiftTo,BigInteger.prototype.rShiftTo=bnpRShiftTo,BigInteger.prototype.subTo=bnpSubTo,BigInteger.prototype.multiplyTo=bnpMultiplyTo,BigInteger.prototype.squareTo=bnpSquareTo,BigInteger.prototype.divRemTo=bnpDivRemTo,BigInteger.prototype.invDigit=bnpInvDigit,BigInteger.prototype.isEven=bnpIsEven,BigInteger.prototype.exp=bnpExp,BigInteger.prototype.toString=bnToString,BigInteger.prototype.negate=bnNegate,BigInteger.prototype.abs=bnAbs,BigInteger.prototype.compareTo=bnCompareTo,BigInteger.prototype.bitLength=bnBitLength,BigInteger.prototype.mod=bnMod,BigInteger.prototype.modPowInt=bnModPowInt,BigInteger.ZERO=nbv(0),BigInteger.ONE=nbv(1),NullExp.prototype.convert=nNop,NullExp.prototype.revert=nNop,NullExp.prototype.mulTo=nMulTo,NullExp.prototype.sqrTo=nSqrTo,Barrett.prototype.convert=barrettConvert,Barrett.prototype.revert=barrettRevert,Barrett.prototype.reduce=barrettReduce,Barrett.prototype.mulTo=barrettMulTo,Barrett.prototype.sqrTo=barrettSqrTo;var lowprimes=[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997],lplim=(1<<26)/lowprimes[lowprimes.length-1];BigInteger.prototype.chunkSize=bnpChunkSize,BigInteger.prototype.toRadix=bnpToRadix,BigInteger.prototype.fromRadix=bnpFromRadix,BigInteger.prototype.fromNumber=bnpFromNumber,BigInteger.prototype.bitwiseTo=bnpBitwiseTo,BigInteger.prototype.changeBit=bnpChangeBit,BigInteger.prototype.addTo=bnpAddTo,BigInteger.prototype.dMultiply=bnpDMultiply,BigInteger.prototype.dAddOffset=bnpDAddOffset,BigInteger.prototype.multiplyLowerTo=bnpMultiplyLowerTo,BigInteger.prototype.multiplyUpperTo=bnpMultiplyUpperTo,BigInteger.prototype.modInt=bnpModInt,BigInteger.prototype.millerRabin=bnpMillerRabin,BigInteger.prototype.clone=bnClone,BigInteger.prototype.intValue=bnIntValue,BigInteger.prototype.byteValue=bnByteValue,BigInteger.prototype.shortValue=bnShortValue,BigInteger.prototype.signum=bnSigNum,BigInteger.prototype.toByteArray=bnToByteArray,BigInteger.prototype.equals=bnEquals,BigInteger.prototype.min=bnMin,BigInteger.prototype.max=bnMax,BigInteger.prototype.and=bnAnd,BigInteger.prototype.or=bnOr,BigInteger.prototype.xor=bnXor,BigInteger.prototype.andNot=bnAndNot,BigInteger.prototype.not=bnNot,BigInteger.prototype.shiftLeft=bnShiftLeft,BigInteger.prototype.shiftRight=bnShiftRight,BigInteger.prototype.getLowestSetBit=bnGetLowestSetBit,BigInteger.prototype.bitCount=bnBitCount,BigInteger.prototype.testBit=bnTestBit,BigInteger.prototype.setBit=bnSetBit,BigInteger.prototype.clearBit=bnClearBit,BigInteger.prototype.flipBit=bnFlipBit,BigInteger.prototype.add=bnAdd,BigInteger.prototype.subtract=bnSubtract,BigInteger.prototype.multiply=bnMultiply,BigInteger.prototype.divide=bnDivide,BigInteger.prototype.remainder=bnRemainder,BigInteger.prototype.divideAndRemainder=bnDivideAndRemainder,BigInteger.prototype.modPow=bnModPow,BigInteger.prototype.modInverse=bnModInverse,BigInteger.prototype.pow=bnPow,BigInteger.prototype.gcd=bnGCD,BigInteger.prototype.isProbablePrime=bnIsProbablePrime,BigInteger.prototype.square=bnSquare;var rng_state,rng_pool,rng_pptr;if(null==rng_pool){rng_pool=new Array,rng_pptr=0;var global="undefined"!=typeof window?window:this,t;if(global&&global.crypto&&global.crypto.getRandomValues){var ua=new Uint8Array(32);for(global.crypto.getRandomValues(ua),t=0;32>t;++t)rng_pool[rng_pptr++]=ua[t]}if("Netscape"==navigator.appName&&navigator.appVersion<"5"&&global&&global.crypto){var z=global.crypto.random(32);for(t=0;t<z.length;++t)rng_pool[rng_pptr++]=255&z.charCodeAt(t)}for(;rng_psize>rng_pptr;)t=Math.floor(65536*Math.random()),rng_pool[rng_pptr++]=t>>>8,rng_pool[rng_pptr++]=255&t;rng_pptr=0,rng_seed_time()}SecureRandom.prototype.nextBytes=rng_get_bytes,Arcfour.prototype.init=ARC4init,Arcfour.prototype.next=ARC4next;var rng_psize=256;
-function $httpModule($q) {
+function httpServiceModule(queryService) {
     return {
         post: function (url, data) {
-            var defer = $q.defer();
+            var defer = queryService.defer();
             var xhr = new XMLHttpRequest();
 
             xhr.open('POST', url, true);
@@ -80,66 +80,588 @@ function $httpModule($q) {
     };
 }
 
-$httpModule.dependencies = [
-    '$q'
+httpServiceModule.dependencies = [
+    'queryService'
 ];
 
-function $intervalModule() {
+function intervalServiceModule() {
     return setInterval;
 }
 
-$intervalModule.dependencies = [];
+intervalServiceModule.dependencies = [];
 
-function $qModule($) {
-    return {
-        defer: function () {
-            var deferred = $.Deferred();
-            deferred.promise = deferred.promise();
-            return deferred;
-        },
-        when: $.when,
-        reject: function (result) {
-            return this.defer().reject(result);
-        },
-        all: function (promises) {
-            if (isArray(promises)) {
-                return this.when.apply($, promises);
-            }
+function queryServiceModule() {
+  var arr = [];
+  var document = window.document;
+  var getProto = Object.getPrototypeOf;
+  var slice = arr.slice;
+  var concat = arr.concat;
+  var push = arr.push;
+  var indexOf = arr.indexOf;
+  var class2type = {};
+  var toString = class2type.toString;
+  var hasOwn = class2type.hasOwnProperty;
+  var fnToString = hasOwn.toString;
+  var ObjectFunctionString = fnToString.call(Object);
+  var support = {};
 
-            var p = [];
-            var keys = Object.keys(promises);
-            
-            forEach(keys, function (key) {
-                p.push(promises[key]);
-            });
+  function isFunction(obj) {
+    return typeof obj === 'function' && typeof obj.nodeType !== 'number';
+  }
 
-            return this.all(p).then(function () {
-                var objects = toArray(arguments);
-                var result = {};
-                
-                forEach(keys, function (key, i) {
-                    result[key] = objects[i];
-                });
+  function inArray( elem, arr, i ) {
+    return arr == null ? -1 : indexOf.call( arr, elem, i );
+  }
 
-                return result;
-            });
+  var isWindow = function isWindow(obj) {
+    return obj != null && obj === obj.window;
+  };
+
+  var rnothtmlwhite = ( /[^\x20\t\r\n\f]+/g );
+
+  function createOptions( options ) {
+    var object = {};
+    each( options.match( rnothtmlwhite ) || [], function( _, flag ) {
+      object[ flag ] = true;
+    } );
+    return object;
+  }
+
+  var preservedScriptAttributes = {
+    type: true,
+    src: true,
+    nonce: true,
+    noModule: true,
+  };
+
+  function DOMEval(code, node, doc) {
+    doc = doc || document;
+    var i, val,
+      script = doc.createElement('script');
+    script.text = code;
+    if (node) {
+      for (i in preservedScriptAttributes) {
+        val = node[i] || node.getAttribute && node.getAttribute(i);
+        if (val) {
+          script.setAttribute(i, val);
         }
-    };
+      }
+    }
+    doc.head.appendChild(script).parentNode.removeChild(script);
+  }
+
+
+  function toType(obj) {
+    if (obj == null) {
+      return obj + '';
+    }
+    return typeof obj === 'object' || typeof obj === 'function' ?
+      class2type[toString.call(obj)] || 'object' :
+      typeof obj;
+  }
+
+  function isPlainObject(obj) {
+    var proto, Ctor;
+    if (!obj || toString.call(obj) !== '[object Object]') {
+      return false;
+    }
+    proto = getProto(obj);
+    if (!proto) {
+      return true;
+    }
+    Ctor = hasOwn.call(proto, 'constructor') && proto.constructor;
+    return typeof Ctor === 'function' && fnToString.call(Ctor) === ObjectFunctionString;
+  }
+
+  function extend() {
+    var options, name, src, copy, copyIsArray, clone,
+      target = arguments[0] || {},
+      i = 1,
+      length = arguments.length,
+      deep = false;
+
+    if (typeof target === 'boolean') {
+      deep = target;
+      target = arguments[i] || {};
+      i++;
+    }
+    if (typeof target !== 'object' && !isFunction(target)) {
+      target = {};
+    }
+    if (i === length) {
+      target = this;
+      i--;
+    }
+    for (; i < length; i++) {
+      if ((options = arguments[i]) != null) {
+        for (name in options) {
+          copy = options[name];
+          if (name === '__proto__' || target === copy) {
+            continue;
+          }
+          if (deep && copy && (isPlainObject(copy) ||
+            (copyIsArray = Array.isArray(copy)))) {
+            src = target[name];
+            if (copyIsArray && !Array.isArray(src)) {
+              clone = [];
+            } else if (!copyIsArray && !isPlainObject(src)) {
+              clone = {};
+            } else {
+              clone = src;
+            }
+            copyIsArray = false;
+            target[name] = extend(deep, clone, copy);
+          } else if (copy !== undefined) {
+            target[name] = copy;
+          }
+        }
+      }
+    }
+    return target;
+  };
+
+  function isArrayLike( obj ) {
+    var length = !!obj && "length" in obj && obj.length,
+      type = toType( obj );
+    if ( isFunction( obj ) || isWindow( obj ) ) {
+      return false;
+    }
+    return type === "array" || length === 0 ||
+      typeof length === "number" && length > 0 && ( length - 1 ) in obj;
+  }
+
+  function each(obj, callback) {
+    var length, i = 0;
+
+    if (isArrayLike(obj)) {
+      length = obj.length;
+      for (; i < length; i++) {
+        if (callback.call(obj[i], i, obj[i]) === false) {
+          break;
+        }
+      }
+    } else {
+      for (i in obj) {
+        if (callback.call(obj[i], i, obj[i]) === false) {
+          break;
+        }
+      }
+    }
+
+    return obj;
+  }
+
+  function Callbacks(options) {
+    options = typeof options === 'string' ?
+      createOptions(options) :
+      extend({}, options);
+
+    var firing,
+      memory,
+      fired,
+      locked,
+      list = [],
+      queue = [],
+      firingIndex = -1,
+      fire = function () {
+        locked = locked || options.once;
+        fired = firing = true;
+        for (; queue.length; firingIndex = -1) {
+          memory = queue.shift();
+          while (++firingIndex < list.length) {
+            if (list[firingIndex].apply(memory[0], memory[1]) === false &&
+              options.stopOnFalse) {
+              firingIndex = list.length;
+              memory = false;
+            }
+          }
+        }
+        if (!options.memory) {
+          memory = false;
+        }
+        firing = false;
+        if (locked) {
+          if (memory) {
+            list = [];
+          } else {
+            list = '';
+          }
+        }
+      },
+      self = {
+        add: function () {
+          if (list) {
+            if (memory && !firing) {
+              firingIndex = list.length - 1;
+              queue.push(memory);
+            }
+            (function add(args) {
+              each(args, function (_, arg) {
+                if (isFunction(arg)) {
+                  if (!options.unique || !self.has(arg)) {
+                    list.push(arg);
+                  }
+                } else if (arg && arg.length && toType(arg) !== 'string') {
+                  add(arg);
+                }
+              });
+            })(arguments);
+
+            if (memory && !firing) {
+              fire();
+            }
+          }
+          return this;
+        },
+        remove: function () {
+          each(arguments, function (_, arg) {
+            var index;
+            while ((index = inArray(arg, list, index)) > -1) {
+              list.splice(index, 1);
+              if (index <= firingIndex) {
+                firingIndex--;
+              }
+            }
+          });
+          return this;
+        },
+        has: function (fn) {
+          return fn ?
+            inArray(fn, list) > -1 :
+            list.length > 0;
+        },
+        empty: function () {
+          if (list) {
+            list = [];
+          }
+          return this;
+        },
+        disable: function () {
+          locked = queue = [];
+          list = memory = '';
+          return this;
+        },
+        disabled: function () {
+          return !list;
+        },
+        lock: function () {
+          locked = queue = [];
+          if (!memory && !firing) {
+            list = memory = '';
+          }
+          return this;
+        },
+        locked: function () {
+          return !!locked;
+        },
+        fireWith: function (context, args) {
+          if (!locked) {
+            args = args || [];
+            args = [context, args.slice ? args.slice() : args];
+            queue.push(args);
+            if (!firing) {
+              fire();
+            }
+          }
+          return this;
+        },
+        fire: function () {
+          self.fireWith(this, arguments);
+          return this;
+        },
+        fired: function () {
+          return !!fired;
+        },
+      };
+
+    return self;
+  };
+
+
+  function Identity(v) {
+    return v;
+  }
+
+  function Thrower(ex) {
+    throw ex;
+  }
+
+  function adoptValue(value, resolve, reject, noValue) {
+    var method;
+    try {
+      if (value && isFunction((method = value.promise))) {
+        method.call(value).done(resolve).fail(reject);
+      } else if (value && isFunction((method = value.then))) {
+        method.call(value, resolve, reject);
+      } else {
+        resolve.apply(undefined, [value].slice(noValue));
+      }
+    } catch (value) {
+      reject.apply(undefined, [value]);
+    }
+  }
+
+  function Deferred(func) {
+    var tuples = [
+        ['notify', 'progress', Callbacks('memory'),
+          Callbacks('memory'), 2],
+        ['resolve', 'done', Callbacks('once memory'),
+          Callbacks('once memory'), 0, 'resolved'],
+        ['reject', 'fail', Callbacks('once memory'),
+          Callbacks('once memory'), 1, 'rejected'],
+      ],
+      state = 'pending',
+      promise = {
+        state: function () {
+          return state;
+        },
+        always: function () {
+          deferred.done(arguments).fail(arguments);
+          return this;
+        },
+        'catch': function (fn) {
+          return promise.then(null, fn);
+        },
+        pipe: function () {
+          var fns = arguments;
+          return Deferred(function (newDefer) {
+            each(tuples, function (i, tuple) {
+              var fn = isFunction(fns[tuple[4]]) && fns[tuple[4]];
+              deferred[tuple[1]](function () {
+                var returned = fn && fn.apply(this, arguments);
+                if (returned && isFunction(returned.promise)) {
+                  returned.promise()
+                    .progress(newDefer.notify)
+                    .done(newDefer.resolve)
+                    .fail(newDefer.reject);
+                } else {
+                  newDefer[tuple[0] + 'With'](
+                    this,
+                    fn ? [returned] : arguments,
+                  );
+                }
+              });
+            });
+            fns = null;
+          }).promise();
+        },
+        then: function (onFulfilled, onRejected, onProgress) {
+          var maxDepth = 0;
+
+          function resolve(depth, deferred, handler, special) {
+            return function () {
+              var that = this,
+                args = arguments,
+                mightThrow = function () {
+                  var returned, then;
+                  if (depth < maxDepth) {
+                    return;
+                  }
+                  returned = handler.apply(that, args);
+                  if (returned === deferred.promise()) {
+                    throw new TypeError('Thenable self-resolution');
+                  }
+                  then = returned &&
+                    (typeof returned === 'object' ||
+                      typeof returned === 'function') &&
+                    returned.then;
+
+                  if (isFunction(then)) {
+                    if (special) {
+                      then.call(
+                        returned,
+                        resolve(maxDepth, deferred, Identity, special),
+                        resolve(maxDepth, deferred, Thrower, special),
+                      );
+                    } else {
+
+                      maxDepth++;
+
+                      then.call(
+                        returned,
+                        resolve(maxDepth, deferred, Identity, special),
+                        resolve(maxDepth, deferred, Thrower, special),
+                        resolve(maxDepth, deferred, Identity,
+                          deferred.notifyWith),
+                      );
+                    }
+                  } else {
+                    if (handler !== Identity) {
+                      that = undefined;
+                      args = [returned];
+                    }
+                    (special || deferred.resolveWith)(that, args);
+                  }
+                },
+                process = special ?
+                  mightThrow :
+                  function () {
+                    try {
+                      mightThrow();
+                    } catch (e) {
+                      if (depth + 1 >= maxDepth) {
+                        if (handler !== Thrower) {
+                          that = undefined;
+                          args = [e];
+                        }
+                        deferred.rejectWith(that, args);
+                      }
+                    }
+                  };
+              if (depth) {
+                process();
+              } else {
+                window.setTimeout(process);
+              }
+            };
+          }
+
+          return Deferred(function (newDefer) {
+            tuples[0][3].add(
+              resolve(
+                0,
+                newDefer,
+                isFunction(onProgress) ?
+                  onProgress :
+                  Identity,
+                newDefer.notifyWith,
+              ),
+            );
+            tuples[1][3].add(
+              resolve(
+                0,
+                newDefer,
+                isFunction(onFulfilled) ?
+                  onFulfilled :
+                  Identity,
+              ),
+            );
+            tuples[2][3].add(
+              resolve(
+                0,
+                newDefer,
+                isFunction(onRejected) ?
+                  onRejected :
+                  Thrower,
+              ),
+            );
+          }).promise();
+        },
+        promise: function (obj) {
+          return obj != null ? extend(obj, promise) : promise;
+        },
+      },
+      deferred = {};
+    each(tuples, function (i, tuple) {
+      var list = tuple[2],
+        stateString = tuple[5];
+      promise[tuple[1]] = list.add;
+
+      // Handle state
+      if (stateString) {
+        list.add(
+          function () {
+            state = stateString;
+          },
+          tuples[3 - i][2].disable,
+          tuples[3 - i][3].disable,
+          tuples[0][2].lock,
+          tuples[0][3].lock,
+        );
+      }
+      list.add(tuple[3].fire);
+      deferred[tuple[0]] = function () {
+        deferred[tuple[0] + 'With'](this === deferred ? undefined : this, arguments);
+        return this;
+      };
+      deferred[tuple[0] + 'With'] = list.fireWith;
+    });
+    promise.promise(deferred);
+    if (func) {
+      func.call(deferred, deferred);
+    }
+    return deferred;
+  }
+
+  function when(singleValue) {
+    var remaining = arguments.length,
+      i = remaining,
+      resolveContexts = Array(i),
+      resolveValues = slice.call(arguments),
+      master = Deferred(),
+      updateFunc = function (i) {
+        return function (value) {
+          resolveContexts[i] = this;
+          resolveValues[i] = arguments.length > 1 ? slice.call(arguments) : value;
+          if (!(--remaining)) {
+            master.resolveWith(resolveContexts, resolveValues);
+          }
+        };
+      };
+    if (remaining <= 1) {
+      adoptValue(singleValue, master.done(updateFunc(i)).resolve, master.reject,
+        !remaining);
+
+      // Use .then() to unwrap secondary thenables (cf. gh-3000)
+      if (master.state() === 'pending' ||
+        isFunction(resolveValues[i] && resolveValues[i].then)) {
+        return master.then();
+      }
+    }
+    while (i--) {
+      adoptValue(resolveValues[i], updateFunc(i), master.reject);
+    }
+
+    return master.promise();
+  }
+
+  return {
+    defer: function () {
+      var deferred = Deferred();
+      deferred.promise = deferred.promise();
+      return deferred;
+    },
+    when: when,
+    reject: function (result) {
+      return this.defer().reject(result);
+    },
+    all: function (promises) {
+      if (isArray(promises)) {
+        return this.when.apply(null, promises);
+      }
+
+      var p = [];
+      var keys = Object.keys(promises);
+
+      forEach(keys, function (key) {
+        p.push(promises[key]);
+      });
+
+      return this.all(p).then(function () {
+        var objects = toArray(arguments);
+        var result = {};
+
+        forEach(keys, function (key, i) {
+          result[key] = objects[i];
+        });
+
+        return result;
+      });
+    },
+  };
 }
 
-$qModule.dependencies = [
-    'jQuery'
-];
+queryServiceModule.dependencies = [];
 
-function $rootScopeModule() {
+function rootServiceModule() {
     return {};
 }
 
-$rootScopeModule.dependencies = [];
+rootServiceModule.dependencies = [];
 
-function $timeoutModule($q) {
+function timeoutServiceModule(queryService) {
     var timeout = function (cb, t) {
-        var defer = $q.defer();
+        var defer = queryService.defer();
         var promise = defer.promise;
 
         promise.__timeoutID = setTimeout(function () {
@@ -160,8 +682,8 @@ function $timeoutModule($q) {
     return timeout;
 }
 
-$timeoutModule.dependencies = [
-    '$q'
+timeoutServiceModule.dependencies = [
+    'queryService'
 ];
 
 function AppChatsManagerModule() {
@@ -289,7 +811,7 @@ AppPeersManagerModule.dependencies = [
     'AppUsersManager'
 ];
 
-function AppProfileManagerModule(AppChatsManager, AppUsersManager, MtpApiManager, $q) {
+function AppProfileManagerModule(AppChatsManager, AppUsersManager, MtpApiManager, queryService) {
     var chatsFull = {};
     var chatFullPromises = {};
 
@@ -301,7 +823,7 @@ function AppProfileManagerModule(AppChatsManager, AppUsersManager, MtpApiManager
             var chat = AppChatsManager.getChat(id);
             if (chat.version == chatsFull[id].participants.version ||
                 chat.pFlags.left) {
-                return $q.when(chatsFull[id]);
+                return queryService.when(chatsFull[id]);
             }
         }
         if (chatFullPromises[id] !== undefined) {
@@ -383,7 +905,7 @@ function AppProfileManagerModule(AppChatsManager, AppUsersManager, MtpApiManager
 
     function getChannelFull(id, force) {
         if (chatsFull[id] !== undefined && !force) {
-            return $q.when(chatsFull[id]);
+            return queryService.when(chatsFull[id]);
         }
         if (chatFullPromises[id] !== undefined) {
             return chatFullPromises[id];
@@ -408,7 +930,7 @@ function AppProfileManagerModule(AppChatsManager, AppUsersManager, MtpApiManager
                     error.handled = true;
                 });
             } else {
-                participantsPromise = $q.when();
+                participantsPromise = queryService.when();
             }
             return participantsPromise.then(function () {
                 delete chatFullPromises[id];
@@ -417,7 +939,7 @@ function AppProfileManagerModule(AppChatsManager, AppUsersManager, MtpApiManager
                 return fullChannel;
             });
         }, function (error) {
-            return $q.reject(error);
+            return queryService.reject(error);
         });
     }
 
@@ -430,7 +952,7 @@ AppProfileManagerModule.dependencies = [
     'AppChatsManager',
     'AppUsersManager',
     'MtpApiManager',
-    '$q'
+    'queryService'
 ];
 
 function AppUsersManagerModule(Storage, MtpApiManager) {
@@ -546,37 +1068,37 @@ AppUsersManagerModule.dependencies = [
     'MtpApiManager'
 ];
 
-function CryptoWorkerModule($timeout) {
+function CryptoWorkerModule(timeoutService) {
     return {
         sha1Hash: function (bytes) {
-            return $timeout(function () {
+            return timeoutService(function () {
                 return sha1HashSync(bytes);
             });
         },
         sha256Hash: function (bytes) {
-            return $timeout(function () {
+            return timeoutService(function () {
                 return sha256HashSync(bytes);
             });
         },
         aesEncrypt: function (bytes, keyBytes, ivBytes) {
-            return $timeout(function () {
+            return timeoutService(function () {
                 return convertToArrayBuffer(aesEncryptSync(bytes, keyBytes, ivBytes));
             });
         },
         aesDecrypt: function (encryptedBytes, keyBytes, ivBytes) {
-            return $timeout(function () {
+            return timeoutService(function () {
                 return convertToArrayBuffer(aesDecryptSync(encryptedBytes, keyBytes, ivBytes));
             });
         },
         factorize: function (bytes) {
             bytes = convertToByteArray(bytes);
 
-            return $timeout(function () {
+            return timeoutService(function () {
                 return pqPrimeFactorization(bytes);
             });
         },
         modPow: function (x, y, m) {
-            return $timeout(function () {
+            return timeoutService(function () {
                 return bytesModPow(x, y, m);
             });
         }
@@ -584,10 +1106,10 @@ function CryptoWorkerModule($timeout) {
 }
 
 CryptoWorkerModule.dependencies = [
-    '$timeout'
+    'timeoutService'
 ];
 
-function FileSaverModule($timeout) {
+function FileSaverModule(timeoutService) {
     function save(bytes, fileName) {
         // TODO: Improve
         var a = document.createElement('a');
@@ -605,7 +1127,7 @@ function FileSaverModule($timeout) {
         a.download = fileName;
         a.click();
 
-        $timeout(function() {
+        timeoutService(function() {
             window.URL.revokeObjectURL(a.href);
             a.remove();
         }, 100);
@@ -617,7 +1139,7 @@ function FileSaverModule($timeout) {
 }
 
 FileSaverModule.dependencies = [
-    '$timeout'
+    'timeoutService'
 ];
 
 function forEach(obj, iterator, context) {
@@ -698,8 +1220,8 @@ function noop() {
 
 }
 
-function IdleManagerModule($rootScope, $timeout, $) {
-    $rootScope.idle = {isIDLE: false};
+function IdleManagerModule(rootService, timeoutService) {
+    rootService.idle = {isIDLE: false};
 
     var toPromise, started = false;
     var hidden = 'hidden';
@@ -725,7 +1247,12 @@ function IdleManagerModule($rootScope, $timeout, $) {
     function start() {
         if (!started) {
             started = true;
-            $(window).on(visibilityChange + ' blur focus keydown mousedown touchstart', onEvent);
+            window.addEventListener(visibilityChange, () => onEvent, false);
+            window.addEventListener('blur', () => onEvent);
+            window.addEventListener('focus', () => onEvent);
+            window.addEventListener('keydown', () => onEvent);
+            window.addEventListener('mousedown', () => onEvent);
+            window.addEventListener('touchstart', () => onEvent);
 
             setTimeout(function () {
                 onEvent({type: 'blur'});
@@ -734,13 +1261,12 @@ function IdleManagerModule($rootScope, $timeout, $) {
     }
 
     function onEvent(e) {
-        // console.log('event', e.type);
         if (e.type == 'mousemove') {
             var e = e.originalEvent || e;
             if (e && e.movementX === 0 && e.movementY === 0) {
                 return;
             }
-            $(window).off('mousemove', onEvent);
+            window.removeEventListener('mousemove', onEvent);
         }
 
         var isIDLE = e.type == 'blur' || e.type == 'timeout' ? true : false;
@@ -748,35 +1274,87 @@ function IdleManagerModule($rootScope, $timeout, $) {
             isIDLE = true;
         }
 
-        $timeout.cancel(toPromise);
+        timeoutService.cancel(toPromise);
         if (!isIDLE) {
-            // console.log('update timeout');
-            toPromise = $timeout(function () {
+            toPromise = timeoutService(function () {
                 onEvent({type: 'timeout'});
             }, 30000);
         }
 
         if (isIDLE && e.type == 'timeout') {
-            $(window).on('mousemove', onEvent);
+            window.addEventListener('mousemove', onEvent);
         }
     }
 }
 
 IdleManagerModule.dependencies = [
-    '$rootScope', 
-    '$timeout',
-    'jQuery'
+    'rootService',
+    'timeoutService',
 ];
 
-function jQueryModule() {
-    if (typeof window.jQuery == 'undefined') {
-        throw new Error('TelegramApi requires jQuery');
-    }
+function StorageModule(queryService) {
+    var methods = {};
 
-    return window.jQuery;
+    forEach(['get', 'set', 'remove'], function (methodName) {
+        if(Config.Modes.test) {
+            ConfigStorage.prefix('t_');
+        }
+        methods[methodName] = function () {
+            var deferred = queryService.defer(),
+                args = toArray(arguments);
+
+            args.push(function (result) {
+                deferred.resolve(result);
+            });
+
+            ConfigStorage[methodName].apply(ConfigStorage, args);
+
+            return deferred.promise;
+        };
+    });
+
+    return methods;
 }
 
-jQueryModule.dependencies = [];
+StorageModule.dependencies = [
+    'queryService'
+];
+
+function TelegramMeWebServiceModule(Storage) {
+    var disabled = Config.Modes.test || location.protocol != 'http:' && location.protocol != 'https:';
+
+    function sendAsyncRequest(canRedirect) {
+        if (disabled) {
+            return false;
+        }
+
+        Storage.get('tgme_sync').then(function (curValue) {
+            var ts = tsNow(true);
+            if (canRedirect &&
+                curValue &&
+                curValue.canRedirect == canRedirect &&
+                curValue.ts + 86400 > ts) {
+                return false;
+            }
+            Storage.set({tgme_sync: {canRedirect: canRedirect, ts: ts}});
+
+            var script = document.createElement('script');
+            script.src = '//telegram.me/_websync_?authed=' + (canRedirect ? '1' : '0');
+            script.onerror = () => {
+                document.body.removeChild(script);
+            };
+            document.body.append(script);
+        });
+    }
+
+    return {
+        setAuthorized: sendAsyncRequest
+    };
+}
+
+TelegramMeWebServiceModule.dependencies = [
+    'Storage',
+];
 
 function qSyncModule() {
     return {
@@ -801,65 +1379,2078 @@ function qSyncModule() {
 
 qSyncModule.dependencies = [];
 
-function StorageModule($q) {
-    var methods = {};
+function MtpApiFileManagerModule(MtpApiManager, queryService) {
+    var cachedFs = false;
+    var cachedFsPromise = false;
+    var cachedSavePromises = {};
+    var cachedDownloadPromises = {};
+    var cachedDownloads = {};
 
-    forEach(['get', 'set', 'remove'], function (methodName) {
-        methods[methodName] = function () {
-            var deferred = $q.defer(),
-                args = toArray(arguments);
+    var downloadPulls = {};
+    var downloadActives = {};
 
-            args.push(function (result) {
-                deferred.resolve(result);
-            });
+    function downloadRequest(dcID, cb, activeDelta) {
+        if (downloadPulls[dcID] === undefined) {
+            downloadPulls[dcID] = [];
+            downloadActives[dcID] = 0
+        }
+        var downloadPull = downloadPulls[dcID];
+        var deferred = queryService.defer();
+        downloadPull.push({cb: cb, deferred: deferred, activeDelta: activeDelta});
+        setZeroTimeout(function () {
+            downloadCheck(dcID);
+        });
 
-            ConfigStorage[methodName].apply(ConfigStorage, args);
+        return deferred.promise;
+    }
 
-            return deferred.promise;
-        };
-    });
+    var index = 0;
 
-    return methods;
-}
+    function downloadCheck(dcID) {
+        var downloadPull = downloadPulls[dcID];
+        var downloadLimit = dcID == 'upload' ? 11 : 5;
 
-StorageModule.dependencies = [
-    '$q'
-];
-
-function TelegramMeWebServiceModule(Storage, $) {
-    var disabled = location.protocol != 'http:' && location.protocol != 'https:';
-
-    function sendAsyncRequest(canRedirect) {
-        if (disabled) {
+        if (downloadActives[dcID] >= downloadLimit || !downloadPull || !downloadPull.length) {
             return false;
         }
 
-        Storage.get('tgme_sync').then(function (curValue) {
-            var ts = tsNow(true);
-            if (canRedirect &&
-                curValue &&
-                curValue.canRedirect == canRedirect &&
-                curValue.ts + 86400 > ts) {
+        var data = downloadPull.shift(),
+            activeDelta = data.activeDelta || 1;
+
+        downloadActives[dcID] += activeDelta;
+
+        var a = index++;
+        data.cb()
+            .then(function (result) {
+                downloadActives[dcID] -= activeDelta;
+                downloadCheck(dcID);
+
+                data.deferred.resolve(result);
+
+            }, function (error) {
+                downloadActives[dcID] -= activeDelta;
+                downloadCheck(dcID);
+
+                data.deferred.reject(error);
+            })
+    }
+
+    function uploadFile(file) {
+        var fileSize = file.size,
+            isBigFile = fileSize >= 10485760,
+            canceled = false,
+            resolved = false,
+            doneParts = 0,
+            partSize = 262144, // 256 Kb
+            activeDelta = 2;
+
+        if (!fileSize) {
+            return queryService.reject({type: 'EMPTY_FILE'});
+        }
+
+        if (fileSize > 67108864) {
+            partSize = 524288;
+            activeDelta = 4;
+        }
+        else if (fileSize < 102400) {
+            partSize = 32768;
+            activeDelta = 1;
+        }
+        var totalParts = Math.ceil(fileSize / partSize);
+
+        if (totalParts > 3000) {
+            return queryService.reject({type: 'FILE_TOO_BIG'});
+        }
+
+        var fileID = [nextRandomInt(0xFFFFFFFF), nextRandomInt(0xFFFFFFFF)],
+            deferred = queryService.defer(),
+            errorHandler = function (error) {
+                // console.error('Up Error', error);
+                deferred.reject(error);
+                canceled = true;
+                errorHandler = noop;
+            },
+            part = 0,
+            offset,
+            resultInputFile = {
+                _: isBigFile ? 'inputFileBig' : 'inputFile',
+                id: fileID,
+                parts: totalParts,
+                name: file.name,
+                md5_checksum: ''
+            };
+
+
+        for (offset = 0; offset < fileSize; offset += partSize) {
+            (function (offset, part) {
+                downloadRequest('upload', function () {
+                    var uploadDeferred = queryService.defer();
+
+                    var reader = new FileReader();
+                    var blob = file.slice(offset, offset + partSize);
+
+                    reader.onloadend = function (e) {
+                        if (canceled) {
+                            uploadDeferred.reject();
+                            return;
+                        }
+                        if (e.target.readyState != FileReader.DONE) {
+                            return;
+                        }
+                        MtpApiManager.invokeApi(isBigFile ? 'upload.saveBigFilePart' : 'upload.saveFilePart', {
+                            file_id: fileID,
+                            file_part: part,
+                            file_total_parts: totalParts,
+                            bytes: e.target.result
+                        }, {
+                            startMaxLength: partSize + 256,
+                            fileUpload: true,
+                            singleInRequest: true
+                        }).then(function (result) {
+                            doneParts++;
+                            uploadDeferred.resolve();
+                            if (doneParts >= totalParts) {
+                                deferred.resolve(resultInputFile);
+                                resolved = true;
+                            } else {
+                                deferred.notify({done: doneParts * partSize, total: fileSize});
+                            }
+                        }, errorHandler);
+                    };
+
+                    reader.readAsArrayBuffer(blob);
+
+                    return uploadDeferred.promise;
+                }, activeDelta);
+            })(offset, part++);
+        }
+
+        deferred.promise.cancel = function () {
+            if (!canceled && !resolved) {
+                canceled = true;
+                errorHandler({type: 'UPLOAD_CANCELED'});
+            }
+        };
+
+        return deferred.promise;
+    }
+
+    return {
+        uploadFile: uploadFile
+    };
+}
+
+MtpApiFileManagerModule.dependencies = [
+    'MtpApiManager',
+    'queryService'
+];
+
+function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpAuthorizer, Storage, TelegramMeWebService, qSync, queryService, CryptoWorker) {
+    var cachedNetworkers = {},
+        cachedUploadNetworkers = {},
+        cachedExportPromise = {},
+        baseDcID = false;
+
+    var telegramMeNotified;
+
+    MtpSingleInstanceService.start();
+
+    Storage.get('dc').then(function (dcID) {
+        if (dcID) {
+            baseDcID = dcID;
+        }
+    });
+
+    function telegramMeNotify(newValue) {
+        if (telegramMeNotified !== newValue) {
+            telegramMeNotified = newValue;
+            TelegramMeWebService.setAuthorized(telegramMeNotified);
+        }
+    }
+
+    function mtpSetUserAuth(dcID, userAuth) {
+        var fullUserAuth = extend({dcID: dcID}, userAuth);
+        Storage.set({
+            dc: dcID,
+            user_auth: fullUserAuth
+        });
+        telegramMeNotify(true);
+        baseDcID = dcID;
+    }
+
+    function mtpLogOut() {
+        var storageKeys = [];
+        for (var dcID = 1; dcID <= 5; dcID++) {
+            storageKeys.push('dc' + dcID + '_auth_key');
+        }
+        return Storage.get.apply(Storage, storageKeys).then(function (storageResult) {
+            var logoutPromises = [];
+            for (var i = 0; i < storageResult.length; i++) {
+                if (storageResult[i]) {
+                    logoutPromises.push(mtpInvokeApi('auth.logOut', {}, {dcID: i + 1}));
+                }
+            }
+            return queryService.all(logoutPromises).then(function () {
+                Storage.remove('dc', 'user_auth');
+                baseDcID = false;
+                telegramMeNotify(false);
+            }, function (error) {
+                Storage.remove.apply(storageKeys);
+                Storage.remove('dc', 'user_auth');
+                baseDcID = false;
+                error.handled = true;
+                telegramMeNotify(false);
+            });
+        });
+    }
+
+    function mtpGetNetworker(dcID, options) {
+        options = options || {};
+
+        var cache = (options.fileUpload || options.fileDownload)
+            ? cachedUploadNetworkers
+            : cachedNetworkers;
+        if (!dcID) {
+            throw new Exception('get Networker without dcID');
+        }
+
+        if (cache[dcID] !== undefined) {
+            return qSync.when(cache[dcID]);
+        }
+
+        var akk = 'dc' + dcID + '_auth_key',
+            ssk = 'dc' + dcID + '_server_salt';
+
+        return Storage.get(akk, ssk).then(function (result) {
+
+            if (cache[dcID] !== undefined) {
+                return cache[dcID];
+            }
+
+            var authKeyHex = result[0],
+                serverSaltHex = result[1];
+            if (authKeyHex && authKeyHex.length == 512) {
+                var authKey = bytesFromHex(authKeyHex);
+                var serverSalt = bytesFromHex(serverSaltHex);
+
+                return cache[dcID] = MtpNetworkerFactory.getNetworker(dcID, authKey, serverSalt, options);
+            }
+
+            if (!options.createNetworker) {
+                return queryService.reject({type: 'AUTH_KEY_EMPTY', code: 401});
+            }
+
+            return MtpAuthorizer.auth(dcID).then(function (auth) {
+                var storeObj = {};
+                storeObj[akk] = bytesToHex(auth.authKey);
+                storeObj[ssk] = bytesToHex(auth.serverSalt);
+                Storage.set(storeObj);
+
+                return cache[dcID] = MtpNetworkerFactory.getNetworker(dcID, auth.authKey, auth.serverSalt, options);
+            }, function (error) {
+                return queryService.reject(error);
+            });
+        });
+    }
+
+    function mtpInvokeApi(method, params, options) {
+        options = options || {};
+
+        var deferred = queryService.defer(),
+            rejectPromise = function (error) {
+                // if (!error) {
+                //     error = {type: 'ERROR_EMPTY'};
+                // } else if (!isObject(error)) {
+                //     error = {message: error};
+                // }
+                deferred.reject(error);
+
+                // if (!options.noErrorBox) {
+                //     error.input = method;
+                //     error.stack = error.originalError && error.originalError.stack || error.stack || (new Error()).stack;
+                //     setTimeout(function () {
+                //         if (!error.handled) {
+                //             if (error.code == 401) {
+                //                 mtpLogOut();
+                //             }
+                //             error.handled = true;
+                //         }
+                //     }, 100);
+                // }
+            },
+            dcID,
+            networkerPromise;
+
+        var cachedNetworker;
+        var stack = (new Error()).stack;
+        if (!stack) {
+            try {
+                window.unexistingFunction();
+            } catch (e) {
+                stack = e.stack || '';
+            }
+        }
+        var performRequest = function (networker) {
+            return (cachedNetworker = networker).wrapApiCall(method, params, options).then(
+                function (result) {
+                    deferred.resolve(result);
+                },
+                function (error) {
+                    console.error(dT(), 'Error', error.code, error.type, baseDcID, dcID);
+                    if (error.code == 401 && baseDcID == dcID) {
+                        Storage.remove('dc', 'user_auth');
+                        telegramMeNotify(false);
+                        rejectPromise(error);
+                    }
+                    else if (error.code == 401 && baseDcID && dcID != baseDcID) {
+                        if (cachedExportPromise[dcID] === undefined) {
+                            var exportDeferred = queryService.defer();
+
+                            mtpInvokeApi('auth.exportAuthorization', {dc_id: dcID}, {noErrorBox: true}).then(function (exportedAuth) {
+                                mtpInvokeApi('auth.importAuthorization', {
+                                    id: exportedAuth.id,
+                                    bytes: exportedAuth.bytes
+                                }, {dcID: dcID, noErrorBox: true}).then(function () {
+                                    exportDeferred.resolve();
+                                }, function (e) {
+                                    exportDeferred.reject(e);
+                                })
+                            }, function (e) {
+                                exportDeferred.reject(e)
+                            });
+
+                            cachedExportPromise[dcID] = exportDeferred.promise;
+                        }
+
+                        cachedExportPromise[dcID].then(function () {
+                            (cachedNetworker = networker).wrapApiCall(method, params, options).then(function (result) {
+                                deferred.resolve(result);
+                            }, rejectPromise);
+                        }, rejectPromise);
+                    }
+                    else if (error.code == 303) {
+                        var newDcID = error.type.match(/^(PHONE_MIGRATE_|NETWORK_MIGRATE_|USER_MIGRATE_)(\d+)/)[2];
+                        if (newDcID != dcID) {
+                            if (options.dcID) {
+                                options.dcID = newDcID;
+                            } else {
+                                Storage.set({dc: baseDcID = newDcID});
+                            }
+
+                            mtpGetNetworker(newDcID, options).then(function (networker) {
+                                networker.wrapApiCall(method, params, options).then(function (result) {
+                                    deferred.resolve(result);
+                                }, rejectPromise);
+                            }, rejectPromise);
+                        }
+                    }
+                    else if (!options.rawError && error.code == 420) {
+                        var waitTime = error.type.match(/^FLOOD_WAIT_(\d+)/)[1] || 10;
+                        if (waitTime > (options.timeout || 60)) {
+                            return rejectPromise(error);
+                        }
+                        setTimeout(function () {
+                            performRequest(cachedNetworker);
+                        }, waitTime * 1000);
+                    }
+                    else if (!options.rawError && (error.code == 500 || error.type == 'MSG_WAIT_FAILED')) {
+                        var now = tsNow();
+                        if (options.stopTime) {
+                            if (now >= options.stopTime) {
+                                return rejectPromise(error);
+                            }
+                        } else {
+                            options.stopTime = now + (options.timeout !== undefined ? options.timeout : 10) * 1000;
+                        }
+                        options.waitTime = options.waitTime ? Math.min(60, options.waitTime * 1.5) : 1;
+                        setTimeout(function () {
+                            performRequest(cachedNetworker);
+                        }, options.waitTime * 1000);
+                    }
+                    else {
+                        rejectPromise(error);
+                    }
+                });
+        };
+
+        if (dcID = (options.dcID || baseDcID)) {
+            mtpGetNetworker(dcID, options).then(performRequest, rejectPromise);
+        } else {
+            Storage.get('dc').then(function (baseDcID) {
+                mtpGetNetworker(dcID = baseDcID || 2, options).then(performRequest, rejectPromise);
+            });
+        }
+
+        return deferred.promise;
+    }
+
+    // function mtpInvokeApi(method, params, options) {
+    //     options = options || {};
+    //
+    //     var deferred = queryService.defer();
+    //
+    //     var rejectPromise = function (error) {
+    //         deferred.reject(error);
+    //     };
+    //
+    //     var performRequest = function (networker) {
+    //         var performRequestPromise = (networker).wrapApiCall(method, params, options);
+    //
+    //         return performRequestPromise.then(
+    //           function (result) {
+    //               deferred.resolve(result);
+    //           },
+    //           function (error) {
+    //               rejectPromise(error);
+    //           });
+    //     };
+    //     mtpGetNetworker(baseDcID || 2, options).then(performRequest, rejectPromise);
+    //     // if (dcID = (options.dcID || baseDcID)) {
+    //     //     mtpGetNetworker(dcID, options).then(performRequest, rejectPromise);
+    //     // } else {
+    //     //     Storage.get('dc').then(function (baseDcID) {
+    //     //         mtpGetNetworker(dcID = baseDcID || 2, options).then(performRequest, rejectPromise);
+    //     //     });
+    //     // }
+    //
+    //     return deferred.promise;
+    // }
+
+    function mtpGetUserID() {
+        return Storage.get('user_auth').then(function (auth) {
+            telegramMeNotify(auth && auth.id > 0 || false);
+            return auth.id || 0;
+        });
+    }
+
+    function getBaseDcID() {
+        return baseDcID || false;
+    }
+
+    function makePasswordHash (salt, password) {
+        var passwordUTF8 = unescape(encodeURIComponent(password));
+
+        var buffer = new ArrayBuffer(passwordUTF8.length);
+        var byteView = new Uint8Array(buffer);
+        for (var i = 0, len = passwordUTF8.length; i < len; i++) {
+            byteView[i] = passwordUTF8.charCodeAt(i);
+        }
+        buffer = bufferConcat(bufferConcat(salt, byteView), salt);
+
+        return CryptoWorker.sha256Hash(buffer);
+    }
+
+    return {
+        getBaseDcID: getBaseDcID,
+        getUserID: mtpGetUserID,
+        invokeApi: mtpInvokeApi,
+        getNetworker: mtpGetNetworker,
+        setUserAuth: mtpSetUserAuth,
+        logOut: mtpLogOut,
+        makePasswordHash: makePasswordHash,
+    };
+}
+
+MtpApiManagerModule.dependencies = [
+    'MtpSingleInstanceService',
+    'MtpNetworkerFactory',
+    'MtpAuthorizer',
+    'Storage',
+    'TelegramMeWebService',
+    'qSync',
+    'queryService',
+    'CryptoWorker'
+];
+
+function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManager, CryptoWorker, MtpSecureRandom, queryService, timeoutService, httpService) {
+    var chromeMatches = navigator.userAgent.match(/Chrome\/(\d+(\.\d+)?)/),
+        chromeVersion = chromeMatches && parseFloat(chromeMatches[1]) || false,
+        xhrSendBuffer = !('ArrayBufferView' in window) && (!chromeVersion || chromeVersion < 30);
+
+    function mtpSendPlainRequest(dcID, requestBuffer) {
+        var requestLength = requestBuffer.byteLength,
+            requestArray = new Int32Array(requestBuffer);
+
+        var header = new TLSerialization();
+        header.storeLongP(0, 0, 'auth_key_id'); // Auth key
+        header.storeLong(MtpTimeManager.generateID(), 'msg_id'); // Msg_id
+        header.storeInt(requestLength, 'request_length');
+
+        var headerBuffer = header.getBuffer(),
+            headerArray = new Int32Array(headerBuffer),
+            headerLength = headerBuffer.byteLength;
+
+        var resultBuffer = new ArrayBuffer(headerLength + requestLength),
+            resultArray = new Int32Array(resultBuffer);
+
+        resultArray.set(headerArray);
+        resultArray.set(requestArray, headerArray.length);
+
+        var requestData = xhrSendBuffer ? resultBuffer : resultArray,
+            requestPromise;
+        var url = MtpDcConfigurator.chooseServer(dcID);
+        var baseError = {code: 406, type: 'NETWORK_BAD_RESPONSE', url: url};
+        try {
+            requestPromise = httpService.post(url, requestData, {
+                responseType: 'arraybuffer',
+                transformRequest: null
+            });
+        } catch (e) {
+            requestPromise = queryService.reject(extend(baseError, {originalError: e}));
+        }
+        return requestPromise.then(
+            function (result) {
+                if (!result.data || !result.data.byteLength) {
+                    return queryService.reject(baseError);
+                }
+
+                try {
+                    var deserializer = new TLDeserialization(result.data, {mtproto: true});
+                    var auth_key_id = deserializer.fetchLong('auth_key_id');
+                    var msg_id = deserializer.fetchLong('msg_id');
+                    var msg_len = deserializer.fetchInt('msg_len');
+
+                } catch (e) {
+                    return queryService.reject(extend(baseError, {originalError: e}));
+                }
+
+                return deserializer;
+            },
+            function (error) {
+                if (!error.message && !error.type) {
+                    error = extend(baseError, {originalError: error});
+                }
+                return queryService.reject(error);
+            }
+        );
+    }
+
+    function mtpSendReqPQ(auth) {
+        var deferred = auth.deferred;
+
+        var request = new TLSerialization({mtproto: true});
+
+        request.storeMethod('req_pq', {nonce: auth.nonce});
+
+        mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
+            var response = deserializer.fetchObject('ResPQ');
+
+            if (response._ != 'resPQ') {
+                throw new Error('resPQ response invalid: ' + response._);
+            }
+
+            if (!bytesCmp(auth.nonce, response.nonce)) {
+                throw new Error('resPQ nonce mismatch');
+            }
+
+            auth.serverNonce = response.server_nonce;
+            auth.pq = response.pq;
+            auth.fingerprints = response.server_public_key_fingerprints;
+            auth.publicKey = MtpRsaKeysManager.select(auth.fingerprints);
+
+            if (!auth.publicKey) {
+                throw new Error('No public key found');
+            }
+
+            CryptoWorker.factorize(auth.pq).then(function (pAndQ) {
+                auth.p = pAndQ[0];
+                auth.q = pAndQ[1];
+                mtpSendReqDhParams(auth);
+            }, function (error) {
+                deferred.reject(error);
+            });
+        }, function (error) {
+            deferred.reject(error);
+        });
+
+        timeoutService(function () {
+            MtpRsaKeysManager.prepare();
+        });
+    }
+
+    function mtpSendReqDhParams(auth) {
+        var deferred = auth.deferred;
+
+        auth.newNonce = new Array(32);
+        MtpSecureRandom.nextBytes(auth.newNonce);
+
+        var data = new TLSerialization({mtproto: true});
+        data.storeObject({
+            _: 'p_q_inner_data',
+            pq: auth.pq,
+            p: auth.p,
+            q: auth.q,
+            nonce: auth.nonce,
+            server_nonce: auth.serverNonce,
+            new_nonce: auth.newNonce
+        }, 'P_Q_inner_data', 'DECRYPTED_DATA');
+
+        var dataWithHash = sha1BytesSync(data.getBuffer()).concat(data.getBytes());
+
+        var request = new TLSerialization({mtproto: true});
+        request.storeMethod('req_DH_params', {
+            nonce: auth.nonce,
+            server_nonce: auth.serverNonce,
+            p: auth.p,
+            q: auth.q,
+            public_key_fingerprint: auth.publicKey.fingerprint,
+            encrypted_data: rsaEncrypt(auth.publicKey, dataWithHash)
+        });
+
+        mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
+            var response = deserializer.fetchObject('Server_DH_Params', 'RESPONSE');
+
+            if (response._ != 'server_DH_params_fail' && response._ != 'server_DH_params_ok') {
+                deferred.reject(new Error('Server_DH_Params response invalid: ' + response._));
                 return false;
             }
-            Storage.set({tgme_sync: {canRedirect: canRedirect, ts: ts}});
 
-            var script = $('<script>').appendTo('body')
-                .on('load error', function () {
-                    script.remove();
+            if (!bytesCmp(auth.nonce, response.nonce)) {
+                deferred.reject(new Error('Server_DH_Params nonce mismatch'));
+                return false;
+            }
+
+            if (!bytesCmp(auth.serverNonce, response.server_nonce)) {
+                deferred.reject(new Error('Server_DH_Params server_nonce mismatch'));
+                return false;
+            }
+
+            if (response._ == 'server_DH_params_fail') {
+                var newNonceHash = sha1BytesSync(auth.newNonce).slice(-16);
+                if (!bytesCmp(newNonceHash, response.new_nonce_hash)) {
+                    deferred.reject(new Error('server_DH_params_fail new_nonce_hash mismatch'));
+                    return false;
+                }
+                deferred.reject(new Error('server_DH_params_fail'));
+                return false;
+            }
+
+            try {
+                mtpDecryptServerDhDataAnswer(auth, response.encrypted_answer);
+            } catch (e) {
+                deferred.reject(e);
+                return false;
+            }
+
+            mtpSendSetClientDhParams(auth);
+        }, function (error) {
+            deferred.reject(error);
+        });
+    }
+
+    function mtpDecryptServerDhDataAnswer(auth, encryptedAnswer) {
+        auth.localTime = tsNow();
+
+        auth.tmpAesKey = sha1BytesSync(auth.newNonce.concat(auth.serverNonce)).concat(sha1BytesSync(auth.serverNonce.concat(auth.newNonce)).slice(0, 12));
+        auth.tmpAesIv = sha1BytesSync(auth.serverNonce.concat(auth.newNonce)).slice(12).concat(sha1BytesSync([].concat(auth.newNonce, auth.newNonce)), auth.newNonce.slice(0, 4));
+
+        var answerWithHash = aesDecryptSync(encryptedAnswer, auth.tmpAesKey, auth.tmpAesIv);
+
+        var hash = answerWithHash.slice(0, 20);
+        var answerWithPadding = answerWithHash.slice(20);
+        var buffer = bytesToArrayBuffer(answerWithPadding);
+
+        var deserializer = new TLDeserialization(buffer, {mtproto: true});
+        var response = deserializer.fetchObject('Server_DH_inner_data');
+
+        if (response._ != 'server_DH_inner_data') {
+            throw new Error('server_DH_inner_data response invalid: ' + constructor);
+        }
+
+        if (!bytesCmp(auth.nonce, response.nonce)) {
+            throw new Error('server_DH_inner_data nonce mismatch');
+        }
+
+        if (!bytesCmp(auth.serverNonce, response.server_nonce)) {
+            throw new Error('server_DH_inner_data serverNonce mismatch');
+        }
+
+        auth.g = response.g;
+        auth.dhPrime = response.dh_prime;
+        auth.gA = response.g_a;
+        auth.serverTime = response.server_time;
+        auth.retry = 0;
+
+        var offset = deserializer.getOffset();
+
+        if (!bytesCmp(hash, sha1BytesSync(answerWithPadding.slice(0, offset)))) {
+            throw new Error('server_DH_inner_data SHA1-hash mismatch');
+        }
+
+        MtpTimeManager.applyServerTime(auth.serverTime, auth.localTime);
+    }
+
+    function mtpSendSetClientDhParams(auth) {
+        var deferred = auth.deferred,
+            gBytes = bytesFromHex(auth.g.toString(16));
+
+        auth.b = new Array(256);
+        MtpSecureRandom.nextBytes(auth.b);
+
+        CryptoWorker.modPow(gBytes, auth.b, auth.dhPrime).then(function (gB) {
+            var data = new TLSerialization({mtproto: true});
+            data.storeObject({
+                _: 'client_DH_inner_data',
+                nonce: auth.nonce,
+                server_nonce: auth.serverNonce,
+                retry_id: [0, auth.retry++],
+                g_b: gB,
+            }, 'Client_DH_Inner_Data');
+
+            var dataWithHash = sha1BytesSync(data.getBuffer()).concat(data.getBytes());
+
+            var encryptedData = aesEncryptSync(dataWithHash, auth.tmpAesKey, auth.tmpAesIv);
+
+            var request = new TLSerialization({mtproto: true});
+            request.storeMethod('set_client_DH_params', {
+                nonce: auth.nonce,
+                server_nonce: auth.serverNonce,
+                encrypted_data: encryptedData
+            });
+
+            mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
+                var response = deserializer.fetchObject('Set_client_DH_params_answer');
+
+                if (response._ != 'dh_gen_ok' && response._ != 'dh_gen_retry' && response._ != 'dh_gen_fail') {
+                    deferred.reject(new Error('Set_client_DH_params_answer response invalid: ' + response._));
+                    return false;
+                }
+
+                if (!bytesCmp(auth.nonce, response.nonce)) {
+                    deferred.reject(new Error('Set_client_DH_params_answer nonce mismatch'));
+                    return false
+                }
+
+                if (!bytesCmp(auth.serverNonce, response.server_nonce)) {
+                    deferred.reject(new Error('Set_client_DH_params_answer server_nonce mismatch'));
+                    return false;
+                }
+
+                CryptoWorker.modPow(auth.gA, auth.b, auth.dhPrime).then(function (authKey) {
+                    var authKeyHash = sha1BytesSync(authKey),
+                        authKeyAux = authKeyHash.slice(0, 8),
+                        authKeyID = authKeyHash.slice(-8);
+
+                    switch (response._) {
+                        case 'dh_gen_ok':
+                            var newNonceHash1 = sha1BytesSync(auth.newNonce.concat([1], authKeyAux)).slice(-16);
+
+                            if (!bytesCmp(newNonceHash1, response.new_nonce_hash1)) {
+                                deferred.reject(new Error('Set_client_DH_params_answer new_nonce_hash1 mismatch'));
+                                return false;
+                            }
+
+                            var serverSalt = bytesXor(auth.newNonce.slice(0, 8), auth.serverNonce.slice(0, 8));
+                            // console.log('Auth successfull!', authKeyID, authKey, serverSalt);
+
+                            auth.authKeyID = authKeyID;
+                            auth.authKey = authKey;
+                            auth.serverSalt = serverSalt;
+
+                            deferred.resolve(auth);
+                            break;
+
+                        case 'dh_gen_retry':
+                            var newNonceHash2 = sha1BytesSync(auth.newNonce.concat([2], authKeyAux)).slice(-16);
+                            if (!bytesCmp(newNonceHash2, response.new_nonce_hash2)) {
+                                deferred.reject(new Error('Set_client_DH_params_answer new_nonce_hash2 mismatch'));
+                                return false;
+                            }
+
+                            return mtpSendSetClientDhParams(auth);
+
+                        case 'dh_gen_fail':
+                            var newNonceHash3 = sha1BytesSync(auth.newNonce.concat([3], authKeyAux)).slice(-16);
+                            if (!bytesCmp(newNonceHash3, response.new_nonce_hash3)) {
+                                deferred.reject(new Error('Set_client_DH_params_answer new_nonce_hash3 mismatch'));
+                                return false;
+                            }
+
+                            deferred.reject(new Error('Set_client_DH_params_answer fail'));
+                            return false;
+                    }
+                }, function (error) {
+                    deferred.reject(error);
                 })
-                .attr('src', '//telegram.me/_websync_?authed=' + (canRedirect ? '1' : '0'));
+            }, function (error) {
+                deferred.reject(error);
+            });
+        }, function (error) {
+            deferred.reject(error);
+        })
+    }
+
+    var cached = {};
+
+    function mtpAuth(dcID) {
+        if (cached[dcID] !== undefined) {
+            return cached[dcID];
+        }
+
+        var nonce = [];
+        for (var i = 0; i < 16; i++) {
+            nonce.push(nextRandomInt(0xFF));
+        }
+
+        if (!MtpDcConfigurator.chooseServer(dcID)) {
+            return queryService.reject(new Error('No server found for dc ' + dcID));
+        }
+
+        var auth = {
+            dcID: dcID,
+            nonce: nonce,
+            deferred: queryService.defer()
+        };
+
+        timeoutService(function () {
+            mtpSendReqPQ(auth);
+        });
+
+        cached[dcID] = auth.deferred.promise;
+
+        cached[dcID]['fail'](function () {
+            delete cached[dcID];
+        });
+
+        return cached[dcID];
+    }
+
+    return {
+        auth: mtpAuth
+    };
+}
+
+MtpAuthorizerModule.dependencies = [
+    'MtpTimeManager',
+    'MtpDcConfigurator',
+    'MtpRsaKeysManager',
+    'CryptoWorker',
+    'MtpSecureRandom',
+    'queryService',
+    'timeoutService',
+    'httpService'
+];
+
+function MtpDcConfiguratorModule() {
+    var chosenServers = {};
+
+    function chooseServer(dcID, upload) {
+        var dcOptions = Config.Modes.test ? Config.Server.Test : chooseProtocol() === 'https:' ? Config.Server.Https : Config.Server.Production;
+
+        if (chosenServers[dcID] === undefined) {
+            var chosenServer = false,
+                i, dcOption;
+
+            for (i = 0; i < dcOptions.length; i++) {
+                dcOption = dcOptions[i];
+                if (dcOption.id == dcID) {
+                    chosenServer = chooseProtocol() + '//' + dcOption.host + (dcOption.port != 80 ? ':' + dcOption.port : '') + '/apiw1';
+                    break;
+                }
+            }
+            chosenServers[dcID] = chosenServer;
+        }
+
+        return chosenServers[dcID];
+    }
+
+    function chooseProtocol() {
+        if (location.protocol.indexOf('http') != -1) {
+            return location.protocol;
+        }
+
+        return 'http:';
+    }
+
+    return {
+        chooseServer: chooseServer
+    };
+}
+
+MtpDcConfiguratorModule.dependencies = [];
+
+function MtpNetworkerFactoryModule(MtpSecureRandom, MtpTimeManager, Storage, CryptoWorker, MtpDcConfigurator, timeoutService, intervalService, queryService, httpService) {
+    var updatesProcessor,
+        akStopped = false,
+        chromeMatches = navigator.userAgent.match(/Chrome\/(\d+(\.\d+)?)/),
+        chromeVersion = chromeMatches && parseFloat(chromeMatches[1]) || false,
+        xhrSendBuffer = !('ArrayBufferView' in window) && (!chromeVersion || chromeVersion < 30);
+
+    var subscriptions = {};
+
+    function subscribe(id, handler) {
+        if (typeof handler == 'function') {
+            subscriptions[id] = handler;
+        }
+    }
+
+    function unSubscribe(id) {
+        delete subscriptions[id];
+    }
+
+    function MtpNetworker(dcID, authKey, serverSalt, options) {
+        options = options || {};
+
+        this.dcID = dcID;
+
+        this.authKey = authKey;
+        this.authKeyUint8 = convertToUint8Array(authKey);
+        this.authKeyID = sha1BytesSync(authKey).slice(-8);
+
+        this.serverSalt = serverSalt;
+
+        this.upload = options.fileUpload || options.fileDownload || false;
+
+        this.updateSession();
+
+        this.checkConnectionPeriod = 0;
+
+        this.sentMessages = {};
+        this.serverMessages = [];
+
+        this.pendingMessages = {};
+        this.pendingAcks = [];
+        this.pendingResends = [];
+        this.connectionInited = false;
+
+        intervalService(this.checkLongPoll.bind(this), 10000);
+
+        this.checkLongPoll();
+    }
+
+    MtpNetworker.prototype.updateSession = function () {
+        this.seqNo = 0;
+        this.sessionID = new Array(8);
+        MtpSecureRandom.nextBytes(this.sessionID);
+    };
+
+    MtpNetworker.prototype.updateSentMessage = function (sentMessageID) {
+        var sentMessage = this.sentMessages[sentMessageID];
+        if (!sentMessage) {
+            return false;
+        }
+        var self = this;
+        if (sentMessage.container) {
+            var newInner = [];
+            forEach(sentMessage.inner, function (innerSentMessageID) {
+                var innerSentMessage = self.updateSentMessage(innerSentMessageID);
+                if (innerSentMessage) {
+                    newInner.push(innerSentMessage.msg_id);
+                }
+            });
+            sentMessage.inner = newInner;
+        }
+
+        sentMessage.msg_id = MtpTimeManager.generateID();
+        sentMessage.seq_no = this.generateSeqNo(
+            sentMessage.notContentRelated ||
+            sentMessage.container
+        );
+        this.sentMessages[sentMessage.msg_id] = sentMessage;
+        delete self.sentMessages[sentMessageID];
+
+        return sentMessage;
+    };
+
+    MtpNetworker.prototype.generateSeqNo = function (notContentRelated) {
+        var seqNo = this.seqNo * 2;
+
+        if (!notContentRelated) {
+            seqNo++;
+            this.seqNo++;
+        }
+
+        return seqNo;
+    };
+
+    MtpNetworker.prototype.wrapMtpCall = function (method, params, options) {
+        var serializer = new TLSerialization({mtproto: true});
+
+        serializer.storeMethod(method, params);
+
+        var messageID = MtpTimeManager.generateID(),
+            seqNo = this.generateSeqNo(),
+            message = {
+                msg_id: messageID,
+                seq_no: seqNo,
+                body: serializer.getBytes()
+            };
+
+        if (Config.Modes.debug) {
+            console.log(dT(), 'MT call', method, params, messageID, seqNo);
+        }
+
+        return this.pushMessage(message, options);
+    };
+
+    MtpNetworker.prototype.wrapMtpMessage = function (object, options) {
+        options = options || {};
+
+        var serializer = new TLSerialization({mtproto: true});
+        serializer.storeObject(object, 'Object');
+
+        var messageID = MtpTimeManager.generateID(),
+            seqNo = this.generateSeqNo(options.notContentRelated),
+            message = {
+                msg_id: messageID,
+                seq_no: seqNo,
+                body: serializer.getBytes()
+            };
+
+        if (Config.Modes.debug) {
+            console.log(dT(), 'MT message', object, messageID, seqNo);
+        }
+
+        return this.pushMessage(message, options);
+    };
+
+    MtpNetworker.prototype.wrapApiCall = function (method, params, options) {
+        var serializer = new TLSerialization(options);
+
+        if (!this.connectionInited) {
+            serializer.storeInt(0xda9b0d0d, 'invokeWithLayer');
+            serializer.storeInt(Config.Schema.API.layer, 'layer');
+            serializer.storeInt(0x69796de9, 'initConnection');
+            serializer.storeInt(Config.App.id, 'api_id');
+            serializer.storeString(navigator.userAgent || 'Unknown UserAgent', 'device_model');
+            serializer.storeString(navigator.platform || 'Unknown Platform', 'system_version');
+            serializer.storeString(Config.App.version, 'app_version');
+            serializer.storeString(navigator.language || 'en', 'lang_code');
+        }
+
+        if (options.afterMessageID) {
+            serializer.storeInt(0xcb9f372d, 'invokeAfterMsg');
+            serializer.storeLong(options.afterMessageID, 'msg_id');
+        }
+
+        options.resultType = serializer.storeMethod(method, params);
+
+        var messageID = MtpTimeManager.generateID(),
+            seqNo = this.generateSeqNo(),
+            message = {
+                msg_id: messageID,
+                seq_no: seqNo,
+                body: serializer.getBytes(true),
+                isAPI: true
+            };
+
+        if (Config.Modes.debug) {
+            console.log(dT(), 'Api call', method, params, messageID, seqNo, options);
+        } else {
+            console.log(dT(), 'Api call', method);
+        }
+
+        return this.pushMessage(message, options);
+    };
+
+    MtpNetworker.prototype.checkLongPoll = function (force) {
+        var isClean = this.cleanupSent();
+        if (this.longPollPending && tsNow() < this.longPollPending ||
+            this.offline ||
+            akStopped) {
+            return false;
+        }
+        var self = this;
+        Storage.get('dc').then(function (baseDcID) {
+            if (isClean && (
+                    baseDcID != self.dcID ||
+                    self.upload ||
+                    self.sleepAfter && tsNow() > self.sleepAfter
+                )) {
+                // console.warn(dT(), 'Send long-poll for DC is delayed', self.dcID, self.sleepAfter);
+                return;
+            }
+            self.sendLongPoll();
+        });
+    };
+
+    MtpNetworker.prototype.sendLongPoll = function () {
+        var maxWait = 25000,
+            self = this;
+
+        this.longPollPending = tsNow() + maxWait;
+
+        this.wrapMtpCall('http_wait', {
+            max_delay: 500,
+            wait_after: 150,
+            max_wait: maxWait
+        }, {
+            noResponse: true,
+            longPoll: true
+        }).then(function () {
+            delete self.longPollPending;
+            setZeroTimeout(self.checkLongPoll.bind(self));
+        }, function () {
+            console.error('Long-poll failed');
+        });
+
+    };
+
+    MtpNetworker.prototype.pushMessage = function (message, options) {
+        var deferred = queryService.defer();
+
+        this.sentMessages[message.msg_id] = extend(message, options || {}, {deferred: deferred});
+        this.pendingMessages[message.msg_id] = 0;
+
+        if (!options || !options.noShedule) {
+            this.sheduleRequest();
+        }
+        if (isObject(options)) {
+            options.messageID = message.msg_id;
+        }
+
+        return deferred.promise;
+    };
+
+    MtpNetworker.prototype.pushResend = function (messageID, delay) {
+        var value = delay ? tsNow() + delay : 0;
+        var sentMessage = this.sentMessages[messageID];
+        if (sentMessage.container) {
+            for (var i = 0; i < sentMessage.inner.length; i++) {
+                this.pendingMessages[sentMessage.inner[i]] = value;
+            }
+        } else {
+            this.pendingMessages[messageID] = value;
+        }
+        this.sheduleRequest(delay);
+    };
+
+    MtpNetworker.prototype.getMsgKeyIv = function (msgKey, isOut) {
+        var authKey = this.authKeyUint8,
+            x = isOut ? 0 : 8,
+            sha1aText = new Uint8Array(48),
+            sha1bText = new Uint8Array(48),
+            sha1cText = new Uint8Array(48),
+            sha1dText = new Uint8Array(48),
+            promises = {};
+
+        sha1aText.set(msgKey, 0);
+        sha1aText.set(authKey.subarray(x, x + 32), 16);
+        promises.sha1a = CryptoWorker.sha1Hash(sha1aText);
+
+        sha1bText.set(authKey.subarray(x + 32, x + 48), 0);
+        sha1bText.set(msgKey, 16);
+        sha1bText.set(authKey.subarray(x + 48, x + 64), 32);
+        promises.sha1b = CryptoWorker.sha1Hash(sha1bText);
+
+        sha1cText.set(authKey.subarray(x + 64, x + 96), 0);
+        sha1cText.set(msgKey, 32);
+        promises.sha1c = CryptoWorker.sha1Hash(sha1cText);
+
+        sha1dText.set(msgKey, 0);
+        sha1dText.set(authKey.subarray(x + 96, x + 128), 16);
+        promises.sha1d = CryptoWorker.sha1Hash(sha1dText);
+        return queryService.all(promises).then(function (result) {
+            var aesKey = new Uint8Array(32),
+                aesIv = new Uint8Array(32),
+                sha1a = new Uint8Array(result.sha1a),
+                sha1b = new Uint8Array(result.sha1b),
+                sha1c = new Uint8Array(result.sha1c),
+                sha1d = new Uint8Array(result.sha1d);
+
+            aesKey.set(sha1a.subarray(0, 8));
+            aesKey.set(sha1b.subarray(8, 20), 8);
+            aesKey.set(sha1c.subarray(4, 16), 20);
+
+            aesIv.set(sha1a.subarray(8, 20));
+            aesIv.set(sha1b.subarray(0, 8), 12);
+            aesIv.set(sha1c.subarray(16, 20), 20);
+            aesIv.set(sha1d.subarray(0, 8), 24);
+
+            return [aesKey, aesIv];
+        });
+    };
+
+    MtpNetworker.prototype.checkConnection = function (event) {
+        timeoutService.cancel(this.checkConnectionPromise);
+
+        var serializer = new TLSerialization({mtproto: true}),
+            pingID = [nextRandomInt(0xFFFFFFFF), nextRandomInt(0xFFFFFFFF)];
+
+        serializer.storeMethod('ping', {ping_id: pingID});
+
+        var pingMessage = {
+            msg_id: MtpTimeManager.generateID(),
+            seq_no: this.generateSeqNo(true),
+            body: serializer.getBytes()
+        };
+
+        var self = this;
+        this.sendEncryptedRequest(pingMessage, {timeout: 15000}).then(function (result) {
+            self.toggleOffline(false);
+        }, function () {
+            self.checkConnectionPromise = timeoutService(self.checkConnection.bind(self), parseInt(self.checkConnectionPeriod * 1000));
+            self.checkConnectionPeriod = Math.min(60, self.checkConnectionPeriod * 1.5);
+        })
+    };
+
+    MtpNetworker.prototype.toggleOffline = function (enabled) {
+        if (this.offline !== undefined && this.offline == enabled) {
+            return false;
+        }
+
+        this.offline = enabled;
+
+        if (this.offline) {
+            timeoutService.cancel(this.nextReqPromise);
+            delete this.nextReq;
+
+            if (this.checkConnectionPeriod < 1.5) {
+                this.checkConnectionPeriod = 0;
+            }
+
+            this.checkConnectionPromise = timeoutService(this.checkConnection.bind(this), parseInt(this.checkConnectionPeriod * 1000));
+            this.checkConnectionPeriod = Math.min(30, (1 + this.checkConnectionPeriod) * 1.5);
+
+            this.onOnlineCb = this.checkConnection.bind(this);
+
+            document.body.addEventListener('online', this.onOnlineCb);
+            document.body.addEventListener('focus', this.onOnlineCb);
+        } else {
+            delete this.longPollPending;
+            this.checkLongPoll();
+            this.sheduleRequest();
+
+            if (this.onOnlineCb) {
+                document.body.removeEventListener('online', this.onOnlineCb);
+                document.body.removeEventListener('focus', this.onOnlineCb);
+            }
+            timeoutService.cancel(this.checkConnectionPromise);
+        }
+
+    };
+
+    MtpNetworker.prototype.performSheduledRequest = function () {
+        if (this.offline || akStopped) {
+            return false;
+        }
+        delete this.nextReq;
+        if (this.pendingAcks.length) {
+            var ackMsgIDs = [];
+            for (var i = 0; i < this.pendingAcks.length; i++) {
+                ackMsgIDs.push(this.pendingAcks[i]);
+            }
+            this.wrapMtpMessage({_: 'msgs_ack', msg_ids: ackMsgIDs}, {notContentRelated: true, noShedule: true});
+        }
+
+        if (this.pendingResends.length) {
+            var resendMsgIDs = [],
+                resendOpts = {noShedule: true, notContentRelated: true};
+            for (var i = 0; i < this.pendingResends.length; i++) {
+                resendMsgIDs.push(this.pendingResends[i]);
+            }
+            this.wrapMtpMessage({_: 'msg_resend_req', msg_ids: resendMsgIDs}, resendOpts);
+            this.lastResendReq = {req_msg_id: resendOpts.messageID, resend_msg_ids: resendMsgIDs};
+        }
+
+        var messages = [],
+            message,
+            messagesByteLen = 0,
+            currentTime = tsNow(),
+            hasApiCall = false,
+            hasHttpWait = false,
+            lengthOverflow = false,
+            singlesCount = 0,
+            self = this;
+
+        forEach(this.pendingMessages, function (value, messageID) {
+            if (!value || value >= currentTime) {
+                if (message = self.sentMessages[messageID]) {
+                    var messageByteLength = (message.body.byteLength || message.body.length) + 32;
+                    if (!message.notContentRelated &&
+                        lengthOverflow) {
+                        return;
+                    }
+                    if (!message.notContentRelated &&
+                        messagesByteLen &&
+                        messagesByteLen + messageByteLength > 655360) { // 640 Kb
+                        lengthOverflow = true;
+                        return;
+                    }
+                    if (message.singleInRequest) {
+                        singlesCount++;
+                        if (singlesCount > 1) {
+                            return;
+                        }
+                    }
+                    messages.push(message);
+                    messagesByteLen += messageByteLength;
+                    if (message.isAPI) {
+                        hasApiCall = true;
+                    }
+                    else if (message.longPoll) {
+                        hasHttpWait = true;
+                    }
+                }
+                delete self.pendingMessages[messageID];
+            }
+        });
+
+        if (hasApiCall && !hasHttpWait) {
+            var serializer = new TLSerialization({mtproto: true});
+            serializer.storeMethod('http_wait', {
+                max_delay: 500,
+                wait_after: 150,
+                max_wait: 3000
+            });
+            messages.push({
+                msg_id: MtpTimeManager.generateID(),
+                seq_no: this.generateSeqNo(),
+                body: serializer.getBytes()
+            });
+        }
+
+        if (!messages.length) {
+            return;
+        }
+
+        var noResponseMsgs = [];
+
+        if (messages.length > 1) {
+            var container = new TLSerialization({mtproto: true, startMaxLength: messagesByteLen + 64});
+            container.storeInt(0x73f1f8dc, 'CONTAINER[id]');
+            container.storeInt(messages.length, 'CONTAINER[count]');
+            var onloads = [];
+            var innerMessages = [];
+            for (var i = 0; i < messages.length; i++) {
+                container.storeLong(messages[i].msg_id, 'CONTAINER[' + i + '][msg_id]');
+                innerMessages.push(messages[i].msg_id);
+                container.storeInt(messages[i].seq_no, 'CONTAINER[' + i + '][seq_no]');
+                container.storeInt(messages[i].body.length, 'CONTAINER[' + i + '][bytes]');
+                container.storeRawBytes(messages[i].body, 'CONTAINER[' + i + '][body]');
+                if (messages[i].noResponse) {
+                    noResponseMsgs.push(messages[i].msg_id);
+                }
+            }
+
+            var containerSentMessage = {
+                msg_id: MtpTimeManager.generateID(),
+                seq_no: this.generateSeqNo(true),
+                container: true,
+                inner: innerMessages
+            };
+
+            message = extend({body: container.getBytes(true)}, containerSentMessage);
+
+            this.sentMessages[message.msg_id] = containerSentMessage;
+
+            if (Config.Modes.debug) {
+                console.log(dT(), 'Container', innerMessages, message.msg_id, message.seq_no);
+            }
+        } else {
+            if (message.noResponse) {
+                noResponseMsgs.push(message.msg_id);
+            }
+            this.sentMessages[message.msg_id] = message;
+        }
+
+        this.pendingAcks = [];
+
+        var self = this;
+        this.sendEncryptedRequest(message).then(function (result) {
+            self.toggleOffline(false);
+            self.parseResponse(result.data).then(function (response) {
+                if (Config.Modes.debug) {
+                    console.log(dT(), 'Server response', self.dcID, response);
+                }
+
+                self.processMessage(response.response, response.messageID, response.sessionID);
+
+                for (var k in subscriptions) {
+                    subscriptions[k](response.response);
+                }
+
+                forEach(noResponseMsgs, function (msgID) {
+                    if (self.sentMessages[msgID]) {
+                        var deferred = self.sentMessages[msgID].deferred;
+                        delete self.sentMessages[msgID];
+                        deferred.resolve();
+                    }
+                });
+
+                self.checkLongPoll();
+
+                this.checkConnectionPeriod = Math.max(1.1, Math.sqrt(this.checkConnectionPeriod));
+
+            });
+        }, function (error) {
+            console.error('Encrypted request failed', error);
+
+            if (message.container) {
+                forEach(message.inner, function (msgID) {
+                    self.pendingMessages[msgID] = 0;
+                });
+                delete self.sentMessages[message.msg_id];
+            } else {
+                self.pendingMessages[message.msg_id] = 0;
+            }
+
+            forEach(noResponseMsgs, function (msgID) {
+                if (self.sentMessages[msgID]) {
+                    var deferred = self.sentMessages[msgID].deferred;
+                    delete self.sentMessages[msgID];
+                    delete self.pendingMessages[msgID];
+                    deferred.reject();
+                }
+            });
+
+            self.toggleOffline(true);
+        });
+
+        if (lengthOverflow || singlesCount > 1) {
+            this.sheduleRequest()
+        }
+    };
+
+    MtpNetworker.prototype.getEncryptedMessage = function (bytes) {
+        var self = this;
+
+        return CryptoWorker.sha1Hash(bytes).then(function (bytesHash) {
+            var msgKey = new Uint8Array(bytesHash).subarray(4, 20);
+            return self.getMsgKeyIv(msgKey, true).then(function (keyIv) {
+                return CryptoWorker.aesEncrypt(bytes, keyIv[0], keyIv[1]).then(function (encryptedBytes) {
+                    return {
+                        bytes: encryptedBytes,
+                        msgKey: msgKey
+                    };
+                })
+            })
+        })
+    };
+
+    MtpNetworker.prototype.getDecryptedMessage = function (msgKey, encryptedData) {
+        return this.getMsgKeyIv(msgKey, false).then(function (keyIv) {
+            return CryptoWorker.aesDecrypt(encryptedData, keyIv[0], keyIv[1]);
+        });
+    };
+
+    MtpNetworker.prototype.sendEncryptedRequest = function (message, options) {
+        var self = this;
+        options = options || {};
+        var data = new TLSerialization({startMaxLength: message.body.length + 64});
+
+        data.storeIntBytes(this.serverSalt, 64, 'salt');
+        data.storeIntBytes(this.sessionID, 64, 'session_id');
+
+        data.storeLong(message.msg_id, 'message_id');
+        data.storeInt(message.seq_no, 'seq_no');
+
+        data.storeInt(message.body.length, 'message_data_length');
+        data.storeRawBytes(message.body, 'message_data');
+
+        return this.getEncryptedMessage(data.getBuffer()).then(function (encryptedResult) {
+            var request = new TLSerialization({startMaxLength: encryptedResult.bytes.byteLength + 256});
+            request.storeIntBytes(self.authKeyID, 64, 'auth_key_id');
+            request.storeIntBytes(encryptedResult.msgKey, 128, 'msg_key');
+            request.storeRawBytes(encryptedResult.bytes, 'encrypted_data');
+
+            var requestData = xhrSendBuffer ? request.getBuffer() : request.getArray();
+
+            var requestPromise;
+            var url = MtpDcConfigurator.chooseServer(self.dcID, self.upload);
+            var baseError = {code: 406, type: 'NETWORK_BAD_RESPONSE', url: url};
+
+            try {
+                options = extend(options || {}, {
+                    responseType: 'arraybuffer',
+                    transformRequest: null
+                });
+                requestPromise = httpService.post(url, requestData, options);
+            } catch (e) {
+                requestPromise = queryService.reject(e);
+            }
+            return requestPromise.then(
+                function (result) {
+                    if (!result.data || !result.data.byteLength) {
+                        return queryService.reject(baseError);
+                    }
+                    return result;
+                },
+                function (error) {
+                    if (error.status == 404 &&
+                        (error.data || '').indexOf('nginx/0.3.33') != -1) {
+                        Storage.remove(
+                            'dc' + self.dcID + '_server_salt',
+                            'dc' + self.dcID + '_auth_key'
+                        ).then(function () {
+                            window.location.reload();
+                        });
+                    }
+                    if (!error.message && !error.type) {
+                        error = extend(baseError, {type: 'NETWORK_BAD_REQUEST', originalError: error});
+                    }
+                    return queryService.reject(error);
+                }
+            );
+        });
+    };
+
+    MtpNetworker.prototype.parseResponse = function (responseBuffer) {
+        var self = this;
+
+        var deserializer = new TLDeserialization(responseBuffer);
+
+        var authKeyID = deserializer.fetchIntBytes(64, false, 'auth_key_id');
+        if (!bytesCmp(authKeyID, this.authKeyID)) {
+            throw new Error('Invalid server auth_key_id: ' + bytesToHex(authKeyID));
+        }
+        var msgKey = deserializer.fetchIntBytes(128, true, 'msg_key'),
+            encryptedData = deserializer.fetchRawBytes(responseBuffer.byteLength - deserializer.getOffset(), true, 'encrypted_data');
+
+        return this.getDecryptedMessage(msgKey, encryptedData).then(function (dataWithPadding) {
+            var deserializer = new TLDeserialization(dataWithPadding, {mtproto: true});
+
+            var salt = deserializer.fetchIntBytes(64, false, 'salt');
+            var sessionID = deserializer.fetchIntBytes(64, false, 'session_id');
+            var messageID = deserializer.fetchLong('message_id');
+
+            var seqNo = deserializer.fetchInt('seq_no');
+
+            var messageBody = deserializer.fetchRawBytes(false, true, 'message_data');
+
+            var hashData = convertToUint8Array(dataWithPadding).subarray(0, deserializer.getOffset());
+
+            return CryptoWorker.sha1Hash(hashData).then(function (dataHash) {
+                if (!bytesCmp(msgKey, bytesFromArrayBuffer(dataHash).slice(-16))) {
+                    console.warn(msgKey, bytesFromArrayBuffer(dataHash));
+                    throw new Error('server msgKey mismatch');
+                }
+
+                var buffer = bytesToArrayBuffer(messageBody);
+                var deserializerOptions = {
+                    mtproto: true,
+                    override: {
+                        mt_message: function (result, field) {
+                            result.msg_id = this.fetchLong(field + '[msg_id]');
+                            result.seqno = this.fetchInt(field + '[seqno]');
+                            result.bytes = this.fetchInt(field + '[bytes]');
+
+                            var offset = this.getOffset();
+
+                            try {
+                                result.body = this.fetchObject('Object', field + '[body]');
+                            } catch (e) {
+                                console.error(dT(), 'parse error', e.message, e.stack);
+                                result.body = {_: 'parse_error', error: e};
+                            }
+                            if (this.offset != offset + result.bytes) {
+                                this.offset = offset + result.bytes;
+                            }
+                        },
+                        mt_rpc_result: function (result, field) {
+                            result.req_msg_id = this.fetchLong(field + '[req_msg_id]');
+
+                            var sentMessage = self.sentMessages[result.req_msg_id],
+                                type = sentMessage && sentMessage.resultType || 'Object';
+
+                            if (result.req_msg_id && !sentMessage) {
+                                // console.warn(dT(), 'Result for unknown message', result);
+                                return;
+                            }
+                            result.result = this.fetchObject(type, field + '[result]');
+                        }
+                    }
+                };
+                var deserializer = new TLDeserialization(buffer, deserializerOptions);
+                var response = deserializer.fetchObject('', 'INPUT');
+
+                return {
+                    response: response,
+                    messageID: messageID,
+                    sessionID: sessionID,
+                    seqNo: seqNo
+                };
+            });
+        });
+    };
+
+    MtpNetworker.prototype.applyServerSalt = function (newServerSalt) {
+        var serverSalt = longToBytes(newServerSalt);
+
+        var storeObj = {};
+        storeObj['dc' + this.dcID + '_server_salt'] = bytesToHex(serverSalt);
+        Storage.set(storeObj);
+
+        this.serverSalt = serverSalt;
+        return true;
+    };
+
+    MtpNetworker.prototype.sheduleRequest = function (delay) {
+        if (this.offline) {
+            this.checkConnection('forced shedule');
+        }
+        var nextReq = tsNow() + delay;
+
+        if (delay && this.nextReq && this.nextReq <= nextReq) {
+            return false;
+        }
+
+        timeoutService.cancel(this.nextReqPromise);
+        if (delay > 0) {
+            this.nextReqPromise = timeoutService(this.performSheduledRequest.bind(this), delay || 0);
+        } else {
+            setZeroTimeout(this.performSheduledRequest.bind(this))
+        }
+
+        this.nextReq = nextReq;
+    };
+
+    MtpNetworker.prototype.ackMessage = function (msgID) {
+        this.pendingAcks.push(msgID);
+        this.sheduleRequest(30000);
+    };
+
+    MtpNetworker.prototype.reqResendMessage = function (msgID) {
+        this.pendingResends.push(msgID);
+        this.sheduleRequest(100);
+    };
+
+    MtpNetworker.prototype.cleanupSent = function () {
+        var self = this;
+        var notEmpty = false;
+        forEach(this.sentMessages, function (message, msgID) {
+            if (message.notContentRelated && self.pendingMessages[msgID] === undefined) {
+                delete self.sentMessages[msgID];
+            }
+            else if (message.container) {
+                for (var i = 0; i < message.inner.length; i++) {
+                    if (self.sentMessages[message.inner[i]] !== undefined) {
+                        notEmpty = true;
+                        return;
+                    }
+                }
+                delete self.sentMessages[msgID];
+            } else {
+                notEmpty = true;
+            }
+        });
+
+        return !notEmpty;
+    };
+
+
+    MtpNetworker.prototype.processMessageAck = function (messageID) {
+        var sentMessage = this.sentMessages[messageID];
+        if (sentMessage && !sentMessage.acked) {
+            delete sentMessage.body;
+            sentMessage.acked = true;
+
+            return true;
+        }
+
+        return false;
+    };
+
+    MtpNetworker.prototype.processError = function (rawError) {
+        var matches = (rawError.error_message || '').match(/^([A-Z_0-9]+\b)(: (.+))?/) || [];
+        rawError.error_code = uintToInt(rawError.error_code);
+
+        return {
+            code: !rawError.error_code || rawError.error_code <= 0 ? 500 : rawError.error_code,
+            type: matches[1] || 'UNKNOWN',
+            description: matches[3] || ('CODE#' + rawError.error_code + ' ' + rawError.error_message),
+            originalError: rawError
+        };
+    };
+
+
+    MtpNetworker.prototype.processMessage = function (message, messageID, sessionID) {
+        switch (message._) {
+            case 'msg_container':
+                var len = message.messages.length;
+                for (var i = 0; i < len; i++) {
+                    this.processMessage(message.messages[i], messageID, sessionID);
+                }
+                break;
+
+            case 'bad_server_salt':
+                var sentMessage = this.sentMessages[message.bad_msg_id];
+                if (!sentMessage || sentMessage.seq_no != message.bad_msg_seqno) {
+                    throw new Error('Bad server salt for invalid message');
+                }
+
+                this.applyServerSalt(message.new_server_salt);
+                this.pushResend(message.bad_msg_id);
+                this.ackMessage(messageID);
+                break;
+
+            case 'bad_msg_notification':
+                var sentMessage = this.sentMessages[message.bad_msg_id];
+                if (!sentMessage || sentMessage.seq_no != message.bad_msg_seqno) {
+                    throw new Error('Bad msg notification for invalid message');
+                }
+
+                if (message.error_code == 16 || message.error_code == 17) {
+                    if (MtpTimeManager.applyServerTime(
+                            bigStringInt(messageID).shiftRight(32).toString(10)
+                        )) {
+                        this.updateSession();
+                    }
+                    var badMessage = this.updateSentMessage(message.bad_msg_id);
+                    this.pushResend(badMessage.msg_id);
+                    this.ackMessage(messageID);
+                }
+                break;
+
+            case 'message':
+                this.serverMessages.push(message.msg_id);
+                this.processMessage(message.body, message.msg_id, sessionID);
+                break;
+
+            case 'new_session_created':
+                this.ackMessage(messageID);
+
+                this.processMessageAck(message.first_msg_id);
+                this.applyServerSalt(message.server_salt);
+
+                var self = this;
+                Storage.get('dc').then(function (baseDcID) {
+                    if (baseDcID == self.dcID && !self.upload && updatesProcessor) {
+                        updatesProcessor(message);
+                    }
+                });
+                break;
+
+            case 'msgs_ack':
+                for (var i = 0; i < message.msg_ids.length; i++) {
+                    this.processMessageAck(message.msg_ids[i]);
+                }
+                break;
+
+            case 'msg_detailed_info':
+                if (!this.sentMessages[message.msg_id]) {
+                    this.ackMessage(message.answer_msg_id);
+                    break;
+                }
+            case 'msg_new_detailed_info':
+                // this.ackMessage(message.answer_msg_id);
+                this.reqResendMessage(message.answer_msg_id);
+                break;
+
+            case 'msgs_state_info':
+                this.ackMessage(message.answer_msg_id);
+                if (this.lastResendReq && this.lastResendReq.req_msg_id == message.req_msg_id && this.pendingResends.length) {
+                    var i, badMsgID, pos;
+                    for (i = 0; i < this.lastResendReq.resend_msg_ids.length; i++) {
+                        badMsgID = this.lastResendReq.resend_msg_ids[i];
+                        pos = this.pendingResends.indexOf(badMsgID);
+                        if (pos != -1) {
+                            this.pendingResends.splice(pos, 1);
+                        }
+                    }
+                }
+                break;
+
+            case 'rpc_result':
+                this.ackMessage(messageID);
+
+                var sentMessageID = message.req_msg_id,
+                    sentMessage = this.sentMessages[sentMessageID];
+
+                this.processMessageAck(sentMessageID);
+                if (sentMessage) {
+                    var deferred = sentMessage.deferred;
+                    if (message.result._ == 'rpc_error') {
+                        var error = this.processError(message.result);
+                        if (deferred) {
+                            deferred.reject(error)
+                        }
+                    } else {
+                        if (deferred) {
+                            if (Config.Modes.debug) {
+                                console.log(dT(), 'Rpc response', message.result);
+                            } else {
+                                var dRes = message.result._;
+                                if (!dRes) {
+                                    if (message.result.length > 5) {
+                                        dRes = '[..' + message.result.length + '..]';
+                                    } else {
+                                        dRes = message.result;
+                                    }
+                                }
+                            }
+                            sentMessage.deferred.resolve(message.result);
+                        }
+                        if (sentMessage.isAPI) {
+                            this.connectionInited = true;
+                        }
+                    }
+
+                    delete this.sentMessages[sentMessageID];
+                }
+                break;
+
+            default:
+                this.ackMessage(messageID);
+
+                if (updatesProcessor) {
+                    updatesProcessor(message);
+                }
+                break;
+
+        }
+    };
+
+    function startAll() {
+        if (akStopped) {
+            akStopped = false;
+            updatesProcessor({_: 'new_session_created'});
+        }
+    }
+
+    function stopAll() {
+        akStopped = true;
+    }
+
+    return {
+        getNetworker: function (dcID, authKey, serverSalt, options) {
+            return new MtpNetworker(dcID, authKey, serverSalt, options);
+        },
+        setUpdatesProcessor: function (callback) {
+            updatesProcessor = callback;
+        },
+        stopAll: stopAll,
+        startAll: startAll,
+
+        subscribe: subscribe,
+        unSubscribe: unSubscribe
+    };
+}
+
+MtpNetworkerFactoryModule.dependencies = [
+    'MtpSecureRandom',
+    'MtpTimeManager',
+    'Storage',
+    'CryptoWorker',
+    'MtpDcConfigurator',
+    'timeoutService',
+    'intervalService',
+    'queryService',
+    'httpService'
+];
+
+function MtpRsaKeysManagerModule() {
+    /**
+     *  Server public key, obtained from here: https://core.telegram.org/api/obtaining_api_id
+     *
+     * -----BEGIN RSA PUBLIC KEY-----
+     * MIIBCgKCAQEAwVACPi9w23mF3tBkdZz+zwrzKOaaQdr01vAbU4E1pvkfj4sqDsm6
+     * lyDONS789sVoD/xCS9Y0hkkC3gtL1tSfTlgCMOOul9lcixlEKzwKENj1Yz/s7daS
+     * an9tqw3bfUV/nqgbhGX81v/+7RFAEd+RwFnK7a+XYl9sluzHRyVVaTTveB2GazTw
+     * Efzk2DWgkBluml8OREmvfraX3bkHZJTKX4EQSjBbbdJ2ZXIsRrYOXfaA+xayEGB+
+     * 8hdlLmAjbCVfaigxX0CDqWeR1yFL9kwd9P0NsZRPsmoqVwMbMu7mStFai6aIhc3n
+     * Slv8kg9qv1m6XHVQY3PnEw+QQtqSIXklHwIDAQAB
+     * -----END RSA PUBLIC KEY-----
+     */
+
+    var publisKeysHex = [{
+        modulus: 'c150023e2f70db7985ded064759cfecf0af328e69a41daf4d6f01b538135a6f91f8f8b2a0ec9ba9720ce352efcf6c5680ffc424bd634864902de0b4bd6d49f4e580230e3ae97d95c8b19442b3c0a10d8f5633fecedd6926a7f6dab0ddb7d457f9ea81b8465fcd6fffeed114011df91c059caedaf97625f6c96ecc74725556934ef781d866b34f011fce4d835a090196e9a5f0e4449af7eb697ddb9076494ca5f81104a305b6dd27665722c46b60e5df680fb16b210607ef217652e60236c255f6a28315f4083a96791d7214bf64c1df4fd0db1944fb26a2a57031b32eee64ad15a8ba68885cde74a5bfc920f6abf59ba5c75506373e7130f9042da922179251f',
+        exponent: '010001'
+    }];
+
+    var publicKeysParsed = {};
+    var prepared = false;
+
+    function prepareRsaKeys() {
+        if (prepared) {
+            return;
+        }
+
+        for (var i = 0; i < publisKeysHex.length; i++) {
+            var keyParsed = publisKeysHex[i];
+
+            var RSAPublicKey = new TLSerialization();
+            RSAPublicKey.storeBytes(bytesFromHex(keyParsed.modulus), 'n');
+            RSAPublicKey.storeBytes(bytesFromHex(keyParsed.exponent), 'e');
+
+            var buffer = RSAPublicKey.getBuffer();
+
+            var fingerprintBytes = sha1BytesSync(buffer).slice(-8);
+            fingerprintBytes.reverse();
+
+            publicKeysParsed[bytesToHex(fingerprintBytes)] = {
+                modulus: keyParsed.modulus,
+                exponent: keyParsed.exponent
+            };
+        }
+
+        prepared = true;
+    }
+
+    function selectRsaKeyByFingerPrint(fingerprints) {
+        prepareRsaKeys();
+
+        var fingerprintHex, foundKey, i;
+        for (i = 0; i < fingerprints.length; i++) {
+            fingerprintHex = bigStringInt(fingerprints[i]).toString(16);
+            if (foundKey = publicKeysParsed[fingerprintHex]) {
+                return extend({fingerprint: fingerprints[i]}, foundKey);
+            }
+        }
+
+        return false;
+    }
+
+    return {
+        prepare: prepareRsaKeys,
+        select: selectRsaKeyByFingerPrint
+    };
+}
+
+MtpRsaKeysManagerModule.dependencies = [];
+
+function MtpSecureRandomModule() {
+    window.addEventListener('click', rng_seed_time);
+    window.addEventListener('keydown', rng_seed_time);
+    return new SecureRandom();
+}
+
+MtpSecureRandomModule.dependencies = [
+];
+
+function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactory, intervalService, rootService, timeoutService) {
+    var instanceID = nextRandomInt(0xFFFFFFFF);
+    var started = false;
+    var masterInstance = false;
+    var deactivatePromise = false;
+    var deactivated = false;
+
+    function start() {
+        if (!started && !Config.Navigator.mobile) {
+            started = true;
+
+            IdleManager.start();
+
+            intervalService(checkInstance, 5000);
+            checkInstance();
+
+            try {
+                window.addEventListener('beforeunload', clearInstance)
+            } catch (e) {
+            }
+        }
+    }
+
+    function clearInstance() {
+        Storage.remove(masterInstance ? 'xt_instance' : 'xt_idle_instance');
+    }
+
+    function deactivateInstance() {
+        if (masterInstance || deactivated) {
+            return false;
+        }
+        deactivatePromise = false;
+        deactivated = true;
+        clearInstance();
+
+        rootService.idle.deactivated = true;
+    }
+
+    function checkInstance() {
+        if (deactivated) {
+            return false;
+        }
+        var time = tsNow();
+        var idle = rootService.idle && rootService.idle.isIDLE;
+        var newInstance = {id: instanceID, idle: idle, time: time};
+
+        Storage.get('xt_instance', 'xt_idle_instance').then(function (result) {
+            var curInstance = result[0],
+                idleInstance = result[1];
+
+            if (!idle || !curInstance ||
+                curInstance.id == instanceID ||
+                curInstance.time < time - 60000) {
+
+                if (idleInstance &&
+                    idleInstance.id == instanceID) {
+                    Storage.remove('xt_idle_instance');
+                }
+                Storage.set({xt_instance: newInstance});
+                if (!masterInstance) {
+                    MtpNetworkerFactory.startAll();
+                    console.warn(dT(), 'now master instance', newInstance);
+                }
+                masterInstance = true;
+                if (deactivatePromise) {
+                    timeoutService.cancel(deactivatePromise);
+                    deactivatePromise = false;
+                }
+            } else {
+                Storage.set({xt_idle_instance: newInstance});
+                if (masterInstance) {
+                    MtpNetworkerFactory.stopAll();
+                    console.warn(dT(), 'now idle instance', newInstance);
+                    if (!deactivatePromise) {
+                        deactivatePromise = timeoutService(deactivateInstance, 30000);
+                    }
+                }
+                masterInstance = false;
+            }
         });
     }
 
     return {
-        setAuthorized: sendAsyncRequest
+        start: start
     };
 }
 
-TelegramMeWebServiceModule.dependencies = [
+MtpSingleInstanceServiceModule.dependencies = [
+    'IdleManager',
     'Storage',
-    'jQuery'
+    'MtpNetworkerFactory',
+    'intervalService',
+    'rootService',
+    'timeoutService',
+];
+
+function MtpTimeManagerModule(Storage) {
+    var lastMessageID = [0, 0],
+        timeOffset = 0;
+
+    Storage.get('server_time_offset').then(function (to) {
+        if (to) {
+            timeOffset = to;
+        }
+    });
+
+    function generateMessageID() {
+        var timeTicks = tsNow(),
+            timeSec = Math.floor(timeTicks / 1000) + timeOffset,
+            timeMSec = timeTicks % 1000,
+            random = nextRandomInt(0xFFFF);
+
+        var messageID = [timeSec, (timeMSec << 21) | (random << 3) | 4];
+        if (lastMessageID[0] > messageID[0] ||
+            lastMessageID[0] == messageID[0] && lastMessageID[1] >= messageID[1]) {
+
+            messageID = [lastMessageID[0], lastMessageID[1] + 4];
+        }
+
+        lastMessageID = messageID;
+
+        return longFromInts(messageID[0], messageID[1]);
+    }
+
+    function applyServerTime(serverTime, localTime) {
+        var newTimeOffset = serverTime - Math.floor((localTime || tsNow()) / 1000),
+            changed = Math.abs(timeOffset - newTimeOffset) > 10;
+        Storage.set({server_time_offset: newTimeOffset});
+
+        lastMessageID = [0, 0];
+        timeOffset = newTimeOffset;
+
+        return changed;
+    }
+
+    return {
+        generateID: generateMessageID,
+        applyServerTime: applyServerTime
+    };
+}
+
+MtpTimeManagerModule.dependencies = [
+    'Storage'
 ];
 
 /*!
@@ -1079,23 +3670,18 @@ function sha1BytesSync (bytes) {
 }
 
 function sha256HashSync (bytes) {
-  // console.log(dT(), 'SHA-2 hash start', bytes.byteLength || bytes.length);
   var hashWords = CryptoJS.SHA256(bytesToWords(bytes));
-  // console.log(dT(), 'SHA-2 hash finish');
-
   return bytesFromWords(hashWords);
 }
 
 function rsaEncrypt (publicKey, bytes) {
   bytes = addPadding(bytes, 255);
 
-  // console.log('RSA encrypt start');
   var N = new BigInteger(publicKey.modulus, 16),
       E = new BigInteger(publicKey.exponent, 16),
       X = new BigInteger(bytes),
       encryptedBigInt = X.modPowInt(E, N),
       encryptedBytes  = bytesFromBigInt(encryptedBigInt, 256);
-  // console.log('RSA encrypt finish');
 
   return encryptedBytes;
 }
@@ -1127,7 +3713,6 @@ function addPadding(bytes, blockSize, zeroes) {
 function aesEncryptSync (bytes, keyBytes, ivBytes) {
   var len = bytes.byteLength || bytes.length;
 
-  // console.log(dT(), 'AES encrypt start', len/*, bytesToHex(keyBytes), bytesToHex(ivBytes)*/);
   bytes = addPadding(bytes);
 
   var encryptedWords = CryptoJS.AES.encrypt(bytesToWords(bytes), bytesToWords(keyBytes), {
@@ -1137,14 +3722,12 @@ function aesEncryptSync (bytes, keyBytes, ivBytes) {
   }).ciphertext;
 
   var encryptedBytes = bytesFromWords(encryptedWords);
-  // console.log(dT(), 'AES encrypt finish');
 
   return encryptedBytes;
 }
 
 function aesDecryptSync (encryptedBytes, keyBytes, ivBytes) {
 
-  // console.log(dT(), 'AES decrypt start', encryptedBytes.length);
   var decryptedWords = CryptoJS.AES.decrypt({ciphertext: bytesToWords(encryptedBytes)}, bytesToWords(keyBytes), {
     iv: bytesToWords(ivBytes),
     padding: CryptoJS.pad.NoPadding,
@@ -1152,7 +3735,6 @@ function aesDecryptSync (encryptedBytes, keyBytes, ivBytes) {
   });
 
   var bytes = bytesFromWords(decryptedWords);
-  // console.log(dT(), 'AES decrypt finish');
 
   return bytes;
 }
@@ -1169,8 +3751,6 @@ function pqPrimeFactorization (pqBytes) {
   var what = new BigInteger(pqBytes),
       result = false;
 
-  // console.log(dT(), 'PQ start', pqBytes, what.toString(16), what.bitLength());
-
   try {
     result = pqPrimeLeemon(str2bigInt(what.toString(16), 16, Math.ceil(64 / bpe) + 1))
   } catch (e) {
@@ -1184,17 +3764,11 @@ function pqPrimeFactorization (pqBytes) {
     } catch (e) {
       console.error('Pq long Exception', e);
     }
-    // console.timeEnd('PQ long');
   }
-  // console.log(result);
 
   if (result === false) {
-    // console.time('pq BigInt');
     result = pqPrimeBigInteger(what);
-    // console.timeEnd('pq BigInt');
   }
-
-  // console.log(dT(), 'PQ finish');
 
   return result;
 }
@@ -1400,8 +3974,6 @@ function pqPrimeLeemon (what) {
     Q = x;
   }
 
-  // console.log(dT(), 'done', bigInt2str(what, 10), bigInt2str(P, 10), bigInt2str(Q, 10));
-
   return [bytesFromLeemonBigInt(P), bytesFromLeemonBigInt(Q), it];
 }
 
@@ -1458,11 +4030,16 @@ Config.Navigator = {
 
 Config.Schema = Config.Schema || {};
 
-Config.Schema.MTProto = {"constructors":[{"id":"481674261","predicate":"vector","params":[],"type":"Vector t"},{"id":"85337187","predicate":"resPQ","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"pq","type":"bytes"},{"name":"server_public_key_fingerprints","type":"Vector<long>"}],"type":"ResPQ"},{"id":"-2083955988","predicate":"p_q_inner_data","params":[{"name":"pq","type":"bytes"},{"name":"p","type":"bytes"},{"name":"q","type":"bytes"},{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"new_nonce","type":"int256"}],"type":"P_Q_inner_data"},{"id":"2043348061","predicate":"server_DH_params_fail","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"new_nonce_hash","type":"int128"}],"type":"Server_DH_Params"},{"id":"-790100132","predicate":"server_DH_params_ok","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"encrypted_answer","type":"bytes"}],"type":"Server_DH_Params"},{"id":"-1249309254","predicate":"server_DH_inner_data","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"g","type":"int"},{"name":"dh_prime","type":"bytes"},{"name":"g_a","type":"bytes"},{"name":"server_time","type":"int"}],"type":"Server_DH_inner_data"},{"id":"1715713620","predicate":"client_DH_inner_data","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"retry_id","type":"long"},{"name":"g_b","type":"bytes"}],"type":"Client_DH_Inner_Data"},{"id":"1003222836","predicate":"dh_gen_ok","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"new_nonce_hash1","type":"int128"}],"type":"Set_client_DH_params_answer"},{"id":"1188831161","predicate":"dh_gen_retry","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"new_nonce_hash2","type":"int128"}],"type":"Set_client_DH_params_answer"},{"id":"-1499615742","predicate":"dh_gen_fail","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"new_nonce_hash3","type":"int128"}],"type":"Set_client_DH_params_answer"},{"id":"-212046591","predicate":"rpc_result","params":[{"name":"req_msg_id","type":"long"},{"name":"result","type":"Object"}],"type":"RpcResult"},{"id":"558156313","predicate":"rpc_error","params":[{"name":"error_code","type":"int"},{"name":"error_message","type":"string"}],"type":"RpcError"},{"id":"1579864942","predicate":"rpc_answer_unknown","params":[],"type":"RpcDropAnswer"},{"id":"-847714938","predicate":"rpc_answer_dropped_running","params":[],"type":"RpcDropAnswer"},{"id":"-1539647305","predicate":"rpc_answer_dropped","params":[{"name":"msg_id","type":"long"},{"name":"seq_no","type":"int"},{"name":"bytes","type":"int"}],"type":"RpcDropAnswer"},{"id":"155834844","predicate":"future_salt","params":[{"name":"valid_since","type":"int"},{"name":"valid_until","type":"int"},{"name":"salt","type":"long"}],"type":"FutureSalt"},{"id":"-1370486635","predicate":"future_salts","params":[{"name":"req_msg_id","type":"long"},{"name":"now","type":"int"},{"name":"salts","type":"vector<future_salt>"}],"type":"FutureSalts"},{"id":"880243653","predicate":"pong","params":[{"name":"msg_id","type":"long"},{"name":"ping_id","type":"long"}],"type":"Pong"},{"id":"-501201412","predicate":"destroy_session_ok","params":[{"name":"session_id","type":"long"}],"type":"DestroySessionRes"},{"id":"1658015945","predicate":"destroy_session_none","params":[{"name":"session_id","type":"long"}],"type":"DestroySessionRes"},{"id":"-1631450872","predicate":"new_session_created","params":[{"name":"first_msg_id","type":"long"},{"name":"unique_id","type":"long"},{"name":"server_salt","type":"long"}],"type":"NewSession"},{"id":"1945237724","predicate":"msg_container","params":[{"name":"messages","type":"vector<%Message>"}],"type":"MessageContainer"},{"id":"1538843921","predicate":"message","params":[{"name":"msg_id","type":"long"},{"name":"seqno","type":"int"},{"name":"bytes","type":"int"},{"name":"body","type":"Object"}],"type":"Message"},{"id":"-530561358","predicate":"msg_copy","params":[{"name":"orig_message","type":"Message"}],"type":"MessageCopy"},{"id":"812830625","predicate":"gzip_packed","params":[{"name":"packed_data","type":"bytes"}],"type":"Object"},{"id":"1658238041","predicate":"msgs_ack","params":[{"name":"msg_ids","type":"Vector<long>"}],"type":"MsgsAck"},{"id":"-1477445615","predicate":"bad_msg_notification","params":[{"name":"bad_msg_id","type":"long"},{"name":"bad_msg_seqno","type":"int"},{"name":"error_code","type":"int"}],"type":"BadMsgNotification"},{"id":"-307542917","predicate":"bad_server_salt","params":[{"name":"bad_msg_id","type":"long"},{"name":"bad_msg_seqno","type":"int"},{"name":"error_code","type":"int"},{"name":"new_server_salt","type":"long"}],"type":"BadMsgNotification"},{"id":"2105940488","predicate":"msg_resend_req","params":[{"name":"msg_ids","type":"Vector<long>"}],"type":"MsgResendReq"},{"id":"-630588590","predicate":"msgs_state_req","params":[{"name":"msg_ids","type":"Vector<long>"}],"type":"MsgsStateReq"},{"id":"81704317","predicate":"msgs_state_info","params":[{"name":"req_msg_id","type":"long"},{"name":"info","type":"bytes"}],"type":"MsgsStateInfo"},{"id":"-1933520591","predicate":"msgs_all_info","params":[{"name":"msg_ids","type":"Vector<long>"},{"name":"info","type":"bytes"}],"type":"MsgsAllInfo"},{"id":"661470918","predicate":"msg_detailed_info","params":[{"name":"msg_id","type":"long"},{"name":"answer_msg_id","type":"long"},{"name":"bytes","type":"int"},{"name":"status","type":"int"}],"type":"MsgDetailedInfo"},{"id":"-2137147681","predicate":"msg_new_detailed_info","params":[{"name":"answer_msg_id","type":"long"},{"name":"bytes","type":"int"},{"name":"status","type":"int"}],"type":"MsgDetailedInfo"}],"methods":[{"id":"1615239032","method":"req_pq","params":[{"name":"nonce","type":"int128"}],"type":"ResPQ"},{"id":"-686627650","method":"req_DH_params","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"p","type":"bytes"},{"name":"q","type":"bytes"},{"name":"public_key_fingerprint","type":"long"},{"name":"encrypted_data","type":"bytes"}],"type":"Server_DH_Params"},{"id":"-184262881","method":"set_client_DH_params","params":[{"name":"nonce","type":"int128"},{"name":"server_nonce","type":"int128"},{"name":"encrypted_data","type":"bytes"}],"type":"Set_client_DH_params_answer"},{"id":"1491380032","method":"rpc_drop_answer","params":[{"name":"req_msg_id","type":"long"}],"type":"RpcDropAnswer"},{"id":"-1188971260","method":"get_future_salts","params":[{"name":"num","type":"int"}],"type":"FutureSalts"},{"id":"2059302892","method":"ping","params":[{"name":"ping_id","type":"long"}],"type":"Pong"},{"id":"-213746804","method":"ping_delay_disconnect","params":[{"name":"ping_id","type":"long"},{"name":"disconnect_delay","type":"int"}],"type":"Pong"},{"id":"-414113498","method":"destroy_session","params":[{"name":"session_id","type":"long"}],"type":"DestroySessionRes"},{"id":"-1835453025","method":"http_wait","params":[{"name":"max_delay","type":"int"},{"name":"wait_after","type":"int"},{"name":"max_wait","type":"int"}],"type":"HttpWait"}]};
+Config.Schema.MTProto = {'constructors': [{'id': '481674261','predicate': 'vector','params': [],'type': 'Vector t'}, {'id': '85337187','predicate': 'resPQ','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'pq','type': 'bytes'}, {'name': 'server_public_key_fingerprints','type': 'Vector<long>'}],'type': 'ResPQ'}, {'id': '-2083955988','predicate': 'p_q_inner_data','params': [{'name': 'pq','type': 'bytes'}, {'name': 'p','type': 'bytes'}, {'name': 'q','type': 'bytes'}, {'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'new_nonce','type': 'int256'}],'type': 'P_Q_inner_data'}, {'id': '2043348061','predicate': 'server_DH_params_fail','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'new_nonce_hash','type': 'int128'}],'type': 'Server_DH_Params'}, {'id': '-790100132','predicate': 'server_DH_params_ok','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'encrypted_answer','type': 'bytes'}],'type': 'Server_DH_Params'}, {'id': '-1249309254','predicate': 'server_DH_inner_data','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'g','type': 'int'}, {'name': 'dh_prime','type': 'bytes'}, {'name': 'g_a','type': 'bytes'}, {'name': 'server_time','type': 'int'}],'type': 'Server_DH_inner_data'}, {'id': '1715713620','predicate': 'client_DH_inner_data','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'retry_id','type': 'long'}, {'name': 'g_b','type': 'bytes'}],'type': 'Client_DH_Inner_Data'}, {'id': '1003222836','predicate': 'dh_gen_ok','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'new_nonce_hash1','type': 'int128'}],'type': 'Set_client_DH_params_answer'}, {'id': '1188831161','predicate': 'dh_gen_retry','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'new_nonce_hash2','type': 'int128'}],'type': 'Set_client_DH_params_answer'}, {'id': '-1499615742','predicate': 'dh_gen_fail','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'new_nonce_hash3','type': 'int128'}],'type': 'Set_client_DH_params_answer'}, {'id': '-212046591','predicate': 'rpc_result','params': [{'name': 'req_msg_id','type': 'long'}, {'name': 'result','type': 'Object'}],'type': 'RpcResult'}, {'id': '558156313','predicate': 'rpc_error','params': [{'name': 'error_code','type': 'int'}, {'name': 'error_message','type': 'string'}],'type': 'RpcError'}, {'id': '1579864942','predicate': 'rpc_answer_unknown','params': [],'type': 'RpcDropAnswer'}, {'id': '-847714938','predicate': 'rpc_answer_dropped_running','params': [],'type': 'RpcDropAnswer'}, {'id': '-1539647305','predicate': 'rpc_answer_dropped','params': [{'name': 'msg_id','type': 'long'}, {'name': 'seq_no','type': 'int'}, {'name': 'bytes','type': 'int'}],'type': 'RpcDropAnswer'}, {'id': '155834844','predicate': 'future_salt','params': [{'name': 'valid_since','type': 'int'}, {'name': 'valid_until','type': 'int'}, {'name': 'salt','type': 'long'}],'type': 'FutureSalt'}, {'id': '-1370486635','predicate': 'future_salts','params': [{'name': 'req_msg_id','type': 'long'}, {'name': 'now','type': 'int'}, {'name': 'salts','type': 'vector<future_salt>'}],'type': 'FutureSalts'}, {'id': '880243653','predicate': 'pong','params': [{'name': 'msg_id','type': 'long'}, {'name': 'ping_id','type': 'long'}],'type': 'Pong'}, {'id': '-501201412','predicate': 'destroy_session_ok','params': [{'name': 'session_id','type': 'long'}],'type': 'DestroySessionRes'}, {'id': '1658015945','predicate': 'destroy_session_none','params': [{'name': 'session_id','type': 'long'}],'type': 'DestroySessionRes'}, {'id': '-1631450872','predicate': 'new_session_created','params': [{'name': 'first_msg_id','type': 'long'}, {'name': 'unique_id','type': 'long'}, {'name': 'server_salt','type': 'long'}],'type': 'NewSession'}, {'id': '1945237724','predicate': 'msg_container','params': [{'name': 'messages','type': 'vector<%Message>'}],'type': 'MessageContainer'}, {'id': '1538843921','predicate': 'message','params': [{'name': 'msg_id','type': 'long'}, {'name': 'seqno','type': 'int'}, {'name': 'bytes','type': 'int'}, {'name': 'body','type': 'Object'}],'type': 'Message'}, {'id': '-530561358','predicate': 'msg_copy','params': [{'name': 'orig_message','type': 'Message'}],'type': 'MessageCopy'}, {'id': '812830625','predicate': 'gzip_packed','params': [{'name': 'packed_data','type': 'bytes'}],'type': 'Object'}, {'id': '1658238041','predicate': 'msgs_ack','params': [{'name': 'msg_ids','type': 'Vector<long>'}],'type': 'MsgsAck'}, {'id': '-1477445615','predicate': 'bad_msg_notification','params': [{'name': 'bad_msg_id','type': 'long'}, {'name': 'bad_msg_seqno','type': 'int'}, {'name': 'error_code','type': 'int'}],'type': 'BadMsgNotification'}, {'id': '-307542917','predicate': 'bad_server_salt','params': [{'name': 'bad_msg_id','type': 'long'}, {'name': 'bad_msg_seqno','type': 'int'}, {'name': 'error_code','type': 'int'}, {'name': 'new_server_salt','type': 'long'}],'type': 'BadMsgNotification'}, {'id': '2105940488','predicate': 'msg_resend_req','params': [{'name': 'msg_ids','type': 'Vector<long>'}],'type': 'MsgResendReq'}, {'id': '-630588590','predicate': 'msgs_state_req','params': [{'name': 'msg_ids','type': 'Vector<long>'}],'type': 'MsgsStateReq'}, {'id': '81704317','predicate': 'msgs_state_info','params': [{'name': 'req_msg_id','type': 'long'}, {'name': 'info','type': 'bytes'}],'type': 'MsgsStateInfo'}, {'id': '-1933520591','predicate': 'msgs_all_info','params': [{'name': 'msg_ids','type': 'Vector<long>'}, {'name': 'info','type': 'bytes'}],'type': 'MsgsAllInfo'}, {'id': '661470918','predicate': 'msg_detailed_info','params': [{'name': 'msg_id','type': 'long'}, {'name': 'answer_msg_id','type': 'long'}, {'name': 'bytes','type': 'int'}, {'name': 'status','type': 'int'}],'type': 'MsgDetailedInfo'}, {'id': '-2137147681','predicate': 'msg_new_detailed_info','params': [{'name': 'answer_msg_id','type': 'long'}, {'name': 'bytes','type': 'int'}, {'name': 'status','type': 'int'}],'type': 'MsgDetailedInfo'}],'methods': [{'id': '1615239032','method': 'req_pq','params': [{'name': 'nonce','type': 'int128'}],'type': 'ResPQ'}, {'id': '-686627650','method': 'req_DH_params','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'p','type': 'bytes'}, {'name': 'q','type': 'bytes'}, {'name': 'public_key_fingerprint','type': 'long'}, {'name': 'encrypted_data','type': 'bytes'}],'type': 'Server_DH_Params'}, {'id': '-184262881','method': 'set_client_DH_params','params': [{'name': 'nonce','type': 'int128'}, {'name': 'server_nonce','type': 'int128'}, {'name': 'encrypted_data','type': 'bytes'}],'type': 'Set_client_DH_params_answer'}, {'id': '1491380032','method': 'rpc_drop_answer','params': [{'name': 'req_msg_id','type': 'long'}],'type': 'RpcDropAnswer'}, {'id': '-1188971260','method': 'get_future_salts','params': [{'name': 'num','type': 'int'}],'type': 'FutureSalts'}, {'id': '2059302892','method': 'ping','params': [{'name': 'ping_id','type': 'long'}],'type': 'Pong'}, {'id': '-213746804','method': 'ping_delay_disconnect','params': [{'name': 'ping_id','type': 'long'}, {'name': 'disconnect_delay','type': 'int'}],'type': 'Pong'}, {'id': '-414113498','method': 'destroy_session','params': [{'name': 'session_id','type': 'long'}],'type': 'DestroySessionRes'}, {'id': '-1835453025','method': 'http_wait','params': [{'name': 'max_delay','type': 'int'}, {'name': 'wait_after','type': 'int'}, {'name': 'max_wait','type': 'int'}],'type': 'HttpWait'}]};
 
-Config.Schema.API = {"constructors":[{"id":"-1132882121","predicate":"boolFalse","params":[],"type":"Bool"},{"id":"-1720552011","predicate":"boolTrue","params":[],"type":"Bool"},{"id":"1072550713","predicate":"true","params":[],"type":"True"},{"id":"481674261","predicate":"vector","params":[],"type":"Vector t"},{"id":"-994444869","predicate":"error","params":[{"name":"code","type":"int"},{"name":"text","type":"string"}],"type":"Error"},{"id":"1450380236","predicate":"null","params":[],"type":"Null"},{"id":"2134579434","predicate":"inputPeerEmpty","params":[],"type":"InputPeer"},{"id":"2107670217","predicate":"inputPeerSelf","params":[],"type":"InputPeer"},{"id":"396093539","predicate":"inputPeerChat","params":[{"name":"chat_id","type":"int"}],"type":"InputPeer"},{"id":"-1182234929","predicate":"inputUserEmpty","params":[],"type":"InputUser"},{"id":"-138301121","predicate":"inputUserSelf","params":[],"type":"InputUser"},{"id":"-208488460","predicate":"inputPhoneContact","params":[{"name":"client_id","type":"long"},{"name":"phone","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"}],"type":"InputContact"},{"id":"-181407105","predicate":"inputFile","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"name","type":"string"},{"name":"md5_checksum","type":"string"}],"type":"InputFile"},{"id":"-1771768449","predicate":"inputMediaEmpty","params":[],"type":"InputMedia"},{"id":"-139464256","predicate":"inputMediaUploadedPhoto","params":[{"name":"file","type":"InputFile"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"-373312269","predicate":"inputMediaPhoto","params":[{"name":"id","type":"InputPhoto"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"-104578748","predicate":"inputMediaGeoPoint","params":[{"name":"geo_point","type":"InputGeoPoint"}],"type":"InputMedia"},{"id":"-1494984313","predicate":"inputMediaContact","params":[{"name":"phone_number","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"}],"type":"InputMedia"},{"id":"-2106507297","predicate":"inputMediaUploadedVideo","params":[{"name":"file","type":"InputFile"},{"name":"duration","type":"int"},{"name":"w","type":"int"},{"name":"h","type":"int"},{"name":"mime_type","type":"string"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"2004934137","predicate":"inputMediaUploadedThumbVideo","params":[{"name":"file","type":"InputFile"},{"name":"thumb","type":"InputFile"},{"name":"duration","type":"int"},{"name":"w","type":"int"},{"name":"h","type":"int"},{"name":"mime_type","type":"string"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"-1821749571","predicate":"inputMediaVideo","params":[{"name":"id","type":"InputVideo"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"480546647","predicate":"inputChatPhotoEmpty","params":[],"type":"InputChatPhoto"},{"id":"-1809496270","predicate":"inputChatUploadedPhoto","params":[{"name":"file","type":"InputFile"},{"name":"crop","type":"InputPhotoCrop"}],"type":"InputChatPhoto"},{"id":"-1293828344","predicate":"inputChatPhoto","params":[{"name":"id","type":"InputPhoto"},{"name":"crop","type":"InputPhotoCrop"}],"type":"InputChatPhoto"},{"id":"-457104426","predicate":"inputGeoPointEmpty","params":[],"type":"InputGeoPoint"},{"id":"-206066487","predicate":"inputGeoPoint","params":[{"name":"lat","type":"double"},{"name":"long","type":"double"}],"type":"InputGeoPoint"},{"id":"483901197","predicate":"inputPhotoEmpty","params":[],"type":"InputPhoto"},{"id":"-74070332","predicate":"inputPhoto","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputPhoto"},{"id":"1426648181","predicate":"inputVideoEmpty","params":[],"type":"InputVideo"},{"id":"-296249774","predicate":"inputVideo","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputVideo"},{"id":"342061462","predicate":"inputFileLocation","params":[{"name":"volume_id","type":"long"},{"name":"local_id","type":"int"},{"name":"secret","type":"long"}],"type":"InputFileLocation"},{"id":"1023632620","predicate":"inputVideoFileLocation","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputFileLocation"},{"id":"-1377390588","predicate":"inputPhotoCropAuto","params":[],"type":"InputPhotoCrop"},{"id":"-644787419","predicate":"inputPhotoCrop","params":[{"name":"crop_left","type":"double"},{"name":"crop_top","type":"double"},{"name":"crop_width","type":"double"}],"type":"InputPhotoCrop"},{"id":"1996904104","predicate":"inputAppEvent","params":[{"name":"time","type":"double"},{"name":"type","type":"string"},{"name":"peer","type":"long"},{"name":"data","type":"string"}],"type":"InputAppEvent"},{"id":"-1649296275","predicate":"peerUser","params":[{"name":"user_id","type":"int"}],"type":"Peer"},{"id":"-1160714821","predicate":"peerChat","params":[{"name":"chat_id","type":"int"}],"type":"Peer"},{"id":"-1432995067","predicate":"storage.fileUnknown","params":[],"type":"storage.FileType"},{"id":"8322574","predicate":"storage.fileJpeg","params":[],"type":"storage.FileType"},{"id":"-891180321","predicate":"storage.fileGif","params":[],"type":"storage.FileType"},{"id":"172975040","predicate":"storage.filePng","params":[],"type":"storage.FileType"},{"id":"-1373745011","predicate":"storage.filePdf","params":[],"type":"storage.FileType"},{"id":"1384777335","predicate":"storage.fileMp3","params":[],"type":"storage.FileType"},{"id":"1258941372","predicate":"storage.fileMov","params":[],"type":"storage.FileType"},{"id":"1086091090","predicate":"storage.filePartial","params":[],"type":"storage.FileType"},{"id":"-1278304028","predicate":"storage.fileMp4","params":[],"type":"storage.FileType"},{"id":"276907596","predicate":"storage.fileWebp","params":[],"type":"storage.FileType"},{"id":"2086234950","predicate":"fileLocationUnavailable","params":[{"name":"volume_id","type":"long"},{"name":"local_id","type":"int"},{"name":"secret","type":"long"}],"type":"FileLocation"},{"id":"1406570614","predicate":"fileLocation","params":[{"name":"dc_id","type":"int"},{"name":"volume_id","type":"long"},{"name":"local_id","type":"int"},{"name":"secret","type":"long"}],"type":"FileLocation"},{"id":"537022650","predicate":"userEmpty","params":[{"name":"id","type":"int"}],"type":"User"},{"id":"1326562017","predicate":"userProfilePhotoEmpty","params":[],"type":"UserProfilePhoto"},{"id":"-715532088","predicate":"userProfilePhoto","params":[{"name":"photo_id","type":"long"},{"name":"photo_small","type":"FileLocation"},{"name":"photo_big","type":"FileLocation"}],"type":"UserProfilePhoto"},{"id":"164646985","predicate":"userStatusEmpty","params":[],"type":"UserStatus"},{"id":"-306628279","predicate":"userStatusOnline","params":[{"name":"expires","type":"int"}],"type":"UserStatus"},{"id":"9203775","predicate":"userStatusOffline","params":[{"name":"was_online","type":"int"}],"type":"UserStatus"},{"id":"-1683826688","predicate":"chatEmpty","params":[{"name":"id","type":"int"}],"type":"Chat"},{"id":"-652419756","predicate":"chat","params":[{"name":"flags","type":"#"},{"name":"creator","type":"flags.0?true"},{"name":"kicked","type":"flags.1?true"},{"name":"left","type":"flags.2?true"},{"name":"admins_enabled","type":"flags.3?true"},{"name":"admin","type":"flags.4?true"},{"name":"deactivated","type":"flags.5?true"},{"name":"id","type":"int"},{"name":"title","type":"string"},{"name":"photo","type":"ChatPhoto"},{"name":"participants_count","type":"int"},{"name":"date","type":"int"},{"name":"version","type":"int"},{"name":"migrated_to","type":"flags.6?InputChannel"}],"type":"Chat"},{"id":"120753115","predicate":"chatForbidden","params":[{"name":"id","type":"int"},{"name":"title","type":"string"}],"type":"Chat"},{"id":"771925524","predicate":"chatFull","params":[{"name":"id","type":"int"},{"name":"participants","type":"ChatParticipants"},{"name":"chat_photo","type":"Photo"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"exported_invite","type":"ExportedChatInvite"},{"name":"bot_info","type":"Vector<BotInfo>"}],"type":"ChatFull"},{"id":"-925415106","predicate":"chatParticipant","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChatParticipant"},{"id":"-57668565","predicate":"chatParticipantsForbidden","params":[{"name":"flags","type":"#"},{"name":"chat_id","type":"int"},{"name":"self_participant","type":"flags.0?ChatParticipant"}],"type":"ChatParticipants"},{"id":"1061556205","predicate":"chatParticipants","params":[{"name":"chat_id","type":"int"},{"name":"participants","type":"Vector<ChatParticipant>"},{"name":"version","type":"int"}],"type":"ChatParticipants"},{"id":"935395612","predicate":"chatPhotoEmpty","params":[],"type":"ChatPhoto"},{"id":"1632839530","predicate":"chatPhoto","params":[{"name":"photo_small","type":"FileLocation"},{"name":"photo_big","type":"FileLocation"}],"type":"ChatPhoto"},{"id":"-2082087340","predicate":"messageEmpty","params":[{"name":"id","type":"int"}],"type":"Message"},{"id":"-913120932","predicate":"message","params":[{"name":"flags","type":"#"},{"name":"unread","type":"flags.0?true"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"id","type":"int"},{"name":"from_id","type":"flags.8?int"},{"name":"to_id","type":"Peer"},{"name":"fwd_from_id","type":"flags.2?Peer"},{"name":"fwd_date","type":"flags.2?int"},{"name":"via_bot_id","type":"flags.11?int"},{"name":"reply_to_msg_id","type":"flags.3?int"},{"name":"date","type":"int"},{"name":"message","type":"string"},{"name":"media","type":"flags.9?MessageMedia"},{"name":"reply_markup","type":"flags.6?ReplyMarkup"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"},{"name":"views","type":"flags.10?int"}],"type":"Message"},{"id":"-1066691065","predicate":"messageService","params":[{"name":"flags","type":"#"},{"name":"unread","type":"flags.0?true"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"id","type":"int"},{"name":"from_id","type":"flags.8?int"},{"name":"to_id","type":"Peer"},{"name":"date","type":"int"},{"name":"action","type":"MessageAction"}],"type":"Message"},{"id":"1038967584","predicate":"messageMediaEmpty","params":[],"type":"MessageMedia"},{"id":"1032643901","predicate":"messageMediaPhoto","params":[{"name":"photo","type":"Photo"},{"name":"caption","type":"string"}],"type":"MessageMedia"},{"id":"1540298357","predicate":"messageMediaVideo","params":[{"name":"video","type":"Video"},{"name":"caption","type":"string"}],"type":"MessageMedia"},{"id":"1457575028","predicate":"messageMediaGeo","params":[{"name":"geo","type":"GeoPoint"}],"type":"MessageMedia"},{"id":"1585262393","predicate":"messageMediaContact","params":[{"name":"phone_number","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"},{"name":"user_id","type":"int"}],"type":"MessageMedia"},{"id":"-1618676578","predicate":"messageMediaUnsupported","params":[],"type":"MessageMedia"},{"id":"-1230047312","predicate":"messageActionEmpty","params":[],"type":"MessageAction"},{"id":"-1503425638","predicate":"messageActionChatCreate","params":[{"name":"title","type":"string"},{"name":"users","type":"Vector<int>"}],"type":"MessageAction"},{"id":"-1247687078","predicate":"messageActionChatEditTitle","params":[{"name":"title","type":"string"}],"type":"MessageAction"},{"id":"2144015272","predicate":"messageActionChatEditPhoto","params":[{"name":"photo","type":"Photo"}],"type":"MessageAction"},{"id":"-1780220945","predicate":"messageActionChatDeletePhoto","params":[],"type":"MessageAction"},{"id":"1217033015","predicate":"messageActionChatAddUser","params":[{"name":"users","type":"Vector<int>"}],"type":"MessageAction"},{"id":"-1297179892","predicate":"messageActionChatDeleteUser","params":[{"name":"user_id","type":"int"}],"type":"MessageAction"},{"id":"-1042448310","predicate":"dialog","params":[{"name":"peer","type":"Peer"},{"name":"top_message","type":"int"},{"name":"read_inbox_max_id","type":"int"},{"name":"unread_count","type":"int"},{"name":"notify_settings","type":"PeerNotifySettings"}],"type":"Dialog"},{"id":"590459437","predicate":"photoEmpty","params":[{"name":"id","type":"long"}],"type":"Photo"},{"id":"-840088834","predicate":"photo","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"sizes","type":"Vector<PhotoSize>"}],"type":"Photo"},{"id":"236446268","predicate":"photoSizeEmpty","params":[{"name":"type","type":"string"}],"type":"PhotoSize"},{"id":"2009052699","predicate":"photoSize","params":[{"name":"type","type":"string"},{"name":"location","type":"FileLocation"},{"name":"w","type":"int"},{"name":"h","type":"int"},{"name":"size","type":"int"}],"type":"PhotoSize"},{"id":"-374917894","predicate":"photoCachedSize","params":[{"name":"type","type":"string"},{"name":"location","type":"FileLocation"},{"name":"w","type":"int"},{"name":"h","type":"int"},{"name":"bytes","type":"bytes"}],"type":"PhotoSize"},{"id":"-1056548696","predicate":"videoEmpty","params":[{"name":"id","type":"long"}],"type":"Video"},{"id":"-148338733","predicate":"video","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"duration","type":"int"},{"name":"mime_type","type":"string"},{"name":"size","type":"int"},{"name":"thumb","type":"PhotoSize"},{"name":"dc_id","type":"int"},{"name":"w","type":"int"},{"name":"h","type":"int"}],"type":"Video"},{"id":"286776671","predicate":"geoPointEmpty","params":[],"type":"GeoPoint"},{"id":"541710092","predicate":"geoPoint","params":[{"name":"long","type":"double"},{"name":"lat","type":"double"}],"type":"GeoPoint"},{"id":"-2128698738","predicate":"auth.checkedPhone","params":[{"name":"phone_registered","type":"Bool"}],"type":"auth.CheckedPhone"},{"id":"-269659687","predicate":"auth.sentCode","params":[{"name":"phone_registered","type":"Bool"},{"name":"phone_code_hash","type":"string"},{"name":"send_call_timeout","type":"int"},{"name":"is_password","type":"Bool"}],"type":"auth.SentCode"},{"id":"-16553231","predicate":"auth.authorization","params":[{"name":"user","type":"User"}],"type":"auth.Authorization"},{"id":"-543777747","predicate":"auth.exportedAuthorization","params":[{"name":"id","type":"int"},{"name":"bytes","type":"bytes"}],"type":"auth.ExportedAuthorization"},{"id":"-1195615476","predicate":"inputNotifyPeer","params":[{"name":"peer","type":"InputPeer"}],"type":"InputNotifyPeer"},{"id":"423314455","predicate":"inputNotifyUsers","params":[],"type":"InputNotifyPeer"},{"id":"1251338318","predicate":"inputNotifyChats","params":[],"type":"InputNotifyPeer"},{"id":"-1540769658","predicate":"inputNotifyAll","params":[],"type":"InputNotifyPeer"},{"id":"-265263912","predicate":"inputPeerNotifyEventsEmpty","params":[],"type":"InputPeerNotifyEvents"},{"id":"-395694988","predicate":"inputPeerNotifyEventsAll","params":[],"type":"InputPeerNotifyEvents"},{"id":"1185074840","predicate":"inputPeerNotifySettings","params":[{"name":"mute_until","type":"int"},{"name":"sound","type":"string"},{"name":"show_previews","type":"Bool"},{"name":"events_mask","type":"int"}],"type":"InputPeerNotifySettings"},{"id":"-1378534221","predicate":"peerNotifyEventsEmpty","params":[],"type":"PeerNotifyEvents"},{"id":"1830677896","predicate":"peerNotifyEventsAll","params":[],"type":"PeerNotifyEvents"},{"id":"1889961234","predicate":"peerNotifySettingsEmpty","params":[],"type":"PeerNotifySettings"},{"id":"-1923214866","predicate":"peerNotifySettings","params":[{"name":"mute_until","type":"int"},{"name":"sound","type":"string"},{"name":"show_previews","type":"Bool"},{"name":"events_mask","type":"int"}],"type":"PeerNotifySettings"},{"id":"-860866985","predicate":"wallPaper","params":[{"name":"id","type":"int"},{"name":"title","type":"string"},{"name":"sizes","type":"Vector<PhotoSize>"},{"name":"color","type":"int"}],"type":"WallPaper"},{"id":"1490799288","predicate":"inputReportReasonSpam","params":[],"type":"ReportReason"},{"id":"505595789","predicate":"inputReportReasonViolence","params":[],"type":"ReportReason"},{"id":"777640226","predicate":"inputReportReasonPornography","params":[],"type":"ReportReason"},{"id":"-512463606","predicate":"inputReportReasonOther","params":[{"name":"text","type":"string"}],"type":"ReportReason"},{"id":"1518971995","predicate":"userFull","params":[{"name":"user","type":"User"},{"name":"link","type":"contacts.Link"},{"name":"profile_photo","type":"Photo"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"blocked","type":"Bool"},{"name":"bot_info","type":"BotInfo"}],"type":"UserFull"},{"id":"-116274796","predicate":"contact","params":[{"name":"user_id","type":"int"},{"name":"mutual","type":"Bool"}],"type":"Contact"},{"id":"-805141448","predicate":"importedContact","params":[{"name":"user_id","type":"int"},{"name":"client_id","type":"long"}],"type":"ImportedContact"},{"id":"1444661369","predicate":"contactBlocked","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"}],"type":"ContactBlocked"},{"id":"1038193057","predicate":"contactSuggested","params":[{"name":"user_id","type":"int"},{"name":"mutual_contacts","type":"int"}],"type":"ContactSuggested"},{"id":"-748155807","predicate":"contactStatus","params":[{"name":"user_id","type":"int"},{"name":"status","type":"UserStatus"}],"type":"ContactStatus"},{"id":"986597452","predicate":"contacts.link","params":[{"name":"my_link","type":"ContactLink"},{"name":"foreign_link","type":"ContactLink"},{"name":"user","type":"User"}],"type":"contacts.Link"},{"id":"-1219778094","predicate":"contacts.contactsNotModified","params":[],"type":"contacts.Contacts"},{"id":"1871416498","predicate":"contacts.contacts","params":[{"name":"contacts","type":"Vector<Contact>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Contacts"},{"id":"-1387117803","predicate":"contacts.importedContacts","params":[{"name":"imported","type":"Vector<ImportedContact>"},{"name":"retry_contacts","type":"Vector<long>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.ImportedContacts"},{"id":"471043349","predicate":"contacts.blocked","params":[{"name":"blocked","type":"Vector<ContactBlocked>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Blocked"},{"id":"-1878523231","predicate":"contacts.blockedSlice","params":[{"name":"count","type":"int"},{"name":"blocked","type":"Vector<ContactBlocked>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Blocked"},{"id":"1447681221","predicate":"contacts.suggested","params":[{"name":"results","type":"Vector<ContactSuggested>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Suggested"},{"id":"364538944","predicate":"messages.dialogs","params":[{"name":"dialogs","type":"Vector<Dialog>"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Dialogs"},{"id":"1910543603","predicate":"messages.dialogsSlice","params":[{"name":"count","type":"int"},{"name":"dialogs","type":"Vector<Dialog>"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Dialogs"},{"id":"-1938715001","predicate":"messages.messages","params":[{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Messages"},{"id":"189033187","predicate":"messages.messagesSlice","params":[{"name":"count","type":"int"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Messages"},{"id":"1694474197","predicate":"messages.chats","params":[{"name":"chats","type":"Vector<Chat>"}],"type":"messages.Chats"},{"id":"-438840932","predicate":"messages.chatFull","params":[{"name":"full_chat","type":"ChatFull"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.ChatFull"},{"id":"-1269012015","predicate":"messages.affectedHistory","params":[{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"offset","type":"int"}],"type":"messages.AffectedHistory"},{"id":"1474492012","predicate":"inputMessagesFilterEmpty","params":[],"type":"MessagesFilter"},{"id":"-1777752804","predicate":"inputMessagesFilterPhotos","params":[],"type":"MessagesFilter"},{"id":"-1614803355","predicate":"inputMessagesFilterVideo","params":[],"type":"MessagesFilter"},{"id":"1458172132","predicate":"inputMessagesFilterPhotoVideo","params":[],"type":"MessagesFilter"},{"id":"-648121413","predicate":"inputMessagesFilterPhotoVideoDocuments","params":[],"type":"MessagesFilter"},{"id":"-1629621880","predicate":"inputMessagesFilterDocument","params":[],"type":"MessagesFilter"},{"id":"-808946398","predicate":"inputMessagesFilterAudio","params":[],"type":"MessagesFilter"},{"id":"1526462308","predicate":"inputMessagesFilterAudioDocuments","params":[],"type":"MessagesFilter"},{"id":"2129714567","predicate":"inputMessagesFilterUrl","params":[],"type":"MessagesFilter"},{"id":"-3644025","predicate":"inputMessagesFilterGif","params":[],"type":"MessagesFilter"},{"id":"522914557","predicate":"updateNewMessage","params":[{"name":"message","type":"Message"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"1318109142","predicate":"updateMessageID","params":[{"name":"id","type":"int"},{"name":"random_id","type":"long"}],"type":"Update"},{"id":"-1576161051","predicate":"updateDeleteMessages","params":[{"name":"messages","type":"Vector<int>"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"1548249383","predicate":"updateUserTyping","params":[{"name":"user_id","type":"int"},{"name":"action","type":"SendMessageAction"}],"type":"Update"},{"id":"-1704596961","predicate":"updateChatUserTyping","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"action","type":"SendMessageAction"}],"type":"Update"},{"id":"125178264","predicate":"updateChatParticipants","params":[{"name":"participants","type":"ChatParticipants"}],"type":"Update"},{"id":"469489699","predicate":"updateUserStatus","params":[{"name":"user_id","type":"int"},{"name":"status","type":"UserStatus"}],"type":"Update"},{"id":"-1489818765","predicate":"updateUserName","params":[{"name":"user_id","type":"int"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"},{"name":"username","type":"string"}],"type":"Update"},{"id":"-1791935732","predicate":"updateUserPhoto","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"},{"name":"photo","type":"UserProfilePhoto"},{"name":"previous","type":"Bool"}],"type":"Update"},{"id":"628472761","predicate":"updateContactRegistered","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"}],"type":"Update"},{"id":"-1657903163","predicate":"updateContactLink","params":[{"name":"user_id","type":"int"},{"name":"my_link","type":"ContactLink"},{"name":"foreign_link","type":"ContactLink"}],"type":"Update"},{"id":"-1895411046","predicate":"updateNewAuthorization","params":[{"name":"auth_key_id","type":"long"},{"name":"date","type":"int"},{"name":"device","type":"string"},{"name":"location","type":"string"}],"type":"Update"},{"id":"-1519637954","predicate":"updates.state","params":[{"name":"pts","type":"int"},{"name":"qts","type":"int"},{"name":"date","type":"int"},{"name":"seq","type":"int"},{"name":"unread_count","type":"int"}],"type":"updates.State"},{"id":"1567990072","predicate":"updates.differenceEmpty","params":[{"name":"date","type":"int"},{"name":"seq","type":"int"}],"type":"updates.Difference"},{"id":"16030880","predicate":"updates.difference","params":[{"name":"new_messages","type":"Vector<Message>"},{"name":"new_encrypted_messages","type":"Vector<EncryptedMessage>"},{"name":"other_updates","type":"Vector<Update>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"},{"name":"state","type":"updates.State"}],"type":"updates.Difference"},{"id":"-1459938943","predicate":"updates.differenceSlice","params":[{"name":"new_messages","type":"Vector<Message>"},{"name":"new_encrypted_messages","type":"Vector<EncryptedMessage>"},{"name":"other_updates","type":"Vector<Update>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"},{"name":"intermediate_state","type":"updates.State"}],"type":"updates.Difference"},{"id":"-484987010","predicate":"updatesTooLong","params":[],"type":"Updates"},{"id":"333766314","predicate":"updateShortMessage","params":[{"name":"flags","type":"#"},{"name":"unread","type":"flags.0?true"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"id","type":"int"},{"name":"user_id","type":"int"},{"name":"message","type":"string"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"date","type":"int"},{"name":"fwd_from_id","type":"flags.2?Peer"},{"name":"fwd_date","type":"flags.2?int"},{"name":"via_bot_id","type":"flags.11?int"},{"name":"reply_to_msg_id","type":"flags.3?int"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"}],"type":"Updates"},{"id":"613087842","predicate":"updateShortChatMessage","params":[{"name":"flags","type":"#"},{"name":"unread","type":"flags.0?true"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"id","type":"int"},{"name":"from_id","type":"int"},{"name":"chat_id","type":"int"},{"name":"message","type":"string"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"date","type":"int"},{"name":"fwd_from_id","type":"flags.2?Peer"},{"name":"fwd_date","type":"flags.2?int"},{"name":"via_bot_id","type":"flags.11?int"},{"name":"reply_to_msg_id","type":"flags.3?int"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"}],"type":"Updates"},{"id":"2027216577","predicate":"updateShort","params":[{"name":"update","type":"Update"},{"name":"date","type":"int"}],"type":"Updates"},{"id":"1918567619","predicate":"updatesCombined","params":[{"name":"updates","type":"Vector<Update>"},{"name":"users","type":"Vector<User>"},{"name":"chats","type":"Vector<Chat>"},{"name":"date","type":"int"},{"name":"seq_start","type":"int"},{"name":"seq","type":"int"}],"type":"Updates"},{"id":"1957577280","predicate":"updates","params":[{"name":"updates","type":"Vector<Update>"},{"name":"users","type":"Vector<User>"},{"name":"chats","type":"Vector<Chat>"},{"name":"date","type":"int"},{"name":"seq","type":"int"}],"type":"Updates"},{"id":"-1916114267","predicate":"photos.photos","params":[{"name":"photos","type":"Vector<Photo>"},{"name":"users","type":"Vector<User>"}],"type":"photos.Photos"},{"id":"352657236","predicate":"photos.photosSlice","params":[{"name":"count","type":"int"},{"name":"photos","type":"Vector<Photo>"},{"name":"users","type":"Vector<User>"}],"type":"photos.Photos"},{"id":"539045032","predicate":"photos.photo","params":[{"name":"photo","type":"Photo"},{"name":"users","type":"Vector<User>"}],"type":"photos.Photo"},{"id":"157948117","predicate":"upload.file","params":[{"name":"type","type":"storage.FileType"},{"name":"mtime","type":"int"},{"name":"bytes","type":"bytes"}],"type":"upload.File"},{"id":"98092748","predicate":"dcOption","params":[{"name":"flags","type":"#"},{"name":"ipv6","type":"flags.0?true"},{"name":"media_only","type":"flags.1?true"},{"name":"id","type":"int"},{"name":"ip_address","type":"string"},{"name":"port","type":"int"}],"type":"DcOption"},{"id":"112969208","predicate":"config","params":[{"name":"date","type":"int"},{"name":"expires","type":"int"},{"name":"test_mode","type":"Bool"},{"name":"this_dc","type":"int"},{"name":"dc_options","type":"Vector<DcOption>"},{"name":"chat_size_max","type":"int"},{"name":"megagroup_size_max","type":"int"},{"name":"forwarded_count_max","type":"int"},{"name":"online_update_period_ms","type":"int"},{"name":"offline_blur_timeout_ms","type":"int"},{"name":"offline_idle_timeout_ms","type":"int"},{"name":"online_cloud_timeout_ms","type":"int"},{"name":"notify_cloud_delay_ms","type":"int"},{"name":"notify_default_delay_ms","type":"int"},{"name":"chat_big_size","type":"int"},{"name":"push_chat_period_ms","type":"int"},{"name":"push_chat_limit","type":"int"},{"name":"saved_gifs_limit","type":"int"},{"name":"disabled_features","type":"Vector<DisabledFeature>"}],"type":"Config"},{"id":"-1910892683","predicate":"nearestDc","params":[{"name":"country","type":"string"},{"name":"this_dc","type":"int"},{"name":"nearest_dc","type":"int"}],"type":"NearestDc"},{"id":"-1987579119","predicate":"help.appUpdate","params":[{"name":"id","type":"int"},{"name":"critical","type":"Bool"},{"name":"url","type":"string"},{"name":"text","type":"string"}],"type":"help.AppUpdate"},{"id":"-1000708810","predicate":"help.noAppUpdate","params":[],"type":"help.AppUpdate"},{"id":"415997816","predicate":"help.inviteText","params":[{"name":"message","type":"string"}],"type":"help.InviteText"},{"id":"1662091044","predicate":"wallPaperSolid","params":[{"name":"id","type":"int"},{"name":"title","type":"string"},{"name":"bg_color","type":"int"},{"name":"color","type":"int"}],"type":"WallPaper"},{"id":"314359194","predicate":"updateNewEncryptedMessage","params":[{"name":"message","type":"EncryptedMessage"},{"name":"qts","type":"int"}],"type":"Update"},{"id":"386986326","predicate":"updateEncryptedChatTyping","params":[{"name":"chat_id","type":"int"}],"type":"Update"},{"id":"-1264392051","predicate":"updateEncryption","params":[{"name":"chat","type":"EncryptedChat"},{"name":"date","type":"int"}],"type":"Update"},{"id":"956179895","predicate":"updateEncryptedMessagesRead","params":[{"name":"chat_id","type":"int"},{"name":"max_date","type":"int"},{"name":"date","type":"int"}],"type":"Update"},{"id":"-1417756512","predicate":"encryptedChatEmpty","params":[{"name":"id","type":"int"}],"type":"EncryptedChat"},{"id":"1006044124","predicate":"encryptedChatWaiting","params":[{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"}],"type":"EncryptedChat"},{"id":"-931638658","predicate":"encryptedChatRequested","params":[{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"g_a","type":"bytes"}],"type":"EncryptedChat"},{"id":"-94974410","predicate":"encryptedChat","params":[{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"g_a_or_b","type":"bytes"},{"name":"key_fingerprint","type":"long"}],"type":"EncryptedChat"},{"id":"332848423","predicate":"encryptedChatDiscarded","params":[{"name":"id","type":"int"}],"type":"EncryptedChat"},{"id":"-247351839","predicate":"inputEncryptedChat","params":[{"name":"chat_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputEncryptedChat"},{"id":"-1038136962","predicate":"encryptedFileEmpty","params":[],"type":"EncryptedFile"},{"id":"1248893260","predicate":"encryptedFile","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"size","type":"int"},{"name":"dc_id","type":"int"},{"name":"key_fingerprint","type":"int"}],"type":"EncryptedFile"},{"id":"406307684","predicate":"inputEncryptedFileEmpty","params":[],"type":"InputEncryptedFile"},{"id":"1690108678","predicate":"inputEncryptedFileUploaded","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"md5_checksum","type":"string"},{"name":"key_fingerprint","type":"int"}],"type":"InputEncryptedFile"},{"id":"1511503333","predicate":"inputEncryptedFile","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputEncryptedFile"},{"id":"-182231723","predicate":"inputEncryptedFileLocation","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputFileLocation"},{"id":"-317144808","predicate":"encryptedMessage","params":[{"name":"random_id","type":"long"},{"name":"chat_id","type":"int"},{"name":"date","type":"int"},{"name":"bytes","type":"bytes"},{"name":"file","type":"EncryptedFile"}],"type":"EncryptedMessage"},{"id":"594758406","predicate":"encryptedMessageService","params":[{"name":"random_id","type":"long"},{"name":"chat_id","type":"int"},{"name":"date","type":"int"},{"name":"bytes","type":"bytes"}],"type":"EncryptedMessage"},{"id":"-1058912715","predicate":"messages.dhConfigNotModified","params":[{"name":"random","type":"bytes"}],"type":"messages.DhConfig"},{"id":"740433629","predicate":"messages.dhConfig","params":[{"name":"g","type":"int"},{"name":"p","type":"bytes"},{"name":"version","type":"int"},{"name":"random","type":"bytes"}],"type":"messages.DhConfig"},{"id":"1443858741","predicate":"messages.sentEncryptedMessage","params":[{"name":"date","type":"int"}],"type":"messages.SentEncryptedMessage"},{"id":"-1802240206","predicate":"messages.sentEncryptedFile","params":[{"name":"date","type":"int"},{"name":"file","type":"EncryptedFile"}],"type":"messages.SentEncryptedMessage"},{"id":"-95482955","predicate":"inputFileBig","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"name","type":"string"}],"type":"InputFile"},{"id":"767652808","predicate":"inputEncryptedFileBigUploaded","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"key_fingerprint","type":"int"}],"type":"InputEncryptedFile"},{"id":"-364179876","predicate":"updateChatParticipantAdd","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"},{"name":"version","type":"int"}],"type":"Update"},{"id":"1851755554","predicate":"updateChatParticipantDelete","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"version","type":"int"}],"type":"Update"},{"id":"-1906403213","predicate":"updateDcOptions","params":[{"name":"dc_options","type":"Vector<DcOption>"}],"type":"Update"},{"id":"1313442987","predicate":"inputMediaUploadedAudio","params":[{"name":"file","type":"InputFile"},{"name":"duration","type":"int"},{"name":"mime_type","type":"string"}],"type":"InputMedia"},{"id":"-1986820223","predicate":"inputMediaAudio","params":[{"name":"id","type":"InputAudio"}],"type":"InputMedia"},{"id":"495530093","predicate":"inputMediaUploadedDocument","params":[{"name":"file","type":"InputFile"},{"name":"mime_type","type":"string"},{"name":"attributes","type":"Vector<DocumentAttribute>"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"-1386138479","predicate":"inputMediaUploadedThumbDocument","params":[{"name":"file","type":"InputFile"},{"name":"thumb","type":"InputFile"},{"name":"mime_type","type":"string"},{"name":"attributes","type":"Vector<DocumentAttribute>"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"444068508","predicate":"inputMediaDocument","params":[{"name":"id","type":"InputDocument"},{"name":"caption","type":"string"}],"type":"InputMedia"},{"id":"-203411800","predicate":"messageMediaDocument","params":[{"name":"document","type":"Document"},{"name":"caption","type":"string"}],"type":"MessageMedia"},{"id":"-961117440","predicate":"messageMediaAudio","params":[{"name":"audio","type":"Audio"}],"type":"MessageMedia"},{"id":"-648356732","predicate":"inputAudioEmpty","params":[],"type":"InputAudio"},{"id":"2010398975","predicate":"inputAudio","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputAudio"},{"id":"1928391342","predicate":"inputDocumentEmpty","params":[],"type":"InputDocument"},{"id":"410618194","predicate":"inputDocument","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputDocument"},{"id":"1960591437","predicate":"inputAudioFileLocation","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputFileLocation"},{"id":"1313188841","predicate":"inputDocumentFileLocation","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputFileLocation"},{"id":"1483311320","predicate":"audioEmpty","params":[{"name":"id","type":"long"}],"type":"Audio"},{"id":"-102543275","predicate":"audio","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"duration","type":"int"},{"name":"mime_type","type":"string"},{"name":"size","type":"int"},{"name":"dc_id","type":"int"}],"type":"Audio"},{"id":"922273905","predicate":"documentEmpty","params":[{"name":"id","type":"long"}],"type":"Document"},{"id":"-106717361","predicate":"document","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"mime_type","type":"string"},{"name":"size","type":"int"},{"name":"thumb","type":"PhotoSize"},{"name":"dc_id","type":"int"},{"name":"attributes","type":"Vector<DocumentAttribute>"}],"type":"Document"},{"id":"398898678","predicate":"help.support","params":[{"name":"phone_number","type":"string"},{"name":"user","type":"User"}],"type":"help.Support"},{"id":"-1613493288","predicate":"notifyPeer","params":[{"name":"peer","type":"Peer"}],"type":"NotifyPeer"},{"id":"-1261946036","predicate":"notifyUsers","params":[],"type":"NotifyPeer"},{"id":"-1073230141","predicate":"notifyChats","params":[],"type":"NotifyPeer"},{"id":"1959820384","predicate":"notifyAll","params":[],"type":"NotifyPeer"},{"id":"-2131957734","predicate":"updateUserBlocked","params":[{"name":"user_id","type":"int"},{"name":"blocked","type":"Bool"}],"type":"Update"},{"id":"-1094555409","predicate":"updateNotifySettings","params":[{"name":"peer","type":"NotifyPeer"},{"name":"notify_settings","type":"PeerNotifySettings"}],"type":"Update"},{"id":"-484053553","predicate":"auth.sentAppCode","params":[{"name":"phone_registered","type":"Bool"},{"name":"phone_code_hash","type":"string"},{"name":"send_call_timeout","type":"int"},{"name":"is_password","type":"Bool"}],"type":"auth.SentCode"},{"id":"381645902","predicate":"sendMessageTypingAction","params":[],"type":"SendMessageAction"},{"id":"-44119819","predicate":"sendMessageCancelAction","params":[],"type":"SendMessageAction"},{"id":"-1584933265","predicate":"sendMessageRecordVideoAction","params":[],"type":"SendMessageAction"},{"id":"-378127636","predicate":"sendMessageUploadVideoAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"-718310409","predicate":"sendMessageRecordAudioAction","params":[],"type":"SendMessageAction"},{"id":"-212740181","predicate":"sendMessageUploadAudioAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"-774682074","predicate":"sendMessageUploadPhotoAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"-1441998364","predicate":"sendMessageUploadDocumentAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"393186209","predicate":"sendMessageGeoLocationAction","params":[],"type":"SendMessageAction"},{"id":"1653390447","predicate":"sendMessageChooseContactAction","params":[],"type":"SendMessageAction"},{"id":"446822276","predicate":"contacts.found","params":[{"name":"results","type":"Vector<Peer>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Found"},{"id":"942527460","predicate":"updateServiceNotification","params":[{"name":"type","type":"string"},{"name":"message","type":"string"},{"name":"media","type":"MessageMedia"},{"name":"popup","type":"Bool"}],"type":"Update"},{"id":"-496024847","predicate":"userStatusRecently","params":[],"type":"UserStatus"},{"id":"129960444","predicate":"userStatusLastWeek","params":[],"type":"UserStatus"},{"id":"2011940674","predicate":"userStatusLastMonth","params":[],"type":"UserStatus"},{"id":"-298113238","predicate":"updatePrivacy","params":[{"name":"key","type":"PrivacyKey"},{"name":"rules","type":"Vector<PrivacyRule>"}],"type":"Update"},{"id":"1335282456","predicate":"inputPrivacyKeyStatusTimestamp","params":[],"type":"InputPrivacyKey"},{"id":"-1137792208","predicate":"privacyKeyStatusTimestamp","params":[],"type":"PrivacyKey"},{"id":"218751099","predicate":"inputPrivacyValueAllowContacts","params":[],"type":"InputPrivacyRule"},{"id":"407582158","predicate":"inputPrivacyValueAllowAll","params":[],"type":"InputPrivacyRule"},{"id":"320652927","predicate":"inputPrivacyValueAllowUsers","params":[{"name":"users","type":"Vector<InputUser>"}],"type":"InputPrivacyRule"},{"id":"195371015","predicate":"inputPrivacyValueDisallowContacts","params":[],"type":"InputPrivacyRule"},{"id":"-697604407","predicate":"inputPrivacyValueDisallowAll","params":[],"type":"InputPrivacyRule"},{"id":"-1877932953","predicate":"inputPrivacyValueDisallowUsers","params":[{"name":"users","type":"Vector<InputUser>"}],"type":"InputPrivacyRule"},{"id":"-123988","predicate":"privacyValueAllowContacts","params":[],"type":"PrivacyRule"},{"id":"1698855810","predicate":"privacyValueAllowAll","params":[],"type":"PrivacyRule"},{"id":"1297858060","predicate":"privacyValueAllowUsers","params":[{"name":"users","type":"Vector<int>"}],"type":"PrivacyRule"},{"id":"-125240806","predicate":"privacyValueDisallowContacts","params":[],"type":"PrivacyRule"},{"id":"-1955338397","predicate":"privacyValueDisallowAll","params":[],"type":"PrivacyRule"},{"id":"209668535","predicate":"privacyValueDisallowUsers","params":[{"name":"users","type":"Vector<int>"}],"type":"PrivacyRule"},{"id":"1430961007","predicate":"account.privacyRules","params":[{"name":"rules","type":"Vector<PrivacyRule>"},{"name":"users","type":"Vector<User>"}],"type":"account.PrivacyRules"},{"id":"-1194283041","predicate":"accountDaysTTL","params":[{"name":"days","type":"int"}],"type":"AccountDaysTTL"},{"id":"-1527411636","predicate":"account.sentChangePhoneCode","params":[{"name":"phone_code_hash","type":"string"},{"name":"send_call_timeout","type":"int"}],"type":"account.SentChangePhoneCode"},{"id":"314130811","predicate":"updateUserPhone","params":[{"name":"user_id","type":"int"},{"name":"phone","type":"string"}],"type":"Update"},{"id":"1815593308","predicate":"documentAttributeImageSize","params":[{"name":"w","type":"int"},{"name":"h","type":"int"}],"type":"DocumentAttribute"},{"id":"297109817","predicate":"documentAttributeAnimated","params":[],"type":"DocumentAttribute"},{"id":"978674434","predicate":"documentAttributeSticker","params":[{"name":"alt","type":"string"},{"name":"stickerset","type":"InputStickerSet"}],"type":"DocumentAttribute"},{"id":"1494273227","predicate":"documentAttributeVideo","params":[{"name":"duration","type":"int"},{"name":"w","type":"int"},{"name":"h","type":"int"}],"type":"DocumentAttribute"},{"id":"-556656416","predicate":"documentAttributeAudio","params":[{"name":"duration","type":"int"},{"name":"title","type":"string"},{"name":"performer","type":"string"}],"type":"DocumentAttribute"},{"id":"358154344","predicate":"documentAttributeFilename","params":[{"name":"file_name","type":"string"}],"type":"DocumentAttribute"},{"id":"-244016606","predicate":"messages.stickersNotModified","params":[],"type":"messages.Stickers"},{"id":"-1970352846","predicate":"messages.stickers","params":[{"name":"hash","type":"string"},{"name":"stickers","type":"Vector<Document>"}],"type":"messages.Stickers"},{"id":"313694676","predicate":"stickerPack","params":[{"name":"emoticon","type":"string"},{"name":"documents","type":"Vector<long>"}],"type":"StickerPack"},{"id":"-395967805","predicate":"messages.allStickersNotModified","params":[],"type":"messages.AllStickers"},{"id":"-302170017","predicate":"messages.allStickers","params":[{"name":"hash","type":"int"},{"name":"sets","type":"Vector<StickerSet>"}],"type":"messages.AllStickers"},{"id":"-1369215196","predicate":"disabledFeature","params":[{"name":"feature","type":"string"},{"name":"description","type":"string"}],"type":"DisabledFeature"},{"id":"-1721631396","predicate":"updateReadHistoryInbox","params":[{"name":"peer","type":"Peer"},{"name":"max_id","type":"int"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"791617983","predicate":"updateReadHistoryOutbox","params":[{"name":"peer","type":"Peer"},{"name":"max_id","type":"int"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-2066640507","predicate":"messages.affectedMessages","params":[{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"messages.AffectedMessages"},{"id":"1599050311","predicate":"contactLinkUnknown","params":[],"type":"ContactLink"},{"id":"-17968211","predicate":"contactLinkNone","params":[],"type":"ContactLink"},{"id":"646922073","predicate":"contactLinkHasPhone","params":[],"type":"ContactLink"},{"id":"-721239344","predicate":"contactLinkContact","params":[],"type":"ContactLink"},{"id":"2139689491","predicate":"updateWebPage","params":[{"name":"webpage","type":"WebPage"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-350980120","predicate":"webPageEmpty","params":[{"name":"id","type":"long"}],"type":"WebPage"},{"id":"-981018084","predicate":"webPagePending","params":[{"name":"id","type":"long"},{"name":"date","type":"int"}],"type":"WebPage"},{"id":"-897446185","predicate":"webPage","params":[{"name":"flags","type":"#"},{"name":"id","type":"long"},{"name":"url","type":"string"},{"name":"display_url","type":"string"},{"name":"type","type":"flags.0?string"},{"name":"site_name","type":"flags.1?string"},{"name":"title","type":"flags.2?string"},{"name":"description","type":"flags.3?string"},{"name":"photo","type":"flags.4?Photo"},{"name":"embed_url","type":"flags.5?string"},{"name":"embed_type","type":"flags.5?string"},{"name":"embed_width","type":"flags.6?int"},{"name":"embed_height","type":"flags.6?int"},{"name":"duration","type":"flags.7?int"},{"name":"author","type":"flags.8?string"},{"name":"document","type":"flags.9?Document"}],"type":"WebPage"},{"id":"-1557277184","predicate":"messageMediaWebPage","params":[{"name":"webpage","type":"WebPage"}],"type":"MessageMedia"},{"id":"2079516406","predicate":"authorization","params":[{"name":"hash","type":"long"},{"name":"flags","type":"int"},{"name":"device_model","type":"string"},{"name":"platform","type":"string"},{"name":"system_version","type":"string"},{"name":"api_id","type":"int"},{"name":"app_name","type":"string"},{"name":"app_version","type":"string"},{"name":"date_created","type":"int"},{"name":"date_active","type":"int"},{"name":"ip","type":"string"},{"name":"country","type":"string"},{"name":"region","type":"string"}],"type":"Authorization"},{"id":"307276766","predicate":"account.authorizations","params":[{"name":"authorizations","type":"Vector<Authorization>"}],"type":"account.Authorizations"},{"id":"-1764049896","predicate":"account.noPassword","params":[{"name":"new_salt","type":"bytes"},{"name":"email_unconfirmed_pattern","type":"string"}],"type":"account.Password"},{"id":"2081952796","predicate":"account.password","params":[{"name":"current_salt","type":"bytes"},{"name":"new_salt","type":"bytes"},{"name":"hint","type":"string"},{"name":"has_recovery","type":"Bool"},{"name":"email_unconfirmed_pattern","type":"string"}],"type":"account.Password"},{"id":"-1212732749","predicate":"account.passwordSettings","params":[{"name":"email","type":"string"}],"type":"account.PasswordSettings"},{"id":"-1124314324","predicate":"account.passwordInputSettings","params":[{"name":"flags","type":"#"},{"name":"new_salt","type":"flags.0?bytes"},{"name":"new_password_hash","type":"flags.0?bytes"},{"name":"hint","type":"flags.0?string"},{"name":"email","type":"flags.1?string"}],"type":"account.PasswordInputSettings"},{"id":"326715557","predicate":"auth.passwordRecovery","params":[{"name":"email_pattern","type":"string"}],"type":"auth.PasswordRecovery"},{"id":"673687578","predicate":"inputMediaVenue","params":[{"name":"geo_point","type":"InputGeoPoint"},{"name":"title","type":"string"},{"name":"address","type":"string"},{"name":"provider","type":"string"},{"name":"venue_id","type":"string"}],"type":"InputMedia"},{"id":"2031269663","predicate":"messageMediaVenue","params":[{"name":"geo","type":"GeoPoint"},{"name":"title","type":"string"},{"name":"address","type":"string"},{"name":"provider","type":"string"},{"name":"venue_id","type":"string"}],"type":"MessageMedia"},{"id":"-1551583367","predicate":"receivedNotifyMessage","params":[{"name":"id","type":"int"},{"name":"flags","type":"int"}],"type":"ReceivedNotifyMessage"},{"id":"1776236393","predicate":"chatInviteEmpty","params":[],"type":"ExportedChatInvite"},{"id":"-64092740","predicate":"chatInviteExported","params":[{"name":"link","type":"string"}],"type":"ExportedChatInvite"},{"id":"1516793212","predicate":"chatInviteAlready","params":[{"name":"chat","type":"Chat"}],"type":"ChatInvite"},{"id":"-1813406880","predicate":"chatInvite","params":[{"name":"flags","type":"#"},{"name":"channel","type":"flags.0?true"},{"name":"broadcast","type":"flags.1?true"},{"name":"public","type":"flags.2?true"},{"name":"megagroup","type":"flags.3?true"},{"name":"title","type":"string"}],"type":"ChatInvite"},{"id":"-123931160","predicate":"messageActionChatJoinedByLink","params":[{"name":"inviter_id","type":"int"}],"type":"MessageAction"},{"id":"1757493555","predicate":"updateReadMessagesContents","params":[{"name":"messages","type":"Vector<int>"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-4838507","predicate":"inputStickerSetEmpty","params":[],"type":"InputStickerSet"},{"id":"-1645763991","predicate":"inputStickerSetID","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputStickerSet"},{"id":"-2044933984","predicate":"inputStickerSetShortName","params":[{"name":"short_name","type":"string"}],"type":"InputStickerSet"},{"id":"-852477119","predicate":"stickerSet","params":[{"name":"flags","type":"#"},{"name":"installed","type":"flags.0?true"},{"name":"disabled","type":"flags.1?true"},{"name":"official","type":"flags.2?true"},{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"title","type":"string"},{"name":"short_name","type":"string"},{"name":"count","type":"int"},{"name":"hash","type":"int"}],"type":"StickerSet"},{"id":"-1240849242","predicate":"messages.stickerSet","params":[{"name":"set","type":"StickerSet"},{"name":"packs","type":"Vector<StickerPack>"},{"name":"documents","type":"Vector<Document>"}],"type":"messages.StickerSet"},{"id":"-787638374","predicate":"user","params":[{"name":"flags","type":"#"},{"name":"self","type":"flags.10?true"},{"name":"contact","type":"flags.11?true"},{"name":"mutual_contact","type":"flags.12?true"},{"name":"deleted","type":"flags.13?true"},{"name":"bot","type":"flags.14?true"},{"name":"bot_chat_history","type":"flags.15?true"},{"name":"bot_nochats","type":"flags.16?true"},{"name":"verified","type":"flags.17?true"},{"name":"restricted","type":"flags.18?true"},{"name":"id","type":"int"},{"name":"access_hash","type":"flags.0?long"},{"name":"first_name","type":"flags.1?string"},{"name":"last_name","type":"flags.2?string"},{"name":"username","type":"flags.3?string"},{"name":"phone","type":"flags.4?string"},{"name":"photo","type":"flags.5?UserProfilePhoto"},{"name":"status","type":"flags.6?UserStatus"},{"name":"bot_info_version","type":"flags.14?int"},{"name":"restriction_reason","type":"flags.18?string"},{"name":"bot_inline_placeholder","type":"flags.19?string"}],"type":"User"},{"id":"-1032140601","predicate":"botCommand","params":[{"name":"command","type":"string"},{"name":"description","type":"string"}],"type":"BotCommand"},{"id":"-1154598962","predicate":"botInfoEmpty","params":[],"type":"BotInfo"},{"id":"164583517","predicate":"botInfo","params":[{"name":"user_id","type":"int"},{"name":"version","type":"int"},{"name":"share_text","type":"string"},{"name":"description","type":"string"},{"name":"commands","type":"Vector<BotCommand>"}],"type":"BotInfo"},{"id":"-1560655744","predicate":"keyboardButton","params":[{"name":"text","type":"string"}],"type":"KeyboardButton"},{"id":"2002815875","predicate":"keyboardButtonRow","params":[{"name":"buttons","type":"Vector<KeyboardButton>"}],"type":"KeyboardButtonRow"},{"id":"-1606526075","predicate":"replyKeyboardHide","params":[{"name":"flags","type":"#"},{"name":"selective","type":"flags.2?true"}],"type":"ReplyMarkup"},{"id":"-200242528","predicate":"replyKeyboardForceReply","params":[{"name":"flags","type":"#"},{"name":"single_use","type":"flags.1?true"},{"name":"selective","type":"flags.2?true"}],"type":"ReplyMarkup"},{"id":"889353612","predicate":"replyKeyboardMarkup","params":[{"name":"flags","type":"#"},{"name":"resize","type":"flags.0?true"},{"name":"single_use","type":"flags.1?true"},{"name":"selective","type":"flags.2?true"},{"name":"rows","type":"Vector<KeyboardButtonRow>"}],"type":"ReplyMarkup"},{"id":"2072935910","predicate":"inputPeerUser","params":[{"name":"user_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputPeer"},{"id":"-668391402","predicate":"inputUser","params":[{"name":"user_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputUser"},{"id":"-1350696044","predicate":"help.appChangelogEmpty","params":[],"type":"help.AppChangelog"},{"id":"1181279933","predicate":"help.appChangelog","params":[{"name":"text","type":"string"}],"type":"help.AppChangelog"},{"id":"-1148011883","predicate":"messageEntityUnknown","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"-100378723","predicate":"messageEntityMention","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1868782349","predicate":"messageEntityHashtag","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1827637959","predicate":"messageEntityBotCommand","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1859134776","predicate":"messageEntityUrl","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1692693954","predicate":"messageEntityEmail","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"-1117713463","predicate":"messageEntityBold","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"-2106619040","predicate":"messageEntityItalic","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"681706865","predicate":"messageEntityCode","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1938967520","predicate":"messageEntityPre","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"},{"name":"language","type":"string"}],"type":"MessageEntity"},{"id":"1990644519","predicate":"messageEntityTextUrl","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"},{"name":"url","type":"string"}],"type":"MessageEntity"},{"id":"301019932","predicate":"updateShortSentMessage","params":[{"name":"flags","type":"#"},{"name":"unread","type":"flags.0?true"},{"name":"out","type":"flags.1?true"},{"name":"id","type":"int"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"date","type":"int"},{"name":"media","type":"flags.9?MessageMedia"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"}],"type":"Updates"},{"id":"-292807034","predicate":"inputChannelEmpty","params":[],"type":"InputChannel"},{"id":"-1343524562","predicate":"inputChannel","params":[{"name":"channel_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputChannel"},{"id":"-1109531342","predicate":"peerChannel","params":[{"name":"channel_id","type":"int"}],"type":"Peer"},{"id":"548253432","predicate":"inputPeerChannel","params":[{"name":"channel_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputPeer"},{"id":"1260090630","predicate":"channel","params":[{"name":"flags","type":"#"},{"name":"creator","type":"flags.0?true"},{"name":"kicked","type":"flags.1?true"},{"name":"left","type":"flags.2?true"},{"name":"editor","type":"flags.3?true"},{"name":"moderator","type":"flags.4?true"},{"name":"broadcast","type":"flags.5?true"},{"name":"verified","type":"flags.7?true"},{"name":"megagroup","type":"flags.8?true"},{"name":"restricted","type":"flags.9?true"},{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"title","type":"string"},{"name":"username","type":"flags.6?string"},{"name":"photo","type":"ChatPhoto"},{"name":"date","type":"int"},{"name":"version","type":"int"},{"name":"restriction_reason","type":"flags.9?string"}],"type":"Chat"},{"id":"763724588","predicate":"channelForbidden","params":[{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"title","type":"string"}],"type":"Chat"},{"id":"2131196633","predicate":"contacts.resolvedPeer","params":[{"name":"peer","type":"Peer"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.ResolvedPeer"},{"id":"-1640751649","predicate":"channelFull","params":[{"name":"flags","type":"#"},{"name":"can_view_participants","type":"flags.3?true"},{"name":"id","type":"int"},{"name":"about","type":"string"},{"name":"participants_count","type":"flags.0?int"},{"name":"admins_count","type":"flags.1?int"},{"name":"kicked_count","type":"flags.2?int"},{"name":"read_inbox_max_id","type":"int"},{"name":"unread_count","type":"int"},{"name":"unread_important_count","type":"int"},{"name":"chat_photo","type":"Photo"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"exported_invite","type":"ExportedChatInvite"},{"name":"bot_info","type":"Vector<BotInfo>"},{"name":"migrated_from_chat_id","type":"flags.4?int"},{"name":"migrated_from_max_id","type":"flags.4?int"}],"type":"ChatFull"},{"id":"1535415986","predicate":"dialogChannel","params":[{"name":"peer","type":"Peer"},{"name":"top_message","type":"int"},{"name":"top_important_message","type":"int"},{"name":"read_inbox_max_id","type":"int"},{"name":"unread_count","type":"int"},{"name":"unread_important_count","type":"int"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"pts","type":"int"}],"type":"Dialog"},{"id":"182649427","predicate":"messageRange","params":[{"name":"min_id","type":"int"},{"name":"max_id","type":"int"}],"type":"MessageRange"},{"id":"-399216813","predicate":"messageGroup","params":[{"name":"min_id","type":"int"},{"name":"max_id","type":"int"},{"name":"count","type":"int"},{"name":"date","type":"int"}],"type":"MessageGroup"},{"id":"-1139861572","predicate":"messages.channelMessages","params":[{"name":"flags","type":"#"},{"name":"pts","type":"int"},{"name":"count","type":"int"},{"name":"messages","type":"Vector<Message>"},{"name":"collapsed","type":"flags.0?Vector<MessageGroup>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Messages"},{"id":"-1781355374","predicate":"messageActionChannelCreate","params":[{"name":"title","type":"string"}],"type":"MessageAction"},{"id":"1620337698","predicate":"updateChannelTooLong","params":[{"name":"channel_id","type":"int"}],"type":"Update"},{"id":"-1227598250","predicate":"updateChannel","params":[{"name":"channel_id","type":"int"}],"type":"Update"},{"id":"-1016324548","predicate":"updateChannelGroup","params":[{"name":"channel_id","type":"int"},{"name":"group","type":"MessageGroup"}],"type":"Update"},{"id":"1656358105","predicate":"updateNewChannelMessage","params":[{"name":"message","type":"Message"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"1108669311","predicate":"updateReadChannelInbox","params":[{"name":"channel_id","type":"int"},{"name":"max_id","type":"int"}],"type":"Update"},{"id":"-1015733815","predicate":"updateDeleteChannelMessages","params":[{"name":"channel_id","type":"int"},{"name":"messages","type":"Vector<int>"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-1734268085","predicate":"updateChannelMessageViews","params":[{"name":"channel_id","type":"int"},{"name":"id","type":"int"},{"name":"views","type":"int"}],"type":"Update"},{"id":"1041346555","predicate":"updates.channelDifferenceEmpty","params":[{"name":"flags","type":"#"},{"name":"final","type":"flags.0?true"},{"name":"pts","type":"int"},{"name":"timeout","type":"flags.1?int"}],"type":"updates.ChannelDifference"},{"id":"1578530374","predicate":"updates.channelDifferenceTooLong","params":[{"name":"flags","type":"#"},{"name":"final","type":"flags.0?true"},{"name":"pts","type":"int"},{"name":"timeout","type":"flags.1?int"},{"name":"top_message","type":"int"},{"name":"top_important_message","type":"int"},{"name":"read_inbox_max_id","type":"int"},{"name":"unread_count","type":"int"},{"name":"unread_important_count","type":"int"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"updates.ChannelDifference"},{"id":"543450958","predicate":"updates.channelDifference","params":[{"name":"flags","type":"#"},{"name":"final","type":"flags.0?true"},{"name":"pts","type":"int"},{"name":"timeout","type":"flags.1?int"},{"name":"new_messages","type":"Vector<Message>"},{"name":"other_updates","type":"Vector<Update>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"updates.ChannelDifference"},{"id":"-1798033689","predicate":"channelMessagesFilterEmpty","params":[],"type":"ChannelMessagesFilter"},{"id":"-847783593","predicate":"channelMessagesFilter","params":[{"name":"flags","type":"#"},{"name":"important_only","type":"flags.0?true"},{"name":"exclude_new_messages","type":"flags.1?true"},{"name":"ranges","type":"Vector<MessageRange>"}],"type":"ChannelMessagesFilter"},{"id":"-100588754","predicate":"channelMessagesFilterCollapsed","params":[],"type":"ChannelMessagesFilter"},{"id":"367766557","predicate":"channelParticipant","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"}],"type":"ChannelParticipant"},{"id":"-1557620115","predicate":"channelParticipantSelf","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChannelParticipant"},{"id":"-1861910545","predicate":"channelParticipantModerator","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChannelParticipant"},{"id":"-1743180447","predicate":"channelParticipantEditor","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChannelParticipant"},{"id":"-1933187430","predicate":"channelParticipantKicked","params":[{"name":"user_id","type":"int"},{"name":"kicked_by","type":"int"},{"name":"date","type":"int"}],"type":"ChannelParticipant"},{"id":"-471670279","predicate":"channelParticipantCreator","params":[{"name":"user_id","type":"int"}],"type":"ChannelParticipant"},{"id":"-566281095","predicate":"channelParticipantsRecent","params":[],"type":"ChannelParticipantsFilter"},{"id":"-1268741783","predicate":"channelParticipantsAdmins","params":[],"type":"ChannelParticipantsFilter"},{"id":"1010285434","predicate":"channelParticipantsKicked","params":[],"type":"ChannelParticipantsFilter"},{"id":"-1299865402","predicate":"channelRoleEmpty","params":[],"type":"ChannelParticipantRole"},{"id":"-1776756363","predicate":"channelRoleModerator","params":[],"type":"ChannelParticipantRole"},{"id":"-2113143156","predicate":"channelRoleEditor","params":[],"type":"ChannelParticipantRole"},{"id":"-177282392","predicate":"channels.channelParticipants","params":[{"name":"count","type":"int"},{"name":"participants","type":"Vector<ChannelParticipant>"},{"name":"users","type":"Vector<User>"}],"type":"channels.ChannelParticipants"},{"id":"-791039645","predicate":"channels.channelParticipant","params":[{"name":"participant","type":"ChannelParticipant"},{"name":"users","type":"Vector<User>"}],"type":"channels.ChannelParticipant"},{"id":"-636267638","predicate":"chatParticipantCreator","params":[{"name":"user_id","type":"int"}],"type":"ChatParticipant"},{"id":"-489233354","predicate":"chatParticipantAdmin","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChatParticipant"},{"id":"1855224129","predicate":"updateChatAdmins","params":[{"name":"chat_id","type":"int"},{"name":"enabled","type":"Bool"},{"name":"version","type":"int"}],"type":"Update"},{"id":"-1232070311","predicate":"updateChatParticipantAdmin","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"is_admin","type":"Bool"},{"name":"version","type":"int"}],"type":"Update"},{"id":"1371385889","predicate":"messageActionChatMigrateTo","params":[{"name":"channel_id","type":"int"}],"type":"MessageAction"},{"id":"-1336546578","predicate":"messageActionChannelMigrateFrom","params":[{"name":"title","type":"string"},{"name":"chat_id","type":"int"}],"type":"MessageAction"},{"id":"-1328445861","predicate":"channelParticipantsBots","params":[],"type":"ChannelParticipantsFilter"},{"id":"-236044656","predicate":"help.termsOfService","params":[{"name":"text","type":"string"}],"type":"help.TermsOfService"},{"id":"1753886890","predicate":"updateNewStickerSet","params":[{"name":"stickerset","type":"messages.StickerSet"}],"type":"Update"},{"id":"-253774767","predicate":"updateStickerSetsOrder","params":[{"name":"order","type":"Vector<long>"}],"type":"Update"},{"id":"1135492588","predicate":"updateStickerSets","params":[],"type":"Update"},{"id":"372165663","predicate":"foundGif","params":[{"name":"url","type":"string"},{"name":"thumb_url","type":"string"},{"name":"content_url","type":"string"},{"name":"content_type","type":"string"},{"name":"w","type":"int"},{"name":"h","type":"int"}],"type":"FoundGif"},{"id":"-1670052855","predicate":"foundGifCached","params":[{"name":"url","type":"string"},{"name":"photo","type":"Photo"},{"name":"document","type":"Document"}],"type":"FoundGif"},{"id":"1212395773","predicate":"inputMediaGifExternal","params":[{"name":"url","type":"string"},{"name":"q","type":"string"}],"type":"InputMedia"},{"id":"1158290442","predicate":"messages.foundGifs","params":[{"name":"next_offset","type":"int"},{"name":"results","type":"Vector<FoundGif>"}],"type":"messages.FoundGifs"},{"id":"-402498398","predicate":"messages.savedGifsNotModified","params":[],"type":"messages.SavedGifs"},{"id":"772213157","predicate":"messages.savedGifs","params":[{"name":"hash","type":"int"},{"name":"gifs","type":"Vector<Document>"}],"type":"messages.SavedGifs"},{"id":"-1821035490","predicate":"updateSavedGifs","params":[],"type":"Update"},{"id":"776201607","predicate":"inputBotInlineMessageMediaAuto","params":[{"name":"caption","type":"string"}],"type":"InputBotInlineMessage"},{"id":"-1376723087","predicate":"inputBotInlineMessageText","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.0?true"},{"name":"message","type":"string"},{"name":"entities","type":"flags.1?Vector<MessageEntity>"}],"type":"InputBotInlineMessage"},{"id":"750510426","predicate":"inputBotInlineResult","params":[{"name":"flags","type":"#"},{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"title","type":"flags.1?string"},{"name":"description","type":"flags.2?string"},{"name":"url","type":"flags.3?string"},{"name":"thumb_url","type":"flags.4?string"},{"name":"content_url","type":"flags.5?string"},{"name":"content_type","type":"flags.5?string"},{"name":"w","type":"flags.6?int"},{"name":"h","type":"flags.6?int"},{"name":"duration","type":"flags.7?int"},{"name":"send_message","type":"InputBotInlineMessage"}],"type":"InputBotInlineResult"},{"id":"-61413251","predicate":"botInlineMessageMediaAuto","params":[{"name":"caption","type":"string"}],"type":"BotInlineMessage"},{"id":"-1520330839","predicate":"botInlineMessageText","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.0?true"},{"name":"message","type":"string"},{"name":"entities","type":"flags.1?Vector<MessageEntity>"}],"type":"BotInlineMessage"},{"id":"-124267714","predicate":"botInlineMediaResultDocument","params":[{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"document","type":"Document"},{"name":"send_message","type":"BotInlineMessage"}],"type":"BotInlineResult"},{"id":"-984447609","predicate":"botInlineMediaResultPhoto","params":[{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"photo","type":"Photo"},{"name":"send_message","type":"BotInlineMessage"}],"type":"BotInlineResult"},{"id":"-1679053127","predicate":"botInlineResult","params":[{"name":"flags","type":"#"},{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"title","type":"flags.1?string"},{"name":"description","type":"flags.2?string"},{"name":"url","type":"flags.3?string"},{"name":"thumb_url","type":"flags.4?string"},{"name":"content_url","type":"flags.5?string"},{"name":"content_type","type":"flags.5?string"},{"name":"w","type":"flags.6?int"},{"name":"h","type":"flags.6?int"},{"name":"duration","type":"flags.7?int"},{"name":"send_message","type":"BotInlineMessage"}],"type":"BotInlineResult"},{"id":"292597923","predicate":"messages.botResults","params":[{"name":"flags","type":"#"},{"name":"gallery","type":"flags.0?true"},{"name":"query_id","type":"long"},{"name":"next_offset","type":"flags.1?string"},{"name":"results","type":"Vector<BotInlineResult>"}],"type":"messages.BotResults"},{"id":"-1071715832","predicate":"updateBotInlineQuery","params":[{"name":"query_id","type":"long"},{"name":"user_id","type":"int"},{"name":"query","type":"string"},{"name":"offset","type":"string"}],"type":"Update"},{"id":"258597139","predicate":"updateBotInlineSend","params":[{"name":"user_id","type":"int"},{"name":"query","type":"string"},{"name":"id","type":"string"}],"type":"Update"}],"methods":[{"id":"-878758099","method":"invokeAfterMsg","params":[{"name":"msg_id","type":"long"},{"name":"query","type":"!X"}],"type":"X"},{"id":"1036301552","method":"invokeAfterMsgs","params":[{"name":"msg_ids","type":"Vector<long>"},{"name":"query","type":"!X"}],"type":"X"},{"id":"1877286395","method":"auth.checkPhone","params":[{"name":"phone_number","type":"string"}],"type":"auth.CheckedPhone"},{"id":"1988976461","method":"auth.sendCode","params":[{"name":"phone_number","type":"string"},{"name":"sms_type","type":"int"},{"name":"api_id","type":"int"},{"name":"api_hash","type":"string"},{"name":"lang_code","type":"string"}],"type":"auth.SentCode"},{"id":"63247716","method":"auth.sendCall","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"}],"type":"Bool"},{"id":"453408308","method":"auth.signUp","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"},{"name":"phone_code","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"}],"type":"auth.Authorization"},{"id":"-1126886015","method":"auth.signIn","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"},{"name":"phone_code","type":"string"}],"type":"auth.Authorization"},{"id":"1461180992","method":"auth.logOut","params":[],"type":"Bool"},{"id":"-1616179942","method":"auth.resetAuthorizations","params":[],"type":"Bool"},{"id":"1998331287","method":"auth.sendInvites","params":[{"name":"phone_numbers","type":"Vector<string>"},{"name":"message","type":"string"}],"type":"Bool"},{"id":"-440401971","method":"auth.exportAuthorization","params":[{"name":"dc_id","type":"int"}],"type":"auth.ExportedAuthorization"},{"id":"-470837741","method":"auth.importAuthorization","params":[{"name":"id","type":"int"},{"name":"bytes","type":"bytes"}],"type":"auth.Authorization"},{"id":"-841733627","method":"auth.bindTempAuthKey","params":[{"name":"perm_auth_key_id","type":"long"},{"name":"nonce","type":"long"},{"name":"expires_at","type":"int"},{"name":"encrypted_message","type":"bytes"}],"type":"Bool"},{"id":"1147957548","method":"account.registerDevice","params":[{"name":"token_type","type":"int"},{"name":"token","type":"string"},{"name":"device_model","type":"string"},{"name":"system_version","type":"string"},{"name":"app_version","type":"string"},{"name":"app_sandbox","type":"Bool"},{"name":"lang_code","type":"string"}],"type":"Bool"},{"id":"1707432768","method":"account.unregisterDevice","params":[{"name":"token_type","type":"int"},{"name":"token","type":"string"}],"type":"Bool"},{"id":"-2067899501","method":"account.updateNotifySettings","params":[{"name":"peer","type":"InputNotifyPeer"},{"name":"settings","type":"InputPeerNotifySettings"}],"type":"Bool"},{"id":"313765169","method":"account.getNotifySettings","params":[{"name":"peer","type":"InputNotifyPeer"}],"type":"PeerNotifySettings"},{"id":"-612493497","method":"account.resetNotifySettings","params":[],"type":"Bool"},{"id":"-259486360","method":"account.updateProfile","params":[{"name":"first_name","type":"string"},{"name":"last_name","type":"string"}],"type":"User"},{"id":"1713919532","method":"account.updateStatus","params":[{"name":"offline","type":"Bool"}],"type":"Bool"},{"id":"-1068696894","method":"account.getWallPapers","params":[],"type":"Vector<WallPaper>"},{"id":"-1374118561","method":"account.reportPeer","params":[{"name":"peer","type":"InputPeer"},{"name":"reason","type":"ReportReason"}],"type":"Bool"},{"id":"227648840","method":"users.getUsers","params":[{"name":"id","type":"Vector<InputUser>"}],"type":"Vector<User>"},{"id":"-902781519","method":"users.getFullUser","params":[{"name":"id","type":"InputUser"}],"type":"UserFull"},{"id":"-995929106","method":"contacts.getStatuses","params":[],"type":"Vector<ContactStatus>"},{"id":"583445000","method":"contacts.getContacts","params":[{"name":"hash","type":"string"}],"type":"contacts.Contacts"},{"id":"-634342611","method":"contacts.importContacts","params":[{"name":"contacts","type":"Vector<InputContact>"},{"name":"replace","type":"Bool"}],"type":"contacts.ImportedContacts"},{"id":"-847825880","method":"contacts.getSuggested","params":[{"name":"limit","type":"int"}],"type":"contacts.Suggested"},{"id":"-1902823612","method":"contacts.deleteContact","params":[{"name":"id","type":"InputUser"}],"type":"contacts.Link"},{"id":"1504393374","method":"contacts.deleteContacts","params":[{"name":"id","type":"Vector<InputUser>"}],"type":"Bool"},{"id":"858475004","method":"contacts.block","params":[{"name":"id","type":"InputUser"}],"type":"Bool"},{"id":"-448724803","method":"contacts.unblock","params":[{"name":"id","type":"InputUser"}],"type":"Bool"},{"id":"-176409329","method":"contacts.getBlocked","params":[{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"contacts.Blocked"},{"id":"-2065352905","method":"contacts.exportCard","params":[],"type":"Vector<int>"},{"id":"1340184318","method":"contacts.importCard","params":[{"name":"export_card","type":"Vector<int>"}],"type":"User"},{"id":"1109588596","method":"messages.getMessages","params":[{"name":"id","type":"Vector<int>"}],"type":"messages.Messages"},{"id":"1799878989","method":"messages.getDialogs","params":[{"name":"offset_date","type":"int"},{"name":"offset_id","type":"int"},{"name":"offset_peer","type":"InputPeer"},{"name":"limit","type":"int"}],"type":"messages.Dialogs"},{"id":"-1970355494","method":"messages.getHistory","params":[{"name":"peer","type":"InputPeer"},{"name":"offset_id","type":"int"},{"name":"add_offset","type":"int"},{"name":"limit","type":"int"},{"name":"max_id","type":"int"},{"name":"min_id","type":"int"}],"type":"messages.Messages"},{"id":"-732523960","method":"messages.search","params":[{"name":"flags","type":"#"},{"name":"important_only","type":"flags.0?true"},{"name":"peer","type":"InputPeer"},{"name":"q","type":"string"},{"name":"filter","type":"MessagesFilter"},{"name":"min_date","type":"int"},{"name":"max_date","type":"int"},{"name":"offset","type":"int"},{"name":"max_id","type":"int"},{"name":"limit","type":"int"}],"type":"messages.Messages"},{"id":"238054714","method":"messages.readHistory","params":[{"name":"peer","type":"InputPeer"},{"name":"max_id","type":"int"}],"type":"messages.AffectedMessages"},{"id":"-1212072999","method":"messages.deleteHistory","params":[{"name":"peer","type":"InputPeer"},{"name":"max_id","type":"int"}],"type":"messages.AffectedHistory"},{"id":"-1510897371","method":"messages.deleteMessages","params":[{"name":"id","type":"Vector<int>"}],"type":"messages.AffectedMessages"},{"id":"94983360","method":"messages.receivedMessages","params":[{"name":"max_id","type":"int"}],"type":"Vector<ReceivedNotifyMessage>"},{"id":"-1551737264","method":"messages.setTyping","params":[{"name":"peer","type":"InputPeer"},{"name":"action","type":"SendMessageAction"}],"type":"Bool"},{"id":"-91733382","method":"messages.sendMessage","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.1?true"},{"name":"broadcast","type":"flags.4?true"},{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"message","type":"string"},{"name":"random_id","type":"long"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"},{"name":"entities","type":"flags.3?Vector<MessageEntity>"}],"type":"Updates"},{"id":"-923703407","method":"messages.sendMedia","params":[{"name":"flags","type":"#"},{"name":"broadcast","type":"flags.4?true"},{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"media","type":"InputMedia"},{"name":"random_id","type":"long"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"Updates"},{"id":"1888354709","method":"messages.forwardMessages","params":[{"name":"flags","type":"#"},{"name":"broadcast","type":"flags.4?true"},{"name":"from_peer","type":"InputPeer"},{"name":"id","type":"Vector<int>"},{"name":"random_id","type":"Vector<long>"},{"name":"to_peer","type":"InputPeer"}],"type":"Updates"},{"id":"-820669733","method":"messages.reportSpam","params":[{"name":"peer","type":"InputPeer"}],"type":"Bool"},{"id":"1013621127","method":"messages.getChats","params":[{"name":"id","type":"Vector<int>"}],"type":"messages.Chats"},{"id":"998448230","method":"messages.getFullChat","params":[{"name":"chat_id","type":"int"}],"type":"messages.ChatFull"},{"id":"-599447467","method":"messages.editChatTitle","params":[{"name":"chat_id","type":"int"},{"name":"title","type":"string"}],"type":"Updates"},{"id":"-900957736","method":"messages.editChatPhoto","params":[{"name":"chat_id","type":"int"},{"name":"photo","type":"InputChatPhoto"}],"type":"Updates"},{"id":"-106911223","method":"messages.addChatUser","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"InputUser"},{"name":"fwd_limit","type":"int"}],"type":"Updates"},{"id":"-530505962","method":"messages.deleteChatUser","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"InputUser"}],"type":"Updates"},{"id":"164303470","method":"messages.createChat","params":[{"name":"users","type":"Vector<InputUser>"},{"name":"title","type":"string"}],"type":"Updates"},{"id":"-304838614","method":"updates.getState","params":[],"type":"updates.State"},{"id":"168039573","method":"updates.getDifference","params":[{"name":"pts","type":"int"},{"name":"date","type":"int"},{"name":"qts","type":"int"}],"type":"updates.Difference"},{"id":"-285902432","method":"photos.updateProfilePhoto","params":[{"name":"id","type":"InputPhoto"},{"name":"crop","type":"InputPhotoCrop"}],"type":"UserProfilePhoto"},{"id":"-720397176","method":"photos.uploadProfilePhoto","params":[{"name":"file","type":"InputFile"},{"name":"caption","type":"string"},{"name":"geo_point","type":"InputGeoPoint"},{"name":"crop","type":"InputPhotoCrop"}],"type":"photos.Photo"},{"id":"-2016444625","method":"photos.deletePhotos","params":[{"name":"id","type":"Vector<InputPhoto>"}],"type":"Vector<long>"},{"id":"-1291540959","method":"upload.saveFilePart","params":[{"name":"file_id","type":"long"},{"name":"file_part","type":"int"},{"name":"bytes","type":"bytes"}],"type":"Bool"},{"id":"-475607115","method":"upload.getFile","params":[{"name":"location","type":"InputFileLocation"},{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"upload.File"},{"id":"-990308245","method":"help.getConfig","params":[],"type":"Config"},{"id":"531836966","method":"help.getNearestDc","params":[],"type":"NearestDc"},{"id":"-938300290","method":"help.getAppUpdate","params":[{"name":"device_model","type":"string"},{"name":"system_version","type":"string"},{"name":"app_version","type":"string"},{"name":"lang_code","type":"string"}],"type":"help.AppUpdate"},{"id":"1862465352","method":"help.saveAppLog","params":[{"name":"events","type":"Vector<InputAppEvent>"}],"type":"Bool"},{"id":"-1532407418","method":"help.getInviteText","params":[{"name":"lang_code","type":"string"}],"type":"help.InviteText"},{"id":"-1848823128","method":"photos.getUserPhotos","params":[{"name":"user_id","type":"InputUser"},{"name":"offset","type":"int"},{"name":"max_id","type":"long"},{"name":"limit","type":"int"}],"type":"photos.Photos"},{"id":"865483769","method":"messages.forwardMessage","params":[{"name":"peer","type":"InputPeer"},{"name":"id","type":"int"},{"name":"random_id","type":"long"}],"type":"Updates"},{"id":"-1082919718","method":"messages.sendBroadcast","params":[{"name":"contacts","type":"Vector<InputUser>"},{"name":"random_id","type":"Vector<long>"},{"name":"message","type":"string"},{"name":"media","type":"InputMedia"}],"type":"Updates"},{"id":"651135312","method":"messages.getDhConfig","params":[{"name":"version","type":"int"},{"name":"random_length","type":"int"}],"type":"messages.DhConfig"},{"id":"-162681021","method":"messages.requestEncryption","params":[{"name":"user_id","type":"InputUser"},{"name":"random_id","type":"int"},{"name":"g_a","type":"bytes"}],"type":"EncryptedChat"},{"id":"1035731989","method":"messages.acceptEncryption","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"g_b","type":"bytes"},{"name":"key_fingerprint","type":"long"}],"type":"EncryptedChat"},{"id":"-304536635","method":"messages.discardEncryption","params":[{"name":"chat_id","type":"int"}],"type":"Bool"},{"id":"2031374829","method":"messages.setEncryptedTyping","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"typing","type":"Bool"}],"type":"Bool"},{"id":"2135648522","method":"messages.readEncryptedHistory","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"max_date","type":"int"}],"type":"Bool"},{"id":"-1451792525","method":"messages.sendEncrypted","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"random_id","type":"long"},{"name":"data","type":"bytes"}],"type":"messages.SentEncryptedMessage"},{"id":"-1701831834","method":"messages.sendEncryptedFile","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"random_id","type":"long"},{"name":"data","type":"bytes"},{"name":"file","type":"InputEncryptedFile"}],"type":"messages.SentEncryptedMessage"},{"id":"852769188","method":"messages.sendEncryptedService","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"random_id","type":"long"},{"name":"data","type":"bytes"}],"type":"messages.SentEncryptedMessage"},{"id":"1436924774","method":"messages.receivedQueue","params":[{"name":"max_qts","type":"int"}],"type":"Vector<long>"},{"id":"-562337987","method":"upload.saveBigFilePart","params":[{"name":"file_id","type":"long"},{"name":"file_part","type":"int"},{"name":"file_total_parts","type":"int"},{"name":"bytes","type":"bytes"}],"type":"Bool"},{"id":"1769565673","method":"initConnection","params":[{"name":"api_id","type":"int"},{"name":"device_model","type":"string"},{"name":"system_version","type":"string"},{"name":"app_version","type":"string"},{"name":"lang_code","type":"string"},{"name":"query","type":"!X"}],"type":"X"},{"id":"-1663104819","method":"help.getSupport","params":[],"type":"help.Support"},{"id":"229241832","method":"auth.sendSms","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"}],"type":"Bool"},{"id":"916930423","method":"messages.readMessageContents","params":[{"name":"id","type":"Vector<int>"}],"type":"messages.AffectedMessages"},{"id":"655677548","method":"account.checkUsername","params":[{"name":"username","type":"string"}],"type":"Bool"},{"id":"1040964988","method":"account.updateUsername","params":[{"name":"username","type":"string"}],"type":"User"},{"id":"301470424","method":"contacts.search","params":[{"name":"q","type":"string"},{"name":"limit","type":"int"}],"type":"contacts.Found"},{"id":"-623130288","method":"account.getPrivacy","params":[{"name":"key","type":"InputPrivacyKey"}],"type":"account.PrivacyRules"},{"id":"-906486552","method":"account.setPrivacy","params":[{"name":"key","type":"InputPrivacyKey"},{"name":"rules","type":"Vector<InputPrivacyRule>"}],"type":"account.PrivacyRules"},{"id":"1099779595","method":"account.deleteAccount","params":[{"name":"reason","type":"string"}],"type":"Bool"},{"id":"150761757","method":"account.getAccountTTL","params":[],"type":"AccountDaysTTL"},{"id":"608323678","method":"account.setAccountTTL","params":[{"name":"ttl","type":"AccountDaysTTL"}],"type":"Bool"},{"id":"-627372787","method":"invokeWithLayer","params":[{"name":"layer","type":"int"},{"name":"query","type":"!X"}],"type":"X"},{"id":"-113456221","method":"contacts.resolveUsername","params":[{"name":"username","type":"string"}],"type":"contacts.ResolvedPeer"},{"id":"-1543001868","method":"account.sendChangePhoneCode","params":[{"name":"phone_number","type":"string"}],"type":"account.SentChangePhoneCode"},{"id":"1891839707","method":"account.changePhone","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"},{"name":"phone_code","type":"string"}],"type":"User"},{"id":"-1373446075","method":"messages.getStickers","params":[{"name":"emoticon","type":"string"},{"name":"hash","type":"string"}],"type":"messages.Stickers"},{"id":"479598769","method":"messages.getAllStickers","params":[{"name":"hash","type":"int"}],"type":"messages.AllStickers"},{"id":"954152242","method":"account.updateDeviceLocked","params":[{"name":"period","type":"int"}],"type":"Bool"},{"id":"1738800940","method":"auth.importBotAuthorization","params":[{"name":"flags","type":"int"},{"name":"api_id","type":"int"},{"name":"api_hash","type":"string"},{"name":"bot_auth_token","type":"string"}],"type":"auth.Authorization"},{"id":"623001124","method":"messages.getWebPagePreview","params":[{"name":"message","type":"string"}],"type":"MessageMedia"},{"id":"-484392616","method":"account.getAuthorizations","params":[],"type":"account.Authorizations"},{"id":"-545786948","method":"account.resetAuthorization","params":[{"name":"hash","type":"long"}],"type":"Bool"},{"id":"1418342645","method":"account.getPassword","params":[],"type":"account.Password"},{"id":"-1131605573","method":"account.getPasswordSettings","params":[{"name":"current_password_hash","type":"bytes"}],"type":"account.PasswordSettings"},{"id":"-92517498","method":"account.updatePasswordSettings","params":[{"name":"current_password_hash","type":"bytes"},{"name":"new_settings","type":"account.PasswordInputSettings"}],"type":"Bool"},{"id":"174260510","method":"auth.checkPassword","params":[{"name":"password_hash","type":"bytes"}],"type":"auth.Authorization"},{"id":"-661144474","method":"auth.requestPasswordRecovery","params":[],"type":"auth.PasswordRecovery"},{"id":"1319464594","method":"auth.recoverPassword","params":[{"name":"code","type":"string"}],"type":"auth.Authorization"},{"id":"-1080796745","method":"invokeWithoutUpdates","params":[{"name":"query","type":"!X"}],"type":"X"},{"id":"2106086025","method":"messages.exportChatInvite","params":[{"name":"chat_id","type":"int"}],"type":"ExportedChatInvite"},{"id":"1051570619","method":"messages.checkChatInvite","params":[{"name":"hash","type":"string"}],"type":"ChatInvite"},{"id":"1817183516","method":"messages.importChatInvite","params":[{"name":"hash","type":"string"}],"type":"Updates"},{"id":"639215886","method":"messages.getStickerSet","params":[{"name":"stickerset","type":"InputStickerSet"}],"type":"messages.StickerSet"},{"id":"2066793382","method":"messages.installStickerSet","params":[{"name":"stickerset","type":"InputStickerSet"},{"name":"disabled","type":"Bool"}],"type":"Bool"},{"id":"-110209570","method":"messages.uninstallStickerSet","params":[{"name":"stickerset","type":"InputStickerSet"}],"type":"Bool"},{"id":"-421563528","method":"messages.startBot","params":[{"name":"bot","type":"InputUser"},{"name":"peer","type":"InputPeer"},{"name":"random_id","type":"long"},{"name":"start_param","type":"string"}],"type":"Updates"},{"id":"1537966002","method":"help.getAppChangelog","params":[{"name":"device_model","type":"string"},{"name":"system_version","type":"string"},{"name":"app_version","type":"string"},{"name":"lang_code","type":"string"}],"type":"help.AppChangelog"},{"id":"-993483427","method":"messages.getMessagesViews","params":[{"name":"peer","type":"InputPeer"},{"name":"id","type":"Vector<int>"},{"name":"increment","type":"Bool"}],"type":"Vector<int>"},{"id":"-1445735863","method":"channels.getDialogs","params":[{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"messages.Dialogs"},{"id":"-575067701","method":"channels.getImportantHistory","params":[{"name":"channel","type":"InputChannel"},{"name":"offset_id","type":"int"},{"name":"add_offset","type":"int"},{"name":"limit","type":"int"},{"name":"max_id","type":"int"},{"name":"min_id","type":"int"}],"type":"messages.Messages"},{"id":"-871347913","method":"channels.readHistory","params":[{"name":"channel","type":"InputChannel"},{"name":"max_id","type":"int"}],"type":"Bool"},{"id":"-2067661490","method":"channels.deleteMessages","params":[{"name":"channel","type":"InputChannel"},{"name":"id","type":"Vector<int>"}],"type":"messages.AffectedMessages"},{"id":"-787622117","method":"channels.deleteUserHistory","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"}],"type":"messages.AffectedHistory"},{"id":"-32999408","method":"channels.reportSpam","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"},{"name":"id","type":"Vector<int>"}],"type":"Bool"},{"id":"-1814580409","method":"channels.getMessages","params":[{"name":"channel","type":"InputChannel"},{"name":"id","type":"Vector<int>"}],"type":"messages.Messages"},{"id":"618237842","method":"channels.getParticipants","params":[{"name":"channel","type":"InputChannel"},{"name":"filter","type":"ChannelParticipantsFilter"},{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"channels.ChannelParticipants"},{"id":"1416484774","method":"channels.getParticipant","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"}],"type":"channels.ChannelParticipant"},{"id":"176122811","method":"channels.getChannels","params":[{"name":"id","type":"Vector<InputChannel>"}],"type":"messages.Chats"},{"id":"141781513","method":"channels.getFullChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"messages.ChatFull"},{"id":"-192332417","method":"channels.createChannel","params":[{"name":"flags","type":"#"},{"name":"broadcast","type":"flags.0?true"},{"name":"megagroup","type":"flags.1?true"},{"name":"title","type":"string"},{"name":"about","type":"string"}],"type":"Updates"},{"id":"333610782","method":"channels.editAbout","params":[{"name":"channel","type":"InputChannel"},{"name":"about","type":"string"}],"type":"Bool"},{"id":"-344583728","method":"channels.editAdmin","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"},{"name":"role","type":"ChannelParticipantRole"}],"type":"Updates"},{"id":"1450044624","method":"channels.editTitle","params":[{"name":"channel","type":"InputChannel"},{"name":"title","type":"string"}],"type":"Updates"},{"id":"-248621111","method":"channels.editPhoto","params":[{"name":"channel","type":"InputChannel"},{"name":"photo","type":"InputChatPhoto"}],"type":"Updates"},{"id":"-1432183160","method":"channels.toggleComments","params":[{"name":"channel","type":"InputChannel"},{"name":"enabled","type":"Bool"}],"type":"Updates"},{"id":"283557164","method":"channels.checkUsername","params":[{"name":"channel","type":"InputChannel"},{"name":"username","type":"string"}],"type":"Bool"},{"id":"890549214","method":"channels.updateUsername","params":[{"name":"channel","type":"InputChannel"},{"name":"username","type":"string"}],"type":"Bool"},{"id":"615851205","method":"channels.joinChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"Updates"},{"id":"-130635115","method":"channels.leaveChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"Updates"},{"id":"429865580","method":"channels.inviteToChannel","params":[{"name":"channel","type":"InputChannel"},{"name":"users","type":"Vector<InputUser>"}],"type":"Updates"},{"id":"-1502421484","method":"channels.kickFromChannel","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"},{"name":"kicked","type":"Bool"}],"type":"Updates"},{"id":"-950663035","method":"channels.exportInvite","params":[{"name":"channel","type":"InputChannel"}],"type":"ExportedChatInvite"},{"id":"-1072619549","method":"channels.deleteChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"Updates"},{"id":"-1154295872","method":"updates.getChannelDifference","params":[{"name":"channel","type":"InputChannel"},{"name":"filter","type":"ChannelMessagesFilter"},{"name":"pts","type":"int"},{"name":"limit","type":"int"}],"type":"updates.ChannelDifference"},{"id":"-326379039","method":"messages.toggleChatAdmins","params":[{"name":"chat_id","type":"int"},{"name":"enabled","type":"Bool"}],"type":"Updates"},{"id":"-1444503762","method":"messages.editChatAdmin","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"InputUser"},{"name":"is_admin","type":"Bool"}],"type":"Bool"},{"id":"363051235","method":"messages.migrateChat","params":[{"name":"chat_id","type":"int"}],"type":"Updates"},{"id":"-1640190800","method":"messages.searchGlobal","params":[{"name":"q","type":"string"},{"name":"offset_date","type":"int"},{"name":"offset_peer","type":"InputPeer"},{"name":"offset_id","type":"int"},{"name":"limit","type":"int"}],"type":"messages.Messages"},{"id":"936873859","method":"help.getTermsOfService","params":[{"name":"lang_code","type":"string"}],"type":"help.TermsOfService"},{"id":"-1613775824","method":"messages.reorderStickerSets","params":[{"name":"order","type":"Vector<long>"}],"type":"Bool"},{"id":"864953444","method":"messages.getDocumentByHash","params":[{"name":"sha256","type":"bytes"},{"name":"size","type":"int"},{"name":"mime_type","type":"string"}],"type":"Document"},{"id":"-1080395925","method":"messages.searchGifs","params":[{"name":"q","type":"string"},{"name":"offset","type":"int"}],"type":"messages.FoundGifs"},{"id":"-2084618926","method":"messages.getSavedGifs","params":[{"name":"hash","type":"int"}],"type":"messages.SavedGifs"},{"id":"846868683","method":"messages.saveGif","params":[{"name":"id","type":"InputDocument"},{"name":"unsave","type":"Bool"}],"type":"Bool"},{"id":"-1826332659","method":"messages.getInlineBotResults","params":[{"name":"bot","type":"InputUser"},{"name":"query","type":"string"},{"name":"offset","type":"string"}],"type":"messages.BotResults"},{"id":"1059318802","method":"messages.setInlineBotResults","params":[{"name":"flags","type":"#"},{"name":"gallery","type":"flags.0?true"},{"name":"private","type":"flags.1?true"},{"name":"query_id","type":"long"},{"name":"results","type":"Vector<InputBotInlineResult>"},{"name":"cache_time","type":"int"},{"name":"next_offset","type":"flags.2?string"}],"type":"Bool"},{"id":"-1318189314","method":"messages.sendInlineBotResult","params":[{"name":"flags","type":"#"},{"name":"broadcast","type":"flags.4?true"},{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"random_id","type":"long"},{"name":"query_id","type":"long"},{"name":"id","type":"string"}],"type":"Updates"}]};
+Config.Schema.API = {"constructors":[{"id":"-1132882121","predicate":"boolFalse","params":[],"type":"Bool"},{"id":"-1720552011","predicate":"boolTrue","params":[],"type":"Bool"},{"id":"1072550713","predicate":"true","params":[],"type":"True"},{"id":"481674261","predicate":"vector","params":[],"type":"Vector t"},{"id":"-994444869","predicate":"error","params":[{"name":"code","type":"int"},{"name":"text","type":"string"}],"type":"Error"},{"id":"1450380236","predicate":"null","params":[],"type":"Null"},{"id":"2134579434","predicate":"inputPeerEmpty","params":[],"type":"InputPeer"},{"id":"2107670217","predicate":"inputPeerSelf","params":[],"type":"InputPeer"},{"id":"396093539","predicate":"inputPeerChat","params":[{"name":"chat_id","type":"int"}],"type":"InputPeer"},{"id":"-1182234929","predicate":"inputUserEmpty","params":[],"type":"InputUser"},{"id":"-138301121","predicate":"inputUserSelf","params":[],"type":"InputUser"},{"id":"-208488460","predicate":"inputPhoneContact","params":[{"name":"client_id","type":"long"},{"name":"phone","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"}],"type":"InputContact"},{"id":"-181407105","predicate":"inputFile","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"name","type":"string"},{"name":"md5_checksum","type":"string"}],"type":"InputFile"},{"id":"-1771768449","predicate":"inputMediaEmpty","params":[],"type":"InputMedia"},{"id":"792191537","predicate":"inputMediaUploadedPhoto","params":[{"name":"flags","type":"#"},{"name":"file","type":"InputFile"},{"name":"caption","type":"string"},{"name":"stickers","type":"flags.0?Vector<InputDocument>"},{"name":"ttl_seconds","type":"flags.1?int"}],"type":"InputMedia"},{"id":"-2114308294","predicate":"inputMediaPhoto","params":[{"name":"flags","type":"#"},{"name":"id","type":"InputPhoto"},{"name":"caption","type":"string"},{"name":"ttl_seconds","type":"flags.0?int"}],"type":"InputMedia"},{"id":"-104578748","predicate":"inputMediaGeoPoint","params":[{"name":"geo_point","type":"InputGeoPoint"}],"type":"InputMedia"},{"id":"-1494984313","predicate":"inputMediaContact","params":[{"name":"phone_number","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"}],"type":"InputMedia"},{"id":"480546647","predicate":"inputChatPhotoEmpty","params":[],"type":"InputChatPhoto"},{"id":"-1837345356","predicate":"inputChatUploadedPhoto","params":[{"name":"file","type":"InputFile"}],"type":"InputChatPhoto"},{"id":"-1991004873","predicate":"inputChatPhoto","params":[{"name":"id","type":"InputPhoto"}],"type":"InputChatPhoto"},{"id":"-457104426","predicate":"inputGeoPointEmpty","params":[],"type":"InputGeoPoint"},{"id":"-206066487","predicate":"inputGeoPoint","params":[{"name":"lat","type":"double"},{"name":"long","type":"double"}],"type":"InputGeoPoint"},{"id":"483901197","predicate":"inputPhotoEmpty","params":[],"type":"InputPhoto"},{"id":"-74070332","predicate":"inputPhoto","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputPhoto"},{"id":"342061462","predicate":"inputFileLocation","params":[{"name":"volume_id","type":"long"},{"name":"local_id","type":"int"},{"name":"secret","type":"long"}],"type":"InputFileLocation"},{"id":"1996904104","predicate":"inputAppEvent","params":[{"name":"time","type":"double"},{"name":"type","type":"string"},{"name":"peer","type":"long"},{"name":"data","type":"string"}],"type":"InputAppEvent"},{"id":"-1649296275","predicate":"peerUser","params":[{"name":"user_id","type":"int"}],"type":"Peer"},{"id":"-1160714821","predicate":"peerChat","params":[{"name":"chat_id","type":"int"}],"type":"Peer"},{"id":"-1432995067","predicate":"storage.fileUnknown","params":[],"type":"storage.FileType"},{"id":"1086091090","predicate":"storage.filePartial","params":[],"type":"storage.FileType"},{"id":"8322574","predicate":"storage.fileJpeg","params":[],"type":"storage.FileType"},{"id":"-891180321","predicate":"storage.fileGif","params":[],"type":"storage.FileType"},{"id":"172975040","predicate":"storage.filePng","params":[],"type":"storage.FileType"},{"id":"-1373745011","predicate":"storage.filePdf","params":[],"type":"storage.FileType"},{"id":"1384777335","predicate":"storage.fileMp3","params":[],"type":"storage.FileType"},{"id":"1258941372","predicate":"storage.fileMov","params":[],"type":"storage.FileType"},{"id":"-1278304028","predicate":"storage.fileMp4","params":[],"type":"storage.FileType"},{"id":"276907596","predicate":"storage.fileWebp","params":[],"type":"storage.FileType"},{"id":"2086234950","predicate":"fileLocationUnavailable","params":[{"name":"volume_id","type":"long"},{"name":"local_id","type":"int"},{"name":"secret","type":"long"}],"type":"FileLocation"},{"id":"1406570614","predicate":"fileLocation","params":[{"name":"dc_id","type":"int"},{"name":"volume_id","type":"long"},{"name":"local_id","type":"int"},{"name":"secret","type":"long"}],"type":"FileLocation"},{"id":"537022650","predicate":"userEmpty","params":[{"name":"id","type":"int"}],"type":"User"},{"id":"1326562017","predicate":"userProfilePhotoEmpty","params":[],"type":"UserProfilePhoto"},{"id":"-715532088","predicate":"userProfilePhoto","params":[{"name":"photo_id","type":"long"},{"name":"photo_small","type":"FileLocation"},{"name":"photo_big","type":"FileLocation"}],"type":"UserProfilePhoto"},{"id":"164646985","predicate":"userStatusEmpty","params":[],"type":"UserStatus"},{"id":"-306628279","predicate":"userStatusOnline","params":[{"name":"expires","type":"int"}],"type":"UserStatus"},{"id":"9203775","predicate":"userStatusOffline","params":[{"name":"was_online","type":"int"}],"type":"UserStatus"},{"id":"-1683826688","predicate":"chatEmpty","params":[{"name":"id","type":"int"}],"type":"Chat"},{"id":"-652419756","predicate":"chat","params":[{"name":"flags","type":"#"},{"name":"creator","type":"flags.0?true"},{"name":"kicked","type":"flags.1?true"},{"name":"left","type":"flags.2?true"},{"name":"admins_enabled","type":"flags.3?true"},{"name":"admin","type":"flags.4?true"},{"name":"deactivated","type":"flags.5?true"},{"name":"id","type":"int"},{"name":"title","type":"string"},{"name":"photo","type":"ChatPhoto"},{"name":"participants_count","type":"int"},{"name":"date","type":"int"},{"name":"version","type":"int"},{"name":"migrated_to","type":"flags.6?InputChannel"}],"type":"Chat"},{"id":"120753115","predicate":"chatForbidden","params":[{"name":"id","type":"int"},{"name":"title","type":"string"}],"type":"Chat"},{"id":"771925524","predicate":"chatFull","params":[{"name":"id","type":"int"},{"name":"participants","type":"ChatParticipants"},{"name":"chat_photo","type":"Photo"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"exported_invite","type":"ExportedChatInvite"},{"name":"bot_info","type":"Vector<BotInfo>"}],"type":"ChatFull"},{"id":"-925415106","predicate":"chatParticipant","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChatParticipant"},{"id":"-57668565","predicate":"chatParticipantsForbidden","params":[{"name":"flags","type":"#"},{"name":"chat_id","type":"int"},{"name":"self_participant","type":"flags.0?ChatParticipant"}],"type":"ChatParticipants"},{"id":"1061556205","predicate":"chatParticipants","params":[{"name":"chat_id","type":"int"},{"name":"participants","type":"Vector<ChatParticipant>"},{"name":"version","type":"int"}],"type":"ChatParticipants"},{"id":"935395612","predicate":"chatPhotoEmpty","params":[],"type":"ChatPhoto"},{"id":"1632839530","predicate":"chatPhoto","params":[{"name":"photo_small","type":"FileLocation"},{"name":"photo_big","type":"FileLocation"}],"type":"ChatPhoto"},{"id":"-2082087340","predicate":"messageEmpty","params":[{"name":"id","type":"int"}],"type":"Message"},{"id":"1157215293","predicate":"message","params":[{"name":"flags","type":"#"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"silent","type":"flags.13?true"},{"name":"post","type":"flags.14?true"},{"name":"from_scheduled","type":"flags.18?true"},{"name":"id","type":"int"},{"name":"from_id","type":"flags.8?int"},{"name":"to_id","type":"Peer"},{"name":"fwd_from","type":"flags.2?MessageFwdHeader"},{"name":"via_bot_id","type":"flags.11?int"},{"name":"reply_to_msg_id","type":"flags.3?int"},{"name":"date","type":"int"},{"name":"message","type":"string"},{"name":"media","type":"flags.9?MessageMedia"},{"name":"reply_markup","type":"flags.6?ReplyMarkup"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"},{"name":"views","type":"flags.10?int"},{"name":"edit_date","type":"flags.15?int"},{"name":"post_author","type":"flags.16?string"},{"name":"grouped_id","type":"flags.17?long"}],"type":"Message"},{"id":"-1642487306","predicate":"messageService","params":[{"name":"flags","type":"#"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"silent","type":"flags.13?true"},{"name":"post","type":"flags.14?true"},{"name":"id","type":"int"},{"name":"from_id","type":"flags.8?int"},{"name":"to_id","type":"Peer"},{"name":"reply_to_msg_id","type":"flags.3?int"},{"name":"date","type":"int"},{"name":"action","type":"MessageAction"}],"type":"Message"},{"id":"1038967584","predicate":"messageMediaEmpty","params":[],"type":"MessageMedia"},{"id":"-1256047857","predicate":"messageMediaPhoto","params":[{"name":"flags","type":"#"},{"name":"photo","type":"flags.0?Photo"},{"name":"caption","type":"flags.1?string"},{"name":"ttl_seconds","type":"flags.2?int"}],"type":"MessageMedia"},{"id":"1457575028","predicate":"messageMediaGeo","params":[{"name":"geo","type":"GeoPoint"}],"type":"MessageMedia"},{"id":"1585262393","predicate":"messageMediaContact","params":[{"name":"phone_number","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"},{"name":"user_id","type":"int"}],"type":"MessageMedia"},{"id":"-1618676578","predicate":"messageMediaUnsupported","params":[],"type":"MessageMedia"},{"id":"-1230047312","predicate":"messageActionEmpty","params":[],"type":"MessageAction"},{"id":"-1503425638","predicate":"messageActionChatCreate","params":[{"name":"title","type":"string"},{"name":"users","type":"Vector<int>"}],"type":"MessageAction"},{"id":"-1247687078","predicate":"messageActionChatEditTitle","params":[{"name":"title","type":"string"}],"type":"MessageAction"},{"id":"2144015272","predicate":"messageActionChatEditPhoto","params":[{"name":"photo","type":"Photo"}],"type":"MessageAction"},{"id":"-1780220945","predicate":"messageActionChatDeletePhoto","params":[],"type":"MessageAction"},{"id":"1217033015","predicate":"messageActionChatAddUser","params":[{"name":"users","type":"Vector<int>"}],"type":"MessageAction"},{"id":"-1297179892","predicate":"messageActionChatDeleteUser","params":[{"name":"user_id","type":"int"}],"type":"MessageAction"},{"id":"-455150117","predicate":"dialog","params":[{"name":"flags","type":"#"},{"name":"pinned","type":"flags.2?true"},{"name":"peer","type":"Peer"},{"name":"top_message","type":"int"},{"name":"read_inbox_max_id","type":"int"},{"name":"read_outbox_max_id","type":"int"},{"name":"unread_count","type":"int"},{"name":"unread_mentions_count","type":"int"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"pts","type":"flags.0?int"},{"name":"draft","type":"flags.1?DraftMessage"}],"type":"Dialog"},{"id":"590459437","predicate":"photoEmpty","params":[{"name":"id","type":"long"}],"type":"Photo"},{"id":"-1836524247","predicate":"photo","params":[{"name":"flags","type":"#"},{"name":"has_stickers","type":"flags.0?true"},{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"sizes","type":"Vector<PhotoSize>"}],"type":"Photo"},{"id":"236446268","predicate":"photoSizeEmpty","params":[{"name":"type","type":"string"}],"type":"PhotoSize"},{"id":"2009052699","predicate":"photoSize","params":[{"name":"type","type":"string"},{"name":"location","type":"FileLocation"},{"name":"w","type":"int"},{"name":"h","type":"int"},{"name":"size","type":"int"}],"type":"PhotoSize"},{"id":"-374917894","predicate":"photoCachedSize","params":[{"name":"type","type":"string"},{"name":"location","type":"FileLocation"},{"name":"w","type":"int"},{"name":"h","type":"int"},{"name":"bytes","type":"bytes"}],"type":"PhotoSize"},{"id":"286776671","predicate":"geoPointEmpty","params":[],"type":"GeoPoint"},{"id":"541710092","predicate":"geoPoint","params":[{"name":"long","type":"double"},{"name":"lat","type":"double"}],"type":"GeoPoint"},{"id":"-2128698738","predicate":"auth.checkedPhone","params":[{"name":"phone_registered","type":"Bool"}],"type":"auth.CheckedPhone"},{"id":"1577067778","predicate":"auth.sentCode","params":[{"name":"flags","type":"#"},{"name":"phone_registered","type":"flags.0?true"},{"name":"type","type":"auth.SentCodeType"},{"name":"phone_code_hash","type":"string"},{"name":"next_type","type":"flags.1?auth.CodeType"},{"name":"timeout","type":"flags.2?int"}],"type":"auth.SentCode"},{"id":"-855308010","predicate":"auth.authorization","params":[{"name":"flags","type":"#"},{"name":"tmp_sessions","type":"flags.0?int"},{"name":"user","type":"User"}],"type":"auth.Authorization"},{"id":"-543777747","predicate":"auth.exportedAuthorization","params":[{"name":"id","type":"int"},{"name":"bytes","type":"bytes"}],"type":"auth.ExportedAuthorization"},{"id":"-1195615476","predicate":"inputNotifyPeer","params":[{"name":"peer","type":"InputPeer"}],"type":"InputNotifyPeer"},{"id":"423314455","predicate":"inputNotifyUsers","params":[],"type":"InputNotifyPeer"},{"id":"1251338318","predicate":"inputNotifyChats","params":[],"type":"InputNotifyPeer"},{"id":"-1540769658","predicate":"inputNotifyAll","params":[],"type":"InputNotifyPeer"},{"id":"-265263912","predicate":"inputPeerNotifyEventsEmpty","params":[],"type":"InputPeerNotifyEvents"},{"id":"-395694988","predicate":"inputPeerNotifyEventsAll","params":[],"type":"InputPeerNotifyEvents"},{"id":"949182130","predicate":"inputPeerNotifySettings","params":[{"name":"flags","type":"#"},{"name":"show_previews","type":"flags.0?true"},{"name":"silent","type":"flags.1?true"},{"name":"mute_until","type":"int"},{"name":"sound","type":"string"}],"type":"InputPeerNotifySettings"},{"id":"-1378534221","predicate":"peerNotifyEventsEmpty","params":[],"type":"PeerNotifyEvents"},{"id":"1830677896","predicate":"peerNotifyEventsAll","params":[],"type":"PeerNotifyEvents"},{"id":"-1697798976","predicate":"peerNotifySettings","params":[{"name":"flags","type":"#"},{"name":"show_previews","type":"flags.0?true"},{"name":"silent","type":"flags.1?true"},{"name":"mute_until","type":"int"},{"name":"sound","type":"string"}],"type":"PeerNotifySettings"},{"id":"-2122045747","predicate":"peerSettings","params":[{"name":"flags","type":"#"},{"name":"report_spam","type":"flags.0?true"}],"type":"PeerSettings"},{"id":"-860866985","predicate":"wallPaper","params":[{"name":"id","type":"int"},{"name":"title","type":"string"},{"name":"sizes","type":"Vector<PhotoSize>"},{"name":"color","type":"int"}],"type":"WallPaper"},{"id":"1490799288","predicate":"inputReportReasonSpam","params":[],"type":"ReportReason"},{"id":"505595789","predicate":"inputReportReasonViolence","params":[],"type":"ReportReason"},{"id":"777640226","predicate":"inputReportReasonPornography","params":[],"type":"ReportReason"},{"id":"-1376497949","predicate":"inputReportReasonChildAbuse","params":[],"type":"ReportReason"},{"id":"-512463606","predicate":"inputReportReasonOther","params":[{"name":"text","type":"string"}],"type":"ReportReason"},{"id":"253890367","predicate":"userFull","params":[{"name":"flags","type":"#"},{"name":"blocked","type":"flags.0?true"},{"name":"phone_calls_available","type":"flags.4?true"},{"name":"phone_calls_private","type":"flags.5?true"},{"name":"user","type":"User"},{"name":"about","type":"flags.1?string"},{"name":"link","type":"contacts.Link"},{"name":"profile_photo","type":"flags.2?Photo"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"bot_info","type":"flags.3?BotInfo"},{"name":"common_chats_count","type":"int"}],"type":"UserFull"},{"id":"-116274796","predicate":"contact","params":[{"name":"user_id","type":"int"},{"name":"mutual","type":"Bool"}],"type":"Contact"},{"id":"-805141448","predicate":"importedContact","params":[{"name":"user_id","type":"int"},{"name":"client_id","type":"long"}],"type":"ImportedContact"},{"id":"1444661369","predicate":"contactBlocked","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"}],"type":"ContactBlocked"},{"id":"-748155807","predicate":"contactStatus","params":[{"name":"user_id","type":"int"},{"name":"status","type":"UserStatus"}],"type":"ContactStatus"},{"id":"986597452","predicate":"contacts.link","params":[{"name":"my_link","type":"ContactLink"},{"name":"foreign_link","type":"ContactLink"},{"name":"user","type":"User"}],"type":"contacts.Link"},{"id":"-1219778094","predicate":"contacts.contactsNotModified","params":[],"type":"contacts.Contacts"},{"id":"-353862078","predicate":"contacts.contacts","params":[{"name":"contacts","type":"Vector<Contact>"},{"name":"saved_count","type":"int"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Contacts"},{"id":"2010127419","predicate":"contacts.importedContacts","params":[{"name":"imported","type":"Vector<ImportedContact>"},{"name":"popular_invites","type":"Vector<PopularContact>"},{"name":"retry_contacts","type":"Vector<long>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.ImportedContacts"},{"id":"471043349","predicate":"contacts.blocked","params":[{"name":"blocked","type":"Vector<ContactBlocked>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Blocked"},{"id":"-1878523231","predicate":"contacts.blockedSlice","params":[{"name":"count","type":"int"},{"name":"blocked","type":"Vector<ContactBlocked>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Blocked"},{"id":"364538944","predicate":"messages.dialogs","params":[{"name":"dialogs","type":"Vector<Dialog>"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Dialogs"},{"id":"1910543603","predicate":"messages.dialogsSlice","params":[{"name":"count","type":"int"},{"name":"dialogs","type":"Vector<Dialog>"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Dialogs"},{"id":"-1938715001","predicate":"messages.messages","params":[{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Messages"},{"id":"189033187","predicate":"messages.messagesSlice","params":[{"name":"count","type":"int"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Messages"},{"id":"1694474197","predicate":"messages.chats","params":[{"name":"chats","type":"Vector<Chat>"}],"type":"messages.Chats"},{"id":"-438840932","predicate":"messages.chatFull","params":[{"name":"full_chat","type":"ChatFull"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.ChatFull"},{"id":"-1269012015","predicate":"messages.affectedHistory","params":[{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"offset","type":"int"}],"type":"messages.AffectedHistory"},{"id":"1474492012","predicate":"inputMessagesFilterEmpty","params":[],"type":"MessagesFilter"},{"id":"-1777752804","predicate":"inputMessagesFilterPhotos","params":[],"type":"MessagesFilter"},{"id":"-1614803355","predicate":"inputMessagesFilterVideo","params":[],"type":"MessagesFilter"},{"id":"1458172132","predicate":"inputMessagesFilterPhotoVideo","params":[],"type":"MessagesFilter"},{"id":"-1629621880","predicate":"inputMessagesFilterDocument","params":[],"type":"MessagesFilter"},{"id":"2129714567","predicate":"inputMessagesFilterUrl","params":[],"type":"MessagesFilter"},{"id":"-3644025","predicate":"inputMessagesFilterGif","params":[],"type":"MessagesFilter"},{"id":"522914557","predicate":"updateNewMessage","params":[{"name":"message","type":"Message"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"1318109142","predicate":"updateMessageID","params":[{"name":"id","type":"int"},{"name":"random_id","type":"long"}],"type":"Update"},{"id":"-1576161051","predicate":"updateDeleteMessages","params":[{"name":"messages","type":"Vector<int>"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"1548249383","predicate":"updateUserTyping","params":[{"name":"user_id","type":"int"},{"name":"action","type":"SendMessageAction"}],"type":"Update"},{"id":"-1704596961","predicate":"updateChatUserTyping","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"action","type":"SendMessageAction"}],"type":"Update"},{"id":"125178264","predicate":"updateChatParticipants","params":[{"name":"participants","type":"ChatParticipants"}],"type":"Update"},{"id":"469489699","predicate":"updateUserStatus","params":[{"name":"user_id","type":"int"},{"name":"status","type":"UserStatus"}],"type":"Update"},{"id":"-1489818765","predicate":"updateUserName","params":[{"name":"user_id","type":"int"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"},{"name":"username","type":"string"}],"type":"Update"},{"id":"-1791935732","predicate":"updateUserPhoto","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"},{"name":"photo","type":"UserProfilePhoto"},{"name":"previous","type":"Bool"}],"type":"Update"},{"id":"628472761","predicate":"updateContactRegistered","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"}],"type":"Update"},{"id":"-1657903163","predicate":"updateContactLink","params":[{"name":"user_id","type":"int"},{"name":"my_link","type":"ContactLink"},{"name":"foreign_link","type":"ContactLink"}],"type":"Update"},{"id":"-1519637954","predicate":"updates.state","params":[{"name":"pts","type":"int"},{"name":"qts","type":"int"},{"name":"date","type":"int"},{"name":"seq","type":"int"},{"name":"unread_count","type":"int"}],"type":"updates.State"},{"id":"1567990072","predicate":"updates.differenceEmpty","params":[{"name":"date","type":"int"},{"name":"seq","type":"int"}],"type":"updates.Difference"},{"id":"16030880","predicate":"updates.difference","params":[{"name":"new_messages","type":"Vector<Message>"},{"name":"new_encrypted_messages","type":"Vector<EncryptedMessage>"},{"name":"other_updates","type":"Vector<Update>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"},{"name":"state","type":"updates.State"}],"type":"updates.Difference"},{"id":"-1459938943","predicate":"updates.differenceSlice","params":[{"name":"new_messages","type":"Vector<Message>"},{"name":"new_encrypted_messages","type":"Vector<EncryptedMessage>"},{"name":"other_updates","type":"Vector<Update>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"},{"name":"intermediate_state","type":"updates.State"}],"type":"updates.Difference"},{"id":"-484987010","predicate":"updatesTooLong","params":[],"type":"Updates"},{"id":"-1857044719","predicate":"updateShortMessage","params":[{"name":"flags","type":"#"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"silent","type":"flags.13?true"},{"name":"id","type":"int"},{"name":"user_id","type":"int"},{"name":"message","type":"string"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"date","type":"int"},{"name":"fwd_from","type":"flags.2?MessageFwdHeader"},{"name":"via_bot_id","type":"flags.11?int"},{"name":"reply_to_msg_id","type":"flags.3?int"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"}],"type":"Updates"},{"id":"377562760","predicate":"updateShortChatMessage","params":[{"name":"flags","type":"#"},{"name":"out","type":"flags.1?true"},{"name":"mentioned","type":"flags.4?true"},{"name":"media_unread","type":"flags.5?true"},{"name":"silent","type":"flags.13?true"},{"name":"id","type":"int"},{"name":"from_id","type":"int"},{"name":"chat_id","type":"int"},{"name":"message","type":"string"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"date","type":"int"},{"name":"fwd_from","type":"flags.2?MessageFwdHeader"},{"name":"via_bot_id","type":"flags.11?int"},{"name":"reply_to_msg_id","type":"flags.3?int"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"}],"type":"Updates"},{"id":"2027216577","predicate":"updateShort","params":[{"name":"update","type":"Update"},{"name":"date","type":"int"}],"type":"Updates"},{"id":"1918567619","predicate":"updatesCombined","params":[{"name":"updates","type":"Vector<Update>"},{"name":"users","type":"Vector<User>"},{"name":"chats","type":"Vector<Chat>"},{"name":"date","type":"int"},{"name":"seq_start","type":"int"},{"name":"seq","type":"int"}],"type":"Updates"},{"id":"1957577280","predicate":"updates","params":[{"name":"updates","type":"Vector<Update>"},{"name":"users","type":"Vector<User>"},{"name":"chats","type":"Vector<Chat>"},{"name":"date","type":"int"},{"name":"seq","type":"int"}],"type":"Updates"},{"id":"-1916114267","predicate":"photos.photos","params":[{"name":"photos","type":"Vector<Photo>"},{"name":"users","type":"Vector<User>"}],"type":"photos.Photos"},{"id":"352657236","predicate":"photos.photosSlice","params":[{"name":"count","type":"int"},{"name":"photos","type":"Vector<Photo>"},{"name":"users","type":"Vector<User>"}],"type":"photos.Photos"},{"id":"539045032","predicate":"photos.photo","params":[{"name":"photo","type":"Photo"},{"name":"users","type":"Vector<User>"}],"type":"photos.Photo"},{"id":"157948117","predicate":"upload.file","params":[{"name":"type","type":"storage.FileType"},{"name":"mtime","type":"int"},{"name":"bytes","type":"bytes"}],"type":"upload.File"},{"id":"98092748","predicate":"dcOption","params":[{"name":"flags","type":"#"},{"name":"ipv6","type":"flags.0?true"},{"name":"media_only","type":"flags.1?true"},{"name":"tcpo_only","type":"flags.2?true"},{"name":"cdn","type":"flags.3?true"},{"name":"static","type":"flags.4?true"},{"name":"id","type":"int"},{"name":"ip_address","type":"string"},{"name":"port","type":"int"}],"type":"DcOption"},{"id":"-1669068444","predicate":"config","params":[{"name":"flags","type":"#"},{"name":"phonecalls_enabled","type":"flags.1?true"},{"name":"default_p2p_contacts","type":"flags.3?true"},{"name":"date","type":"int"},{"name":"expires","type":"int"},{"name":"test_mode","type":"Bool"},{"name":"this_dc","type":"int"},{"name":"dc_options","type":"Vector<DcOption>"},{"name":"chat_size_max","type":"int"},{"name":"megagroup_size_max","type":"int"},{"name":"forwarded_count_max","type":"int"},{"name":"online_update_period_ms","type":"int"},{"name":"offline_blur_timeout_ms","type":"int"},{"name":"offline_idle_timeout_ms","type":"int"},{"name":"online_cloud_timeout_ms","type":"int"},{"name":"notify_cloud_delay_ms","type":"int"},{"name":"notify_default_delay_ms","type":"int"},{"name":"chat_big_size","type":"int"},{"name":"push_chat_period_ms","type":"int"},{"name":"push_chat_limit","type":"int"},{"name":"saved_gifs_limit","type":"int"},{"name":"edit_time_limit","type":"int"},{"name":"rating_e_decay","type":"int"},{"name":"stickers_recent_limit","type":"int"},{"name":"stickers_faved_limit","type":"int"},{"name":"channels_read_media_period","type":"int"},{"name":"tmp_sessions","type":"flags.0?int"},{"name":"pinned_dialogs_count_max","type":"int"},{"name":"call_receive_timeout_ms","type":"int"},{"name":"call_ring_timeout_ms","type":"int"},{"name":"call_connect_timeout_ms","type":"int"},{"name":"call_packet_timeout_ms","type":"int"},{"name":"me_url_prefix","type":"string"},{"name":"suggested_lang_code","type":"flags.2?string"},{"name":"lang_pack_version","type":"flags.2?int"},{"name":"disabled_features","type":"Vector<DisabledFeature>"}],"type":"Config"},{"id":"-1910892683","predicate":"nearestDc","params":[{"name":"country","type":"string"},{"name":"this_dc","type":"int"},{"name":"nearest_dc","type":"int"}],"type":"NearestDc"},{"id":"-1987579119","predicate":"help.appUpdate","params":[{"name":"id","type":"int"},{"name":"critical","type":"Bool"},{"name":"url","type":"string"},{"name":"text","type":"string"}],"type":"help.AppUpdate"},{"id":"-1000708810","predicate":"help.noAppUpdate","params":[],"type":"help.AppUpdate"},{"id":"415997816","predicate":"help.inviteText","params":[{"name":"message","type":"string"}],"type":"help.InviteText"},{"id":"1662091044","predicate":"wallPaperSolid","params":[{"name":"id","type":"int"},{"name":"title","type":"string"},{"name":"bg_color","type":"int"},{"name":"color","type":"int"}],"type":"WallPaper"},{"id":"314359194","predicate":"updateNewEncryptedMessage","params":[{"name":"message","type":"EncryptedMessage"},{"name":"qts","type":"int"}],"type":"Update"},{"id":"386986326","predicate":"updateEncryptedChatTyping","params":[{"name":"chat_id","type":"int"}],"type":"Update"},{"id":"-1264392051","predicate":"updateEncryption","params":[{"name":"chat","type":"EncryptedChat"},{"name":"date","type":"int"}],"type":"Update"},{"id":"956179895","predicate":"updateEncryptedMessagesRead","params":[{"name":"chat_id","type":"int"},{"name":"max_date","type":"int"},{"name":"date","type":"int"}],"type":"Update"},{"id":"-1417756512","predicate":"encryptedChatEmpty","params":[{"name":"id","type":"int"}],"type":"EncryptedChat"},{"id":"1006044124","predicate":"encryptedChatWaiting","params":[{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"}],"type":"EncryptedChat"},{"id":"-931638658","predicate":"encryptedChatRequested","params":[{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"g_a","type":"bytes"}],"type":"EncryptedChat"},{"id":"-94974410","predicate":"encryptedChat","params":[{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"g_a_or_b","type":"bytes"},{"name":"key_fingerprint","type":"long"}],"type":"EncryptedChat"},{"id":"332848423","predicate":"encryptedChatDiscarded","params":[{"name":"id","type":"int"}],"type":"EncryptedChat"},{"id":"-247351839","predicate":"inputEncryptedChat","params":[{"name":"chat_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputEncryptedChat"},{"id":"-1038136962","predicate":"encryptedFileEmpty","params":[],"type":"EncryptedFile"},{"id":"1248893260","predicate":"encryptedFile","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"size","type":"int"},{"name":"dc_id","type":"int"},{"name":"key_fingerprint","type":"int"}],"type":"EncryptedFile"},{"id":"406307684","predicate":"inputEncryptedFileEmpty","params":[],"type":"InputEncryptedFile"},{"id":"1690108678","predicate":"inputEncryptedFileUploaded","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"md5_checksum","type":"string"},{"name":"key_fingerprint","type":"int"}],"type":"InputEncryptedFile"},{"id":"1511503333","predicate":"inputEncryptedFile","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputEncryptedFile"},{"id":"-182231723","predicate":"inputEncryptedFileLocation","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputFileLocation"},{"id":"-317144808","predicate":"encryptedMessage","params":[{"name":"random_id","type":"long"},{"name":"chat_id","type":"int"},{"name":"date","type":"int"},{"name":"bytes","type":"bytes"},{"name":"file","type":"EncryptedFile"}],"type":"EncryptedMessage"},{"id":"594758406","predicate":"encryptedMessageService","params":[{"name":"random_id","type":"long"},{"name":"chat_id","type":"int"},{"name":"date","type":"int"},{"name":"bytes","type":"bytes"}],"type":"EncryptedMessage"},{"id":"-1058912715","predicate":"messages.dhConfigNotModified","params":[{"name":"random","type":"bytes"}],"type":"messages.DhConfig"},{"id":"740433629","predicate":"messages.dhConfig","params":[{"name":"g","type":"int"},{"name":"p","type":"bytes"},{"name":"version","type":"int"},{"name":"random","type":"bytes"}],"type":"messages.DhConfig"},{"id":"1443858741","predicate":"messages.sentEncryptedMessage","params":[{"name":"date","type":"int"}],"type":"messages.SentEncryptedMessage"},{"id":"-1802240206","predicate":"messages.sentEncryptedFile","params":[{"name":"date","type":"int"},{"name":"file","type":"EncryptedFile"}],"type":"messages.SentEncryptedMessage"},{"id":"-95482955","predicate":"inputFileBig","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"name","type":"string"}],"type":"InputFile"},{"id":"767652808","predicate":"inputEncryptedFileBigUploaded","params":[{"name":"id","type":"long"},{"name":"parts","type":"int"},{"name":"key_fingerprint","type":"int"}],"type":"InputEncryptedFile"},{"id":"-364179876","predicate":"updateChatParticipantAdd","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"},{"name":"version","type":"int"}],"type":"Update"},{"id":"1851755554","predicate":"updateChatParticipantDelete","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"version","type":"int"}],"type":"Update"},{"id":"-1906403213","predicate":"updateDcOptions","params":[{"name":"dc_options","type":"Vector<DcOption>"}],"type":"Update"},{"id":"-476700163","predicate":"inputMediaUploadedDocument","params":[{"name":"flags","type":"#"},{"name":"nosound_video","type":"flags.3?true"},{"name":"file","type":"InputFile"},{"name":"thumb","type":"flags.2?InputFile"},{"name":"mime_type","type":"string"},{"name":"attributes","type":"Vector<DocumentAttribute>"},{"name":"caption","type":"string"},{"name":"stickers","type":"flags.0?Vector<InputDocument>"},{"name":"ttl_seconds","type":"flags.1?int"}],"type":"InputMedia"},{"id":"1523279502","predicate":"inputMediaDocument","params":[{"name":"flags","type":"#"},{"name":"id","type":"InputDocument"},{"name":"caption","type":"string"},{"name":"ttl_seconds","type":"flags.0?int"}],"type":"InputMedia"},{"id":"2084836563","predicate":"messageMediaDocument","params":[{"name":"flags","type":"#"},{"name":"document","type":"flags.0?Document"},{"name":"caption","type":"flags.1?string"},{"name":"ttl_seconds","type":"flags.2?int"}],"type":"MessageMedia"},{"id":"1928391342","predicate":"inputDocumentEmpty","params":[],"type":"InputDocument"},{"id":"410618194","predicate":"inputDocument","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputDocument"},{"id":"1125058340","predicate":"inputDocumentFileLocation","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"version","type":"int"}],"type":"InputFileLocation"},{"id":"922273905","predicate":"documentEmpty","params":[{"name":"id","type":"long"}],"type":"Document"},{"id":"-2027738169","predicate":"document","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"mime_type","type":"string"},{"name":"size","type":"int"},{"name":"thumb","type":"PhotoSize"},{"name":"dc_id","type":"int"},{"name":"version","type":"int"},{"name":"attributes","type":"Vector<DocumentAttribute>"}],"type":"Document"},{"id":"398898678","predicate":"help.support","params":[{"name":"phone_number","type":"string"},{"name":"user","type":"User"}],"type":"help.Support"},{"id":"-1613493288","predicate":"notifyPeer","params":[{"name":"peer","type":"Peer"}],"type":"NotifyPeer"},{"id":"-1261946036","predicate":"notifyUsers","params":[],"type":"NotifyPeer"},{"id":"-1073230141","predicate":"notifyChats","params":[],"type":"NotifyPeer"},{"id":"1959820384","predicate":"notifyAll","params":[],"type":"NotifyPeer"},{"id":"-2131957734","predicate":"updateUserBlocked","params":[{"name":"user_id","type":"int"},{"name":"blocked","type":"Bool"}],"type":"Update"},{"id":"-1094555409","predicate":"updateNotifySettings","params":[{"name":"peer","type":"NotifyPeer"},{"name":"notify_settings","type":"PeerNotifySettings"}],"type":"Update"},{"id":"381645902","predicate":"sendMessageTypingAction","params":[],"type":"SendMessageAction"},{"id":"-44119819","predicate":"sendMessageCancelAction","params":[],"type":"SendMessageAction"},{"id":"-1584933265","predicate":"sendMessageRecordVideoAction","params":[],"type":"SendMessageAction"},{"id":"-378127636","predicate":"sendMessageUploadVideoAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"-718310409","predicate":"sendMessageRecordAudioAction","params":[],"type":"SendMessageAction"},{"id":"-212740181","predicate":"sendMessageUploadAudioAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"-774682074","predicate":"sendMessageUploadPhotoAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"-1441998364","predicate":"sendMessageUploadDocumentAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"393186209","predicate":"sendMessageGeoLocationAction","params":[],"type":"SendMessageAction"},{"id":"1653390447","predicate":"sendMessageChooseContactAction","params":[],"type":"SendMessageAction"},{"id":"-1290580579","predicate":"contacts.found","params":[{"name":"my_results","type":"Vector<Peer>"},{"name":"results","type":"Vector<Peer>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.Found"},{"id":"-337352679","predicate":"updateServiceNotification","params":[{"name":"flags","type":"#"},{"name":"popup","type":"flags.0?true"},{"name":"inbox_date","type":"flags.1?int"},{"name":"type","type":"string"},{"name":"message","type":"string"},{"name":"media","type":"MessageMedia"},{"name":"entities","type":"Vector<MessageEntity>"}],"type":"Update"},{"id":"-496024847","predicate":"userStatusRecently","params":[],"type":"UserStatus"},{"id":"129960444","predicate":"userStatusLastWeek","params":[],"type":"UserStatus"},{"id":"2011940674","predicate":"userStatusLastMonth","params":[],"type":"UserStatus"},{"id":"-298113238","predicate":"updatePrivacy","params":[{"name":"key","type":"PrivacyKey"},{"name":"rules","type":"Vector<PrivacyRule>"}],"type":"Update"},{"id":"1335282456","predicate":"inputPrivacyKeyStatusTimestamp","params":[],"type":"InputPrivacyKey"},{"id":"-1137792208","predicate":"privacyKeyStatusTimestamp","params":[],"type":"PrivacyKey"},{"id":"218751099","predicate":"inputPrivacyValueAllowContacts","params":[],"type":"InputPrivacyRule"},{"id":"407582158","predicate":"inputPrivacyValueAllowAll","params":[],"type":"InputPrivacyRule"},{"id":"320652927","predicate":"inputPrivacyValueAllowUsers","params":[{"name":"users","type":"Vector<InputUser>"}],"type":"InputPrivacyRule"},{"id":"195371015","predicate":"inputPrivacyValueDisallowContacts","params":[],"type":"InputPrivacyRule"},{"id":"-697604407","predicate":"inputPrivacyValueDisallowAll","params":[],"type":"InputPrivacyRule"},{"id":"-1877932953","predicate":"inputPrivacyValueDisallowUsers","params":[{"name":"users","type":"Vector<InputUser>"}],"type":"InputPrivacyRule"},{"id":"-123988","predicate":"privacyValueAllowContacts","params":[],"type":"PrivacyRule"},{"id":"1698855810","predicate":"privacyValueAllowAll","params":[],"type":"PrivacyRule"},{"id":"1297858060","predicate":"privacyValueAllowUsers","params":[{"name":"users","type":"Vector<int>"}],"type":"PrivacyRule"},{"id":"-125240806","predicate":"privacyValueDisallowContacts","params":[],"type":"PrivacyRule"},{"id":"-1955338397","predicate":"privacyValueDisallowAll","params":[],"type":"PrivacyRule"},{"id":"209668535","predicate":"privacyValueDisallowUsers","params":[{"name":"users","type":"Vector<int>"}],"type":"PrivacyRule"},{"id":"1430961007","predicate":"account.privacyRules","params":[{"name":"rules","type":"Vector<PrivacyRule>"},{"name":"users","type":"Vector<User>"}],"type":"account.PrivacyRules"},{"id":"-1194283041","predicate":"accountDaysTTL","params":[{"name":"days","type":"int"}],"type":"AccountDaysTTL"},{"id":"314130811","predicate":"updateUserPhone","params":[{"name":"user_id","type":"int"},{"name":"phone","type":"string"}],"type":"Update"},{"id":"1815593308","predicate":"documentAttributeImageSize","params":[{"name":"w","type":"int"},{"name":"h","type":"int"}],"type":"DocumentAttribute"},{"id":"297109817","predicate":"documentAttributeAnimated","params":[],"type":"DocumentAttribute"},{"id":"1662637586","predicate":"documentAttributeSticker","params":[{"name":"flags","type":"#"},{"name":"mask","type":"flags.1?true"},{"name":"alt","type":"string"},{"name":"stickerset","type":"InputStickerSet"},{"name":"mask_coords","type":"flags.0?MaskCoords"}],"type":"DocumentAttribute"},{"id":"250621158","predicate":"documentAttributeVideo","params":[{"name":"flags","type":"#"},{"name":"round_message","type":"flags.0?true"},{"name":"supports_streaming","type":"flags.1?true"},{"name":"duration","type":"int"},{"name":"w","type":"int"},{"name":"h","type":"int"}],"type":"DocumentAttribute"},{"id":"-1739392570","predicate":"documentAttributeAudio","params":[{"name":"flags","type":"#"},{"name":"voice","type":"flags.10?true"},{"name":"duration","type":"int"},{"name":"title","type":"flags.0?string"},{"name":"performer","type":"flags.1?string"},{"name":"waveform","type":"flags.2?bytes"}],"type":"DocumentAttribute"},{"id":"358154344","predicate":"documentAttributeFilename","params":[{"name":"file_name","type":"string"}],"type":"DocumentAttribute"},{"id":"-244016606","predicate":"messages.stickersNotModified","params":[],"type":"messages.Stickers"},{"id":"-1970352846","predicate":"messages.stickers","params":[{"name":"hash","type":"string"},{"name":"stickers","type":"Vector<Document>"}],"type":"messages.Stickers"},{"id":"313694676","predicate":"stickerPack","params":[{"name":"emoticon","type":"string"},{"name":"documents","type":"Vector<long>"}],"type":"StickerPack"},{"id":"-395967805","predicate":"messages.allStickersNotModified","params":[],"type":"messages.AllStickers"},{"id":"-302170017","predicate":"messages.allStickers","params":[{"name":"hash","type":"int"},{"name":"sets","type":"Vector<StickerSet>"}],"type":"messages.AllStickers"},{"id":"-1369215196","predicate":"disabledFeature","params":[{"name":"feature","type":"string"},{"name":"description","type":"string"}],"type":"DisabledFeature"},{"id":"-1721631396","predicate":"updateReadHistoryInbox","params":[{"name":"peer","type":"Peer"},{"name":"max_id","type":"int"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"791617983","predicate":"updateReadHistoryOutbox","params":[{"name":"peer","type":"Peer"},{"name":"max_id","type":"int"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-2066640507","predicate":"messages.affectedMessages","params":[{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"messages.AffectedMessages"},{"id":"1599050311","predicate":"contactLinkUnknown","params":[],"type":"ContactLink"},{"id":"-17968211","predicate":"contactLinkNone","params":[],"type":"ContactLink"},{"id":"646922073","predicate":"contactLinkHasPhone","params":[],"type":"ContactLink"},{"id":"-721239344","predicate":"contactLinkContact","params":[],"type":"ContactLink"},{"id":"2139689491","predicate":"updateWebPage","params":[{"name":"webpage","type":"WebPage"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-350980120","predicate":"webPageEmpty","params":[{"name":"id","type":"long"}],"type":"WebPage"},{"id":"-981018084","predicate":"webPagePending","params":[{"name":"id","type":"long"},{"name":"date","type":"int"}],"type":"WebPage"},{"id":"1594340540","predicate":"webPage","params":[{"name":"flags","type":"#"},{"name":"id","type":"long"},{"name":"url","type":"string"},{"name":"display_url","type":"string"},{"name":"hash","type":"int"},{"name":"type","type":"flags.0?string"},{"name":"site_name","type":"flags.1?string"},{"name":"title","type":"flags.2?string"},{"name":"description","type":"flags.3?string"},{"name":"photo","type":"flags.4?Photo"},{"name":"embed_url","type":"flags.5?string"},{"name":"embed_type","type":"flags.5?string"},{"name":"embed_width","type":"flags.6?int"},{"name":"embed_height","type":"flags.6?int"},{"name":"duration","type":"flags.7?int"},{"name":"author","type":"flags.8?string"},{"name":"document","type":"flags.9?Document"},{"name":"cached_page","type":"flags.10?Page"}],"type":"WebPage"},{"id":"-1557277184","predicate":"messageMediaWebPage","params":[{"name":"webpage","type":"WebPage"}],"type":"MessageMedia"},{"id":"2079516406","predicate":"authorization","params":[{"name":"hash","type":"long"},{"name":"flags","type":"int"},{"name":"device_model","type":"string"},{"name":"platform","type":"string"},{"name":"system_version","type":"string"},{"name":"api_id","type":"int"},{"name":"app_name","type":"string"},{"name":"app_version","type":"string"},{"name":"date_created","type":"int"},{"name":"date_active","type":"int"},{"name":"ip","type":"string"},{"name":"country","type":"string"},{"name":"region","type":"string"}],"type":"Authorization"},{"id":"307276766","predicate":"account.authorizations","params":[{"name":"authorizations","type":"Vector<Authorization>"}],"type":"account.Authorizations"},{"id":"-1764049896","predicate":"account.noPassword","params":[{"name":"new_salt","type":"bytes"},{"name":"email_unconfirmed_pattern","type":"string"}],"type":"account.Password"},{"id":"2081952796","predicate":"account.password","params":[{"name":"current_salt","type":"bytes"},{"name":"new_salt","type":"bytes"},{"name":"hint","type":"string"},{"name":"has_recovery","type":"Bool"},{"name":"email_unconfirmed_pattern","type":"string"}],"type":"account.Password"},{"id":"-1212732749","predicate":"account.passwordSettings","params":[{"name":"email","type":"string"}],"type":"account.PasswordSettings"},{"id":"-2037289493","predicate":"account.passwordInputSettings","params":[{"name":"flags","type":"#"},{"name":"new_salt","type":"flags.0?bytes"},{"name":"new_password_hash","type":"flags.0?bytes"},{"name":"hint","type":"flags.0?string"},{"name":"email","type":"flags.1?string"}],"type":"account.PasswordInputSettings"},{"id":"326715557","predicate":"auth.passwordRecovery","params":[{"name":"email_pattern","type":"string"}],"type":"auth.PasswordRecovery"},{"id":"-1052959727","predicate":"inputMediaVenue","params":[{"name":"geo_point","type":"InputGeoPoint"},{"name":"title","type":"string"},{"name":"address","type":"string"},{"name":"provider","type":"string"},{"name":"venue_id","type":"string"},{"name":"venue_type","type":"string"}],"type":"InputMedia"},{"id":"784356159","predicate":"messageMediaVenue","params":[{"name":"geo","type":"GeoPoint"},{"name":"title","type":"string"},{"name":"address","type":"string"},{"name":"provider","type":"string"},{"name":"venue_id","type":"string"},{"name":"venue_type","type":"string"}],"type":"MessageMedia"},{"id":"-1551583367","predicate":"receivedNotifyMessage","params":[{"name":"id","type":"int"},{"name":"flags","type":"int"}],"type":"ReceivedNotifyMessage"},{"id":"1776236393","predicate":"chatInviteEmpty","params":[],"type":"ExportedChatInvite"},{"id":"-64092740","predicate":"chatInviteExported","params":[{"name":"link","type":"string"}],"type":"ExportedChatInvite"},{"id":"1516793212","predicate":"chatInviteAlready","params":[{"name":"chat","type":"Chat"}],"type":"ChatInvite"},{"id":"-613092008","predicate":"chatInvite","params":[{"name":"flags","type":"#"},{"name":"channel","type":"flags.0?true"},{"name":"broadcast","type":"flags.1?true"},{"name":"public","type":"flags.2?true"},{"name":"megagroup","type":"flags.3?true"},{"name":"title","type":"string"},{"name":"photo","type":"ChatPhoto"},{"name":"participants_count","type":"int"},{"name":"participants","type":"flags.4?Vector<User>"}],"type":"ChatInvite"},{"id":"-123931160","predicate":"messageActionChatJoinedByLink","params":[{"name":"inviter_id","type":"int"}],"type":"MessageAction"},{"id":"1757493555","predicate":"updateReadMessagesContents","params":[{"name":"messages","type":"Vector<int>"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-4838507","predicate":"inputStickerSetEmpty","params":[],"type":"InputStickerSet"},{"id":"-1645763991","predicate":"inputStickerSetID","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputStickerSet"},{"id":"-2044933984","predicate":"inputStickerSetShortName","params":[{"name":"short_name","type":"string"}],"type":"InputStickerSet"},{"id":"-852477119","predicate":"stickerSet","params":[{"name":"flags","type":"#"},{"name":"installed","type":"flags.0?true"},{"name":"archived","type":"flags.1?true"},{"name":"official","type":"flags.2?true"},{"name":"masks","type":"flags.3?true"},{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"title","type":"string"},{"name":"short_name","type":"string"},{"name":"count","type":"int"},{"name":"hash","type":"int"}],"type":"StickerSet"},{"id":"-1240849242","predicate":"messages.stickerSet","params":[{"name":"set","type":"StickerSet"},{"name":"packs","type":"Vector<StickerPack>"},{"name":"documents","type":"Vector<Document>"}],"type":"messages.StickerSet"},{"id":"773059779","predicate":"user","params":[{"name":"flags","type":"#"},{"name":"self","type":"flags.10?true"},{"name":"contact","type":"flags.11?true"},{"name":"mutual_contact","type":"flags.12?true"},{"name":"deleted","type":"flags.13?true"},{"name":"bot","type":"flags.14?true"},{"name":"bot_chat_history","type":"flags.15?true"},{"name":"bot_nochats","type":"flags.16?true"},{"name":"verified","type":"flags.17?true"},{"name":"restricted","type":"flags.18?true"},{"name":"min","type":"flags.20?true"},{"name":"bot_inline_geo","type":"flags.21?true"},{"name":"id","type":"int"},{"name":"access_hash","type":"flags.0?long"},{"name":"first_name","type":"flags.1?string"},{"name":"last_name","type":"flags.2?string"},{"name":"username","type":"flags.3?string"},{"name":"phone","type":"flags.4?string"},{"name":"photo","type":"flags.5?UserProfilePhoto"},{"name":"status","type":"flags.6?UserStatus"},{"name":"bot_info_version","type":"flags.14?int"},{"name":"restriction_reason","type":"flags.18?string"},{"name":"bot_inline_placeholder","type":"flags.19?string"},{"name":"lang_code","type":"flags.22?string"}],"type":"User"},{"id":"-1032140601","predicate":"botCommand","params":[{"name":"command","type":"string"},{"name":"description","type":"string"}],"type":"BotCommand"},{"id":"-1729618630","predicate":"botInfo","params":[{"name":"user_id","type":"int"},{"name":"description","type":"string"},{"name":"commands","type":"Vector<BotCommand>"}],"type":"BotInfo"},{"id":"-1560655744","predicate":"keyboardButton","params":[{"name":"text","type":"string"}],"type":"KeyboardButton"},{"id":"2002815875","predicate":"keyboardButtonRow","params":[{"name":"buttons","type":"Vector<KeyboardButton>"}],"type":"KeyboardButtonRow"},{"id":"-1606526075","predicate":"replyKeyboardHide","params":[{"name":"flags","type":"#"},{"name":"selective","type":"flags.2?true"}],"type":"ReplyMarkup"},{"id":"-200242528","predicate":"replyKeyboardForceReply","params":[{"name":"flags","type":"#"},{"name":"single_use","type":"flags.1?true"},{"name":"selective","type":"flags.2?true"}],"type":"ReplyMarkup"},{"id":"889353612","predicate":"replyKeyboardMarkup","params":[{"name":"flags","type":"#"},{"name":"resize","type":"flags.0?true"},{"name":"single_use","type":"flags.1?true"},{"name":"selective","type":"flags.2?true"},{"name":"rows","type":"Vector<KeyboardButtonRow>"}],"type":"ReplyMarkup"},{"id":"2072935910","predicate":"inputPeerUser","params":[{"name":"user_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputPeer"},{"id":"-668391402","predicate":"inputUser","params":[{"name":"user_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputUser"},{"id":"-1148011883","predicate":"messageEntityUnknown","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"-100378723","predicate":"messageEntityMention","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1868782349","predicate":"messageEntityHashtag","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1827637959","predicate":"messageEntityBotCommand","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1859134776","predicate":"messageEntityUrl","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1692693954","predicate":"messageEntityEmail","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"-1117713463","predicate":"messageEntityBold","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"-2106619040","predicate":"messageEntityItalic","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"681706865","predicate":"messageEntityCode","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"}],"type":"MessageEntity"},{"id":"1938967520","predicate":"messageEntityPre","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"},{"name":"language","type":"string"}],"type":"MessageEntity"},{"id":"1990644519","predicate":"messageEntityTextUrl","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"},{"name":"url","type":"string"}],"type":"MessageEntity"},{"id":"301019932","predicate":"updateShortSentMessage","params":[{"name":"flags","type":"#"},{"name":"out","type":"flags.1?true"},{"name":"id","type":"int"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"},{"name":"date","type":"int"},{"name":"media","type":"flags.9?MessageMedia"},{"name":"entities","type":"flags.7?Vector<MessageEntity>"}],"type":"Updates"},{"id":"-292807034","predicate":"inputChannelEmpty","params":[],"type":"InputChannel"},{"id":"-1343524562","predicate":"inputChannel","params":[{"name":"channel_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputChannel"},{"id":"-1109531342","predicate":"peerChannel","params":[{"name":"channel_id","type":"int"}],"type":"Peer"},{"id":"548253432","predicate":"inputPeerChannel","params":[{"name":"channel_id","type":"int"},{"name":"access_hash","type":"long"}],"type":"InputPeer"},{"id":"1158377749","predicate":"channel","params":[{"name":"flags","type":"#"},{"name":"creator","type":"flags.0?true"},{"name":"left","type":"flags.2?true"},{"name":"editor","type":"flags.3?true"},{"name":"broadcast","type":"flags.5?true"},{"name":"verified","type":"flags.7?true"},{"name":"megagroup","type":"flags.8?true"},{"name":"restricted","type":"flags.9?true"},{"name":"democracy","type":"flags.10?true"},{"name":"signatures","type":"flags.11?true"},{"name":"min","type":"flags.12?true"},{"name":"id","type":"int"},{"name":"access_hash","type":"flags.13?long"},{"name":"title","type":"string"},{"name":"username","type":"flags.6?string"},{"name":"photo","type":"ChatPhoto"},{"name":"date","type":"int"},{"name":"version","type":"int"},{"name":"restriction_reason","type":"flags.9?string"},{"name":"admin_rights","type":"flags.14?ChannelAdminRights"},{"name":"banned_rights","type":"flags.15?ChannelBannedRights"},{"name":"participants_count","type":"flags.17?int"}],"type":"Chat"},{"id":"681420594","predicate":"channelForbidden","params":[{"name":"flags","type":"#"},{"name":"broadcast","type":"flags.5?true"},{"name":"megagroup","type":"flags.8?true"},{"name":"id","type":"int"},{"name":"access_hash","type":"long"},{"name":"title","type":"string"},{"name":"until_date","type":"flags.16?int"}],"type":"Chat"},{"id":"2131196633","predicate":"contacts.resolvedPeer","params":[{"name":"peer","type":"Peer"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.ResolvedPeer"},{"id":"1991201921","predicate":"channelFull","params":[{"name":"flags","type":"#"},{"name":"can_view_participants","type":"flags.3?true"},{"name":"can_set_username","type":"flags.6?true"},{"name":"can_set_stickers","type":"flags.7?true"},{"name":"hidden_prehistory","type":"flags.10?true"},{"name":"id","type":"int"},{"name":"about","type":"string"},{"name":"participants_count","type":"flags.0?int"},{"name":"admins_count","type":"flags.1?int"},{"name":"kicked_count","type":"flags.2?int"},{"name":"banned_count","type":"flags.2?int"},{"name":"read_inbox_max_id","type":"int"},{"name":"read_outbox_max_id","type":"int"},{"name":"unread_count","type":"int"},{"name":"chat_photo","type":"Photo"},{"name":"notify_settings","type":"PeerNotifySettings"},{"name":"exported_invite","type":"ExportedChatInvite"},{"name":"bot_info","type":"Vector<BotInfo>"},{"name":"migrated_from_chat_id","type":"flags.4?int"},{"name":"migrated_from_max_id","type":"flags.4?int"},{"name":"pinned_msg_id","type":"flags.5?int"},{"name":"stickerset","type":"flags.8?StickerSet"},{"name":"available_min_id","type":"flags.9?int"}],"type":"ChatFull"},{"id":"182649427","predicate":"messageRange","params":[{"name":"min_id","type":"int"},{"name":"max_id","type":"int"}],"type":"MessageRange"},{"id":"-1725551049","predicate":"messages.channelMessages","params":[{"name":"flags","type":"#"},{"name":"pts","type":"int"},{"name":"count","type":"int"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"messages.Messages"},{"id":"-1781355374","predicate":"messageActionChannelCreate","params":[{"name":"title","type":"string"}],"type":"MessageAction"},{"id":"-352032773","predicate":"updateChannelTooLong","params":[{"name":"flags","type":"#"},{"name":"channel_id","type":"int"},{"name":"pts","type":"flags.0?int"}],"type":"Update"},{"id":"-1227598250","predicate":"updateChannel","params":[{"name":"channel_id","type":"int"}],"type":"Update"},{"id":"1656358105","predicate":"updateNewChannelMessage","params":[{"name":"message","type":"Message"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"1108669311","predicate":"updateReadChannelInbox","params":[{"name":"channel_id","type":"int"},{"name":"max_id","type":"int"}],"type":"Update"},{"id":"-1015733815","predicate":"updateDeleteChannelMessages","params":[{"name":"channel_id","type":"int"},{"name":"messages","type":"Vector<int>"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-1734268085","predicate":"updateChannelMessageViews","params":[{"name":"channel_id","type":"int"},{"name":"id","type":"int"},{"name":"views","type":"int"}],"type":"Update"},{"id":"1041346555","predicate":"updates.channelDifferenceEmpty","params":[{"name":"flags","type":"#"},{"name":"final","type":"flags.0?true"},{"name":"pts","type":"int"},{"name":"timeout","type":"flags.1?int"}],"type":"updates.ChannelDifference"},{"id":"1788705589","predicate":"updates.channelDifferenceTooLong","params":[{"name":"flags","type":"#"},{"name":"final","type":"flags.0?true"},{"name":"pts","type":"int"},{"name":"timeout","type":"flags.1?int"},{"name":"top_message","type":"int"},{"name":"read_inbox_max_id","type":"int"},{"name":"read_outbox_max_id","type":"int"},{"name":"unread_count","type":"int"},{"name":"unread_mentions_count","type":"int"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"updates.ChannelDifference"},{"id":"543450958","predicate":"updates.channelDifference","params":[{"name":"flags","type":"#"},{"name":"final","type":"flags.0?true"},{"name":"pts","type":"int"},{"name":"timeout","type":"flags.1?int"},{"name":"new_messages","type":"Vector<Message>"},{"name":"other_updates","type":"Vector<Update>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"updates.ChannelDifference"},{"id":"-1798033689","predicate":"channelMessagesFilterEmpty","params":[],"type":"ChannelMessagesFilter"},{"id":"-847783593","predicate":"channelMessagesFilter","params":[{"name":"flags","type":"#"},{"name":"exclude_new_messages","type":"flags.1?true"},{"name":"ranges","type":"Vector<MessageRange>"}],"type":"ChannelMessagesFilter"},{"id":"367766557","predicate":"channelParticipant","params":[{"name":"user_id","type":"int"},{"name":"date","type":"int"}],"type":"ChannelParticipant"},{"id":"-1557620115","predicate":"channelParticipantSelf","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChannelParticipant"},{"id":"-471670279","predicate":"channelParticipantCreator","params":[{"name":"user_id","type":"int"}],"type":"ChannelParticipant"},{"id":"-566281095","predicate":"channelParticipantsRecent","params":[],"type":"ChannelParticipantsFilter"},{"id":"-1268741783","predicate":"channelParticipantsAdmins","params":[],"type":"ChannelParticipantsFilter"},{"id":"-1548400251","predicate":"channelParticipantsKicked","params":[{"name":"q","type":"string"}],"type":"ChannelParticipantsFilter"},{"id":"-177282392","predicate":"channels.channelParticipants","params":[{"name":"count","type":"int"},{"name":"participants","type":"Vector<ChannelParticipant>"},{"name":"users","type":"Vector<User>"}],"type":"channels.ChannelParticipants"},{"id":"-791039645","predicate":"channels.channelParticipant","params":[{"name":"participant","type":"ChannelParticipant"},{"name":"users","type":"Vector<User>"}],"type":"channels.ChannelParticipant"},{"id":"-636267638","predicate":"chatParticipantCreator","params":[{"name":"user_id","type":"int"}],"type":"ChatParticipant"},{"id":"-489233354","predicate":"chatParticipantAdmin","params":[{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"date","type":"int"}],"type":"ChatParticipant"},{"id":"1855224129","predicate":"updateChatAdmins","params":[{"name":"chat_id","type":"int"},{"name":"enabled","type":"Bool"},{"name":"version","type":"int"}],"type":"Update"},{"id":"-1232070311","predicate":"updateChatParticipantAdmin","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"int"},{"name":"is_admin","type":"Bool"},{"name":"version","type":"int"}],"type":"Update"},{"id":"1371385889","predicate":"messageActionChatMigrateTo","params":[{"name":"channel_id","type":"int"}],"type":"MessageAction"},{"id":"-1336546578","predicate":"messageActionChannelMigrateFrom","params":[{"name":"title","type":"string"},{"name":"chat_id","type":"int"}],"type":"MessageAction"},{"id":"-1328445861","predicate":"channelParticipantsBots","params":[],"type":"ChannelParticipantsFilter"},{"id":"-236044656","predicate":"help.termsOfService","params":[{"name":"text","type":"string"}],"type":"help.TermsOfService"},{"id":"1753886890","predicate":"updateNewStickerSet","params":[{"name":"stickerset","type":"messages.StickerSet"}],"type":"Update"},{"id":"196268545","predicate":"updateStickerSetsOrder","params":[{"name":"flags","type":"#"},{"name":"masks","type":"flags.0?true"},{"name":"order","type":"Vector<long>"}],"type":"Update"},{"id":"1135492588","predicate":"updateStickerSets","params":[],"type":"Update"},{"id":"372165663","predicate":"foundGif","params":[{"name":"url","type":"string"},{"name":"thumb_url","type":"string"},{"name":"content_url","type":"string"},{"name":"content_type","type":"string"},{"name":"w","type":"int"},{"name":"h","type":"int"}],"type":"FoundGif"},{"id":"-1670052855","predicate":"foundGifCached","params":[{"name":"url","type":"string"},{"name":"photo","type":"Photo"},{"name":"document","type":"Document"}],"type":"FoundGif"},{"id":"1212395773","predicate":"inputMediaGifExternal","params":[{"name":"url","type":"string"},{"name":"q","type":"string"}],"type":"InputMedia"},{"id":"1158290442","predicate":"messages.foundGifs","params":[{"name":"next_offset","type":"int"},{"name":"results","type":"Vector<FoundGif>"}],"type":"messages.FoundGifs"},{"id":"-402498398","predicate":"messages.savedGifsNotModified","params":[],"type":"messages.SavedGifs"},{"id":"772213157","predicate":"messages.savedGifs","params":[{"name":"hash","type":"int"},{"name":"gifs","type":"Vector<Document>"}],"type":"messages.SavedGifs"},{"id":"-1821035490","predicate":"updateSavedGifs","params":[],"type":"Update"},{"id":"691006739","predicate":"inputBotInlineMessageMediaAuto","params":[{"name":"flags","type":"#"},{"name":"caption","type":"string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"InputBotInlineMessage"},{"id":"1036876423","predicate":"inputBotInlineMessageText","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.0?true"},{"name":"message","type":"string"},{"name":"entities","type":"flags.1?Vector<MessageEntity>"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"InputBotInlineMessage"},{"id":"750510426","predicate":"inputBotInlineResult","params":[{"name":"flags","type":"#"},{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"title","type":"flags.1?string"},{"name":"description","type":"flags.2?string"},{"name":"url","type":"flags.3?string"},{"name":"thumb_url","type":"flags.4?string"},{"name":"content_url","type":"flags.5?string"},{"name":"content_type","type":"flags.5?string"},{"name":"w","type":"flags.6?int"},{"name":"h","type":"flags.6?int"},{"name":"duration","type":"flags.7?int"},{"name":"send_message","type":"InputBotInlineMessage"}],"type":"InputBotInlineResult"},{"id":"175419739","predicate":"botInlineMessageMediaAuto","params":[{"name":"flags","type":"#"},{"name":"caption","type":"string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"BotInlineMessage"},{"id":"-1937807902","predicate":"botInlineMessageText","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.0?true"},{"name":"message","type":"string"},{"name":"entities","type":"flags.1?Vector<MessageEntity>"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"BotInlineMessage"},{"id":"-1679053127","predicate":"botInlineResult","params":[{"name":"flags","type":"#"},{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"title","type":"flags.1?string"},{"name":"description","type":"flags.2?string"},{"name":"url","type":"flags.3?string"},{"name":"thumb_url","type":"flags.4?string"},{"name":"content_url","type":"flags.5?string"},{"name":"content_type","type":"flags.5?string"},{"name":"w","type":"flags.6?int"},{"name":"h","type":"flags.6?int"},{"name":"duration","type":"flags.7?int"},{"name":"send_message","type":"BotInlineMessage"}],"type":"BotInlineResult"},{"id":"-1803769784","predicate":"messages.botResults","params":[{"name":"flags","type":"#"},{"name":"gallery","type":"flags.0?true"},{"name":"query_id","type":"long"},{"name":"next_offset","type":"flags.1?string"},{"name":"switch_pm","type":"flags.2?InlineBotSwitchPM"},{"name":"results","type":"Vector<BotInlineResult>"},{"name":"cache_time","type":"int"},{"name":"users","type":"Vector<User>"}],"type":"messages.BotResults"},{"id":"1417832080","predicate":"updateBotInlineQuery","params":[{"name":"flags","type":"#"},{"name":"query_id","type":"long"},{"name":"user_id","type":"int"},{"name":"query","type":"string"},{"name":"geo","type":"flags.0?GeoPoint"},{"name":"offset","type":"string"}],"type":"Update"},{"id":"239663460","predicate":"updateBotInlineSend","params":[{"name":"flags","type":"#"},{"name":"user_id","type":"int"},{"name":"query","type":"string"},{"name":"geo","type":"flags.0?GeoPoint"},{"name":"id","type":"string"},{"name":"msg_id","type":"flags.1?InputBotInlineMessageID"}],"type":"Update"},{"id":"1358283666","predicate":"inputMessagesFilterVoice","params":[],"type":"MessagesFilter"},{"id":"928101534","predicate":"inputMessagesFilterMusic","params":[],"type":"MessagesFilter"},{"id":"-1107622874","predicate":"inputPrivacyKeyChatInvite","params":[],"type":"InputPrivacyKey"},{"id":"1343122938","predicate":"privacyKeyChatInvite","params":[],"type":"PrivacyKey"},{"id":"1571494644","predicate":"exportedMessageLink","params":[{"name":"link","type":"string"},{"name":"html","type":"string"}],"type":"ExportedMessageLink"},{"id":"1436466797","predicate":"messageFwdHeader","params":[{"name":"flags","type":"#"},{"name":"from_id","type":"flags.0?int"},{"name":"date","type":"int"},{"name":"channel_id","type":"flags.1?int"},{"name":"channel_post","type":"flags.2?int"},{"name":"post_author","type":"flags.3?string"},{"name":"saved_from_peer","type":"flags.4?Peer"},{"name":"saved_from_msg_id","type":"flags.4?int"}],"type":"MessageFwdHeader"},{"id":"457133559","predicate":"updateEditChannelMessage","params":[{"name":"message","type":"Message"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-1738988427","predicate":"updateChannelPinnedMessage","params":[{"name":"channel_id","type":"int"},{"name":"id","type":"int"}],"type":"Update"},{"id":"-1799538451","predicate":"messageActionPinMessage","params":[],"type":"MessageAction"},{"id":"1923290508","predicate":"auth.codeTypeSms","params":[],"type":"auth.CodeType"},{"id":"1948046307","predicate":"auth.codeTypeCall","params":[],"type":"auth.CodeType"},{"id":"577556219","predicate":"auth.codeTypeFlashCall","params":[],"type":"auth.CodeType"},{"id":"1035688326","predicate":"auth.sentCodeTypeApp","params":[{"name":"length","type":"int"}],"type":"auth.SentCodeType"},{"id":"-1073693790","predicate":"auth.sentCodeTypeSms","params":[{"name":"length","type":"int"}],"type":"auth.SentCodeType"},{"id":"1398007207","predicate":"auth.sentCodeTypeCall","params":[{"name":"length","type":"int"}],"type":"auth.SentCodeType"},{"id":"-1425815847","predicate":"auth.sentCodeTypeFlashCall","params":[{"name":"pattern","type":"string"}],"type":"auth.SentCodeType"},{"id":"629866245","predicate":"keyboardButtonUrl","params":[{"name":"text","type":"string"},{"name":"url","type":"string"}],"type":"KeyboardButton"},{"id":"1748655686","predicate":"keyboardButtonCallback","params":[{"name":"text","type":"string"},{"name":"data","type":"bytes"}],"type":"KeyboardButton"},{"id":"-1318425559","predicate":"keyboardButtonRequestPhone","params":[{"name":"text","type":"string"}],"type":"KeyboardButton"},{"id":"-59151553","predicate":"keyboardButtonRequestGeoLocation","params":[{"name":"text","type":"string"}],"type":"KeyboardButton"},{"id":"90744648","predicate":"keyboardButtonSwitchInline","params":[{"name":"flags","type":"#"},{"name":"same_peer","type":"flags.0?true"},{"name":"text","type":"string"},{"name":"query","type":"string"}],"type":"KeyboardButton"},{"id":"1218642516","predicate":"replyInlineMarkup","params":[{"name":"rows","type":"Vector<KeyboardButtonRow>"}],"type":"ReplyMarkup"},{"id":"911761060","predicate":"messages.botCallbackAnswer","params":[{"name":"flags","type":"#"},{"name":"alert","type":"flags.1?true"},{"name":"has_url","type":"flags.3?true"},{"name":"native_ui","type":"flags.4?true"},{"name":"message","type":"flags.0?string"},{"name":"url","type":"flags.2?string"},{"name":"cache_time","type":"int"}],"type":"messages.BotCallbackAnswer"},{"id":"-415938591","predicate":"updateBotCallbackQuery","params":[{"name":"flags","type":"#"},{"name":"query_id","type":"long"},{"name":"user_id","type":"int"},{"name":"peer","type":"Peer"},{"name":"msg_id","type":"int"},{"name":"chat_instance","type":"long"},{"name":"data","type":"flags.0?bytes"},{"name":"game_short_name","type":"flags.1?string"}],"type":"Update"},{"id":"649453030","predicate":"messages.messageEditData","params":[{"name":"flags","type":"#"},{"name":"caption","type":"flags.0?true"}],"type":"messages.MessageEditData"},{"id":"-469536605","predicate":"updateEditMessage","params":[{"name":"message","type":"Message"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-1045340827","predicate":"inputBotInlineMessageMediaGeo","params":[{"name":"flags","type":"#"},{"name":"geo_point","type":"InputGeoPoint"},{"name":"period","type":"int"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"InputBotInlineMessage"},{"id":"-1431327288","predicate":"inputBotInlineMessageMediaVenue","params":[{"name":"flags","type":"#"},{"name":"geo_point","type":"InputGeoPoint"},{"name":"title","type":"string"},{"name":"address","type":"string"},{"name":"provider","type":"string"},{"name":"venue_id","type":"string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"InputBotInlineMessage"},{"id":"766443943","predicate":"inputBotInlineMessageMediaContact","params":[{"name":"flags","type":"#"},{"name":"phone_number","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"InputBotInlineMessage"},{"id":"-1222451611","predicate":"botInlineMessageMediaGeo","params":[{"name":"flags","type":"#"},{"name":"geo","type":"GeoPoint"},{"name":"period","type":"int"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"BotInlineMessage"},{"id":"1130767150","predicate":"botInlineMessageMediaVenue","params":[{"name":"flags","type":"#"},{"name":"geo","type":"GeoPoint"},{"name":"title","type":"string"},{"name":"address","type":"string"},{"name":"provider","type":"string"},{"name":"venue_id","type":"string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"BotInlineMessage"},{"id":"904770772","predicate":"botInlineMessageMediaContact","params":[{"name":"flags","type":"#"},{"name":"phone_number","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"BotInlineMessage"},{"id":"-1462213465","predicate":"inputBotInlineResultPhoto","params":[{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"photo","type":"InputPhoto"},{"name":"send_message","type":"InputBotInlineMessage"}],"type":"InputBotInlineResult"},{"id":"-459324","predicate":"inputBotInlineResultDocument","params":[{"name":"flags","type":"#"},{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"title","type":"flags.1?string"},{"name":"description","type":"flags.2?string"},{"name":"document","type":"InputDocument"},{"name":"send_message","type":"InputBotInlineMessage"}],"type":"InputBotInlineResult"},{"id":"400266251","predicate":"botInlineMediaResult","params":[{"name":"flags","type":"#"},{"name":"id","type":"string"},{"name":"type","type":"string"},{"name":"photo","type":"flags.0?Photo"},{"name":"document","type":"flags.1?Document"},{"name":"title","type":"flags.2?string"},{"name":"description","type":"flags.3?string"},{"name":"send_message","type":"BotInlineMessage"}],"type":"BotInlineResult"},{"id":"-1995686519","predicate":"inputBotInlineMessageID","params":[{"name":"dc_id","type":"int"},{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputBotInlineMessageID"},{"id":"-103646630","predicate":"updateInlineBotCallbackQuery","params":[{"name":"flags","type":"#"},{"name":"query_id","type":"long"},{"name":"user_id","type":"int"},{"name":"msg_id","type":"InputBotInlineMessageID"},{"name":"chat_instance","type":"long"},{"name":"data","type":"flags.0?bytes"},{"name":"game_short_name","type":"flags.1?string"}],"type":"Update"},{"id":"1008755359","predicate":"inlineBotSwitchPM","params":[{"name":"text","type":"string"},{"name":"start_param","type":"string"}],"type":"InlineBotSwitchPM"},{"id":"863093588","predicate":"messages.peerDialogs","params":[{"name":"dialogs","type":"Vector<Dialog>"},{"name":"messages","type":"Vector<Message>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"},{"name":"state","type":"updates.State"}],"type":"messages.PeerDialogs"},{"id":"-305282981","predicate":"topPeer","params":[{"name":"peer","type":"Peer"},{"name":"rating","type":"double"}],"type":"TopPeer"},{"id":"-1419371685","predicate":"topPeerCategoryBotsPM","params":[],"type":"TopPeerCategory"},{"id":"344356834","predicate":"topPeerCategoryBotsInline","params":[],"type":"TopPeerCategory"},{"id":"104314861","predicate":"topPeerCategoryCorrespondents","params":[],"type":"TopPeerCategory"},{"id":"-1122524854","predicate":"topPeerCategoryGroups","params":[],"type":"TopPeerCategory"},{"id":"371037736","predicate":"topPeerCategoryChannels","params":[],"type":"TopPeerCategory"},{"id":"-75283823","predicate":"topPeerCategoryPeers","params":[{"name":"category","type":"TopPeerCategory"},{"name":"count","type":"int"},{"name":"peers","type":"Vector<TopPeer>"}],"type":"TopPeerCategoryPeers"},{"id":"-567906571","predicate":"contacts.topPeersNotModified","params":[],"type":"contacts.TopPeers"},{"id":"1891070632","predicate":"contacts.topPeers","params":[{"name":"categories","type":"Vector<TopPeerCategoryPeers>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"contacts.TopPeers"},{"id":"892193368","predicate":"messageEntityMentionName","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"},{"name":"user_id","type":"int"}],"type":"MessageEntity"},{"id":"546203849","predicate":"inputMessageEntityMentionName","params":[{"name":"offset","type":"int"},{"name":"length","type":"int"},{"name":"user_id","type":"InputUser"}],"type":"MessageEntity"},{"id":"975236280","predicate":"inputMessagesFilterChatPhotos","params":[],"type":"MessagesFilter"},{"id":"634833351","predicate":"updateReadChannelOutbox","params":[{"name":"channel_id","type":"int"},{"name":"max_id","type":"int"}],"type":"Update"},{"id":"-299124375","predicate":"updateDraftMessage","params":[{"name":"peer","type":"Peer"},{"name":"draft","type":"DraftMessage"}],"type":"Update"},{"id":"-1169445179","predicate":"draftMessageEmpty","params":[],"type":"DraftMessage"},{"id":"-40996577","predicate":"draftMessage","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.1?true"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"message","type":"string"},{"name":"entities","type":"flags.3?Vector<MessageEntity>"},{"name":"date","type":"int"}],"type":"DraftMessage"},{"id":"-1615153660","predicate":"messageActionHistoryClear","params":[],"type":"MessageAction"},{"id":"82699215","predicate":"messages.featuredStickersNotModified","params":[],"type":"messages.FeaturedStickers"},{"id":"-123893531","predicate":"messages.featuredStickers","params":[{"name":"hash","type":"int"},{"name":"sets","type":"Vector<StickerSetCovered>"},{"name":"unread","type":"Vector<long>"}],"type":"messages.FeaturedStickers"},{"id":"1461528386","predicate":"updateReadFeaturedStickers","params":[],"type":"Update"},{"id":"186120336","predicate":"messages.recentStickersNotModified","params":[],"type":"messages.RecentStickers"},{"id":"1558317424","predicate":"messages.recentStickers","params":[{"name":"hash","type":"int"},{"name":"stickers","type":"Vector<Document>"}],"type":"messages.RecentStickers"},{"id":"-1706939360","predicate":"updateRecentStickers","params":[],"type":"Update"},{"id":"1338747336","predicate":"messages.archivedStickers","params":[{"name":"count","type":"int"},{"name":"sets","type":"Vector<StickerSetCovered>"}],"type":"messages.ArchivedStickers"},{"id":"946083368","predicate":"messages.stickerSetInstallResultSuccess","params":[],"type":"messages.StickerSetInstallResult"},{"id":"904138920","predicate":"messages.stickerSetInstallResultArchive","params":[{"name":"sets","type":"Vector<StickerSetCovered>"}],"type":"messages.StickerSetInstallResult"},{"id":"1678812626","predicate":"stickerSetCovered","params":[{"name":"set","type":"StickerSet"},{"name":"cover","type":"Document"}],"type":"StickerSetCovered"},{"id":"-1574314746","predicate":"updateConfig","params":[],"type":"Update"},{"id":"861169551","predicate":"updatePtsChanged","params":[],"type":"Update"},{"id":"153267905","predicate":"inputMediaPhotoExternal","params":[{"name":"flags","type":"#"},{"name":"url","type":"string"},{"name":"caption","type":"string"},{"name":"ttl_seconds","type":"flags.0?int"}],"type":"InputMedia"},{"id":"-1225309387","predicate":"inputMediaDocumentExternal","params":[{"name":"flags","type":"#"},{"name":"url","type":"string"},{"name":"caption","type":"string"},{"name":"ttl_seconds","type":"flags.0?int"}],"type":"InputMedia"},{"id":"872932635","predicate":"stickerSetMultiCovered","params":[{"name":"set","type":"StickerSet"},{"name":"covers","type":"Vector<Document>"}],"type":"StickerSetCovered"},{"id":"-1361650766","predicate":"maskCoords","params":[{"name":"n","type":"int"},{"name":"x","type":"double"},{"name":"y","type":"double"},{"name":"zoom","type":"double"}],"type":"MaskCoords"},{"id":"-1744710921","predicate":"documentAttributeHasStickers","params":[],"type":"DocumentAttribute"},{"id":"1251549527","predicate":"inputStickeredMediaPhoto","params":[{"name":"id","type":"InputPhoto"}],"type":"InputStickeredMedia"},{"id":"70813275","predicate":"inputStickeredMediaDocument","params":[{"name":"id","type":"InputDocument"}],"type":"InputStickeredMedia"},{"id":"-1107729093","predicate":"game","params":[{"name":"flags","type":"#"},{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"short_name","type":"string"},{"name":"title","type":"string"},{"name":"description","type":"string"},{"name":"photo","type":"Photo"},{"name":"document","type":"flags.0?Document"}],"type":"Game"},{"id":"1336154098","predicate":"inputBotInlineResultGame","params":[{"name":"id","type":"string"},{"name":"short_name","type":"string"},{"name":"send_message","type":"InputBotInlineMessage"}],"type":"InputBotInlineResult"},{"id":"1262639204","predicate":"inputBotInlineMessageGame","params":[{"name":"flags","type":"#"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"InputBotInlineMessage"},{"id":"-38694904","predicate":"messageMediaGame","params":[{"name":"game","type":"Game"}],"type":"MessageMedia"},{"id":"-750828557","predicate":"inputMediaGame","params":[{"name":"id","type":"InputGame"}],"type":"InputMedia"},{"id":"53231223","predicate":"inputGameID","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputGame"},{"id":"-1020139510","predicate":"inputGameShortName","params":[{"name":"bot_id","type":"InputUser"},{"name":"short_name","type":"string"}],"type":"InputGame"},{"id":"1358175439","predicate":"keyboardButtonGame","params":[{"name":"text","type":"string"}],"type":"KeyboardButton"},{"id":"-1834538890","predicate":"messageActionGameScore","params":[{"name":"game_id","type":"long"},{"name":"score","type":"int"}],"type":"MessageAction"},{"id":"1493171408","predicate":"highScore","params":[{"name":"pos","type":"int"},{"name":"user_id","type":"int"},{"name":"score","type":"int"}],"type":"HighScore"},{"id":"-1707344487","predicate":"messages.highScores","params":[{"name":"scores","type":"Vector<HighScore>"},{"name":"users","type":"Vector<User>"}],"type":"messages.HighScores"},{"id":"1258196845","predicate":"updates.differenceTooLong","params":[{"name":"pts","type":"int"}],"type":"updates.Difference"},{"id":"1081547008","predicate":"updateChannelWebPage","params":[{"name":"channel_id","type":"int"},{"name":"webpage","type":"WebPage"},{"name":"pts","type":"int"},{"name":"pts_count","type":"int"}],"type":"Update"},{"id":"-1663561404","predicate":"messages.chatsSlice","params":[{"name":"count","type":"int"},{"name":"chats","type":"Vector<Chat>"}],"type":"messages.Chats"},{"id":"-599948721","predicate":"textEmpty","params":[],"type":"RichText"},{"id":"1950782688","predicate":"textPlain","params":[{"name":"text","type":"string"}],"type":"RichText"},{"id":"1730456516","predicate":"textBold","params":[{"name":"text","type":"RichText"}],"type":"RichText"},{"id":"-653089380","predicate":"textItalic","params":[{"name":"text","type":"RichText"}],"type":"RichText"},{"id":"-1054465340","predicate":"textUnderline","params":[{"name":"text","type":"RichText"}],"type":"RichText"},{"id":"-1678197867","predicate":"textStrike","params":[{"name":"text","type":"RichText"}],"type":"RichText"},{"id":"1816074681","predicate":"textFixed","params":[{"name":"text","type":"RichText"}],"type":"RichText"},{"id":"1009288385","predicate":"textUrl","params":[{"name":"text","type":"RichText"},{"name":"url","type":"string"},{"name":"webpage_id","type":"long"}],"type":"RichText"},{"id":"-564523562","predicate":"textEmail","params":[{"name":"text","type":"RichText"},{"name":"email","type":"string"}],"type":"RichText"},{"id":"2120376535","predicate":"textConcat","params":[{"name":"texts","type":"Vector<RichText>"}],"type":"RichText"},{"id":"324435594","predicate":"pageBlockUnsupported","params":[],"type":"PageBlock"},{"id":"1890305021","predicate":"pageBlockTitle","params":[{"name":"text","type":"RichText"}],"type":"PageBlock"},{"id":"-1879401953","predicate":"pageBlockSubtitle","params":[{"name":"text","type":"RichText"}],"type":"PageBlock"},{"id":"-1162877472","predicate":"pageBlockAuthorDate","params":[{"name":"author","type":"RichText"},{"name":"published_date","type":"int"}],"type":"PageBlock"},{"id":"-1076861716","predicate":"pageBlockHeader","params":[{"name":"text","type":"RichText"}],"type":"PageBlock"},{"id":"-248793375","predicate":"pageBlockSubheader","params":[{"name":"text","type":"RichText"}],"type":"PageBlock"},{"id":"1182402406","predicate":"pageBlockParagraph","params":[{"name":"text","type":"RichText"}],"type":"PageBlock"},{"id":"-1066346178","predicate":"pageBlockPreformatted","params":[{"name":"text","type":"RichText"},{"name":"language","type":"string"}],"type":"PageBlock"},{"id":"1216809369","predicate":"pageBlockFooter","params":[{"name":"text","type":"RichText"}],"type":"PageBlock"},{"id":"-618614392","predicate":"pageBlockDivider","params":[],"type":"PageBlock"},{"id":"-837994576","predicate":"pageBlockAnchor","params":[{"name":"name","type":"string"}],"type":"PageBlock"},{"id":"978896884","predicate":"pageBlockList","params":[{"name":"ordered","type":"Bool"},{"name":"items","type":"Vector<RichText>"}],"type":"PageBlock"},{"id":"641563686","predicate":"pageBlockBlockquote","params":[{"name":"text","type":"RichText"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"1329878739","predicate":"pageBlockPullquote","params":[{"name":"text","type":"RichText"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"-372860542","predicate":"pageBlockPhoto","params":[{"name":"photo_id","type":"long"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"-640214938","predicate":"pageBlockVideo","params":[{"name":"flags","type":"#"},{"name":"autoplay","type":"flags.0?true"},{"name":"loop","type":"flags.1?true"},{"name":"video_id","type":"long"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"972174080","predicate":"pageBlockCover","params":[{"name":"cover","type":"PageBlock"}],"type":"PageBlock"},{"id":"-840826671","predicate":"pageBlockEmbed","params":[{"name":"flags","type":"#"},{"name":"full_width","type":"flags.0?true"},{"name":"allow_scrolling","type":"flags.3?true"},{"name":"url","type":"flags.1?string"},{"name":"html","type":"flags.2?string"},{"name":"poster_photo_id","type":"flags.4?long"},{"name":"w","type":"int"},{"name":"h","type":"int"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"690781161","predicate":"pageBlockEmbedPost","params":[{"name":"url","type":"string"},{"name":"webpage_id","type":"long"},{"name":"author_photo_id","type":"long"},{"name":"author","type":"string"},{"name":"date","type":"int"},{"name":"blocks","type":"Vector<PageBlock>"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"145955919","predicate":"pageBlockCollage","params":[{"name":"items","type":"Vector<PageBlock>"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"319588707","predicate":"pageBlockSlideshow","params":[{"name":"items","type":"Vector<PageBlock>"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"-1908433218","predicate":"pagePart","params":[{"name":"blocks","type":"Vector<PageBlock>"},{"name":"photos","type":"Vector<Photo>"},{"name":"documents","type":"Vector<Document>"}],"type":"Page"},{"id":"1433323434","predicate":"pageFull","params":[{"name":"blocks","type":"Vector<PageBlock>"},{"name":"photos","type":"Vector<Photo>"},{"name":"documents","type":"Vector<Document>"}],"type":"Page"},{"id":"-2054908813","predicate":"webPageNotModified","params":[],"type":"WebPage"},{"id":"-88417185","predicate":"inputPrivacyKeyPhoneCall","params":[],"type":"InputPrivacyKey"},{"id":"1030105979","predicate":"privacyKeyPhoneCall","params":[],"type":"PrivacyKey"},{"id":"-580219064","predicate":"sendMessageGamePlayAction","params":[],"type":"SendMessageAction"},{"id":"-2048646399","predicate":"phoneCallDiscardReasonMissed","params":[],"type":"PhoneCallDiscardReason"},{"id":"-527056480","predicate":"phoneCallDiscardReasonDisconnect","params":[],"type":"PhoneCallDiscardReason"},{"id":"1471006352","predicate":"phoneCallDiscardReasonHangup","params":[],"type":"PhoneCallDiscardReason"},{"id":"-84416311","predicate":"phoneCallDiscardReasonBusy","params":[],"type":"PhoneCallDiscardReason"},{"id":"-686710068","predicate":"updateDialogPinned","params":[{"name":"flags","type":"#"},{"name":"pinned","type":"flags.0?true"},{"name":"peer","type":"Peer"}],"type":"Update"},{"id":"-657787251","predicate":"updatePinnedDialogs","params":[{"name":"flags","type":"#"},{"name":"order","type":"flags.0?Vector<Peer>"}],"type":"Update"},{"id":"2104790276","predicate":"dataJSON","params":[{"name":"data","type":"string"}],"type":"DataJSON"},{"id":"-2095595325","predicate":"updateBotWebhookJSON","params":[{"name":"data","type":"DataJSON"}],"type":"Update"},{"id":"-1684914010","predicate":"updateBotWebhookJSONQuery","params":[{"name":"query_id","type":"long"},{"name":"data","type":"DataJSON"},{"name":"timeout","type":"int"}],"type":"Update"},{"id":"-886477832","predicate":"labeledPrice","params":[{"name":"label","type":"string"},{"name":"amount","type":"long"}],"type":"LabeledPrice"},{"id":"-1022713000","predicate":"invoice","params":[{"name":"flags","type":"#"},{"name":"test","type":"flags.0?true"},{"name":"name_requested","type":"flags.1?true"},{"name":"phone_requested","type":"flags.2?true"},{"name":"email_requested","type":"flags.3?true"},{"name":"shipping_address_requested","type":"flags.4?true"},{"name":"flexible","type":"flags.5?true"},{"name":"phone_to_provider","type":"flags.6?true"},{"name":"email_to_provider","type":"flags.7?true"},{"name":"currency","type":"string"},{"name":"prices","type":"Vector<LabeledPrice>"}],"type":"Invoice"},{"id":"-186607933","predicate":"inputMediaInvoice","params":[{"name":"flags","type":"#"},{"name":"title","type":"string"},{"name":"description","type":"string"},{"name":"photo","type":"flags.0?InputWebDocument"},{"name":"invoice","type":"Invoice"},{"name":"payload","type":"bytes"},{"name":"provider","type":"string"},{"name":"provider_data","type":"DataJSON"},{"name":"start_param","type":"string"}],"type":"InputMedia"},{"id":"-368917890","predicate":"paymentCharge","params":[{"name":"id","type":"string"},{"name":"provider_charge_id","type":"string"}],"type":"PaymentCharge"},{"id":"-1892568281","predicate":"messageActionPaymentSentMe","params":[{"name":"flags","type":"#"},{"name":"currency","type":"string"},{"name":"total_amount","type":"long"},{"name":"payload","type":"bytes"},{"name":"info","type":"flags.0?PaymentRequestedInfo"},{"name":"shipping_option_id","type":"flags.1?string"},{"name":"charge","type":"PaymentCharge"}],"type":"MessageAction"},{"id":"-2074799289","predicate":"messageMediaInvoice","params":[{"name":"flags","type":"#"},{"name":"shipping_address_requested","type":"flags.1?true"},{"name":"test","type":"flags.3?true"},{"name":"title","type":"string"},{"name":"description","type":"string"},{"name":"photo","type":"flags.0?WebDocument"},{"name":"receipt_msg_id","type":"flags.2?int"},{"name":"currency","type":"string"},{"name":"total_amount","type":"long"},{"name":"start_param","type":"string"}],"type":"MessageMedia"},{"id":"512535275","predicate":"postAddress","params":[{"name":"street_line1","type":"string"},{"name":"street_line2","type":"string"},{"name":"city","type":"string"},{"name":"state","type":"string"},{"name":"country_iso2","type":"string"},{"name":"post_code","type":"string"}],"type":"PostAddress"},{"id":"-1868808300","predicate":"paymentRequestedInfo","params":[{"name":"flags","type":"#"},{"name":"name","type":"flags.0?string"},{"name":"phone","type":"flags.1?string"},{"name":"email","type":"flags.2?string"},{"name":"shipping_address","type":"flags.3?PostAddress"}],"type":"PaymentRequestedInfo"},{"id":"-1344716869","predicate":"keyboardButtonBuy","params":[{"name":"text","type":"string"}],"type":"KeyboardButton"},{"id":"1080663248","predicate":"messageActionPaymentSent","params":[{"name":"currency","type":"string"},{"name":"total_amount","type":"long"}],"type":"MessageAction"},{"id":"-842892769","predicate":"paymentSavedCredentialsCard","params":[{"name":"id","type":"string"},{"name":"title","type":"string"}],"type":"PaymentSavedCredentials"},{"id":"-971322408","predicate":"webDocument","params":[{"name":"url","type":"string"},{"name":"access_hash","type":"long"},{"name":"size","type":"int"},{"name":"mime_type","type":"string"},{"name":"attributes","type":"Vector<DocumentAttribute>"},{"name":"dc_id","type":"int"}],"type":"WebDocument"},{"id":"-1678949555","predicate":"inputWebDocument","params":[{"name":"url","type":"string"},{"name":"size","type":"int"},{"name":"mime_type","type":"string"},{"name":"attributes","type":"Vector<DocumentAttribute>"}],"type":"InputWebDocument"},{"id":"-1036396922","predicate":"inputWebFileLocation","params":[{"name":"url","type":"string"},{"name":"access_hash","type":"long"}],"type":"InputWebFileLocation"},{"id":"568808380","predicate":"upload.webFile","params":[{"name":"size","type":"int"},{"name":"mime_type","type":"string"},{"name":"file_type","type":"storage.FileType"},{"name":"mtime","type":"int"},{"name":"bytes","type":"bytes"}],"type":"upload.WebFile"},{"id":"1062645411","predicate":"payments.paymentForm","params":[{"name":"flags","type":"#"},{"name":"can_save_credentials","type":"flags.2?true"},{"name":"password_missing","type":"flags.3?true"},{"name":"bot_id","type":"int"},{"name":"invoice","type":"Invoice"},{"name":"provider_id","type":"int"},{"name":"url","type":"string"},{"name":"native_provider","type":"flags.4?string"},{"name":"native_params","type":"flags.4?DataJSON"},{"name":"saved_info","type":"flags.0?PaymentRequestedInfo"},{"name":"saved_credentials","type":"flags.1?PaymentSavedCredentials"},{"name":"users","type":"Vector<User>"}],"type":"payments.PaymentForm"},{"id":"-784000893","predicate":"payments.validatedRequestedInfo","params":[{"name":"flags","type":"#"},{"name":"id","type":"flags.0?string"},{"name":"shipping_options","type":"flags.1?Vector<ShippingOption>"}],"type":"payments.ValidatedRequestedInfo"},{"id":"1314881805","predicate":"payments.paymentResult","params":[{"name":"updates","type":"Updates"}],"type":"payments.PaymentResult"},{"id":"1800845601","predicate":"payments.paymentVerficationNeeded","params":[{"name":"url","type":"string"}],"type":"payments.PaymentResult"},{"id":"1342771681","predicate":"payments.paymentReceipt","params":[{"name":"flags","type":"#"},{"name":"date","type":"int"},{"name":"bot_id","type":"int"},{"name":"invoice","type":"Invoice"},{"name":"provider_id","type":"int"},{"name":"info","type":"flags.0?PaymentRequestedInfo"},{"name":"shipping","type":"flags.1?ShippingOption"},{"name":"currency","type":"string"},{"name":"total_amount","type":"long"},{"name":"credentials_title","type":"string"},{"name":"users","type":"Vector<User>"}],"type":"payments.PaymentReceipt"},{"id":"-74456004","predicate":"payments.savedInfo","params":[{"name":"flags","type":"#"},{"name":"has_saved_credentials","type":"flags.1?true"},{"name":"saved_info","type":"flags.0?PaymentRequestedInfo"}],"type":"payments.SavedInfo"},{"id":"-1056001329","predicate":"inputPaymentCredentialsSaved","params":[{"name":"id","type":"string"},{"name":"tmp_password","type":"bytes"}],"type":"InputPaymentCredentials"},{"id":"873977640","predicate":"inputPaymentCredentials","params":[{"name":"flags","type":"#"},{"name":"save","type":"flags.0?true"},{"name":"data","type":"DataJSON"}],"type":"InputPaymentCredentials"},{"id":"-614138572","predicate":"account.tmpPassword","params":[{"name":"tmp_password","type":"bytes"},{"name":"valid_until","type":"int"}],"type":"account.TmpPassword"},{"id":"-1239335713","predicate":"shippingOption","params":[{"name":"id","type":"string"},{"name":"title","type":"string"},{"name":"prices","type":"Vector<LabeledPrice>"}],"type":"ShippingOption"},{"id":"-523384512","predicate":"updateBotShippingQuery","params":[{"name":"query_id","type":"long"},{"name":"user_id","type":"int"},{"name":"payload","type":"bytes"},{"name":"shipping_address","type":"PostAddress"}],"type":"Update"},{"id":"1563376297","predicate":"updateBotPrecheckoutQuery","params":[{"name":"flags","type":"#"},{"name":"query_id","type":"long"},{"name":"user_id","type":"int"},{"name":"payload","type":"bytes"},{"name":"info","type":"flags.0?PaymentRequestedInfo"},{"name":"shipping_option_id","type":"flags.1?string"},{"name":"currency","type":"string"},{"name":"total_amount","type":"long"}],"type":"Update"},{"id":"-6249322","predicate":"inputStickerSetItem","params":[{"name":"flags","type":"#"},{"name":"document","type":"InputDocument"},{"name":"emoji","type":"string"},{"name":"mask_coords","type":"flags.0?MaskCoords"}],"type":"InputStickerSetItem"},{"id":"-1425052898","predicate":"updatePhoneCall","params":[{"name":"phone_call","type":"PhoneCall"}],"type":"Update"},{"id":"506920429","predicate":"inputPhoneCall","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"}],"type":"InputPhoneCall"},{"id":"1399245077","predicate":"phoneCallEmpty","params":[{"name":"id","type":"long"}],"type":"PhoneCall"},{"id":"462375633","predicate":"phoneCallWaiting","params":[{"name":"flags","type":"#"},{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"protocol","type":"PhoneCallProtocol"},{"name":"receive_date","type":"flags.0?int"}],"type":"PhoneCall"},{"id":"-2089411356","predicate":"phoneCallRequested","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"g_a_hash","type":"bytes"},{"name":"protocol","type":"PhoneCallProtocol"}],"type":"PhoneCall"},{"id":"1828732223","predicate":"phoneCallAccepted","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"g_b","type":"bytes"},{"name":"protocol","type":"PhoneCallProtocol"}],"type":"PhoneCall"},{"id":"-1660057","predicate":"phoneCall","params":[{"name":"id","type":"long"},{"name":"access_hash","type":"long"},{"name":"date","type":"int"},{"name":"admin_id","type":"int"},{"name":"participant_id","type":"int"},{"name":"g_a_or_b","type":"bytes"},{"name":"key_fingerprint","type":"long"},{"name":"protocol","type":"PhoneCallProtocol"},{"name":"connection","type":"PhoneConnection"},{"name":"alternative_connections","type":"Vector<PhoneConnection>"},{"name":"start_date","type":"int"}],"type":"PhoneCall"},{"id":"1355435489","predicate":"phoneCallDiscarded","params":[{"name":"flags","type":"#"},{"name":"need_rating","type":"flags.2?true"},{"name":"need_debug","type":"flags.3?true"},{"name":"id","type":"long"},{"name":"reason","type":"flags.0?PhoneCallDiscardReason"},{"name":"duration","type":"flags.1?int"}],"type":"PhoneCall"},{"id":"-1655957568","predicate":"phoneConnection","params":[{"name":"id","type":"long"},{"name":"ip","type":"string"},{"name":"ipv6","type":"string"},{"name":"port","type":"int"},{"name":"peer_tag","type":"bytes"}],"type":"PhoneConnection"},{"id":"-1564789301","predicate":"phoneCallProtocol","params":[{"name":"flags","type":"#"},{"name":"udp_p2p","type":"flags.0?true"},{"name":"udp_reflector","type":"flags.1?true"},{"name":"min_layer","type":"int"},{"name":"max_layer","type":"int"}],"type":"PhoneCallProtocol"},{"id":"-326966976","predicate":"phone.phoneCall","params":[{"name":"phone_call","type":"PhoneCall"},{"name":"users","type":"Vector<User>"}],"type":"phone.PhoneCall"},{"id":"-2134272152","predicate":"inputMessagesFilterPhoneCalls","params":[{"name":"flags","type":"#"},{"name":"missed","type":"flags.0?true"}],"type":"MessagesFilter"},{"id":"-2132731265","predicate":"messageActionPhoneCall","params":[{"name":"flags","type":"#"},{"name":"call_id","type":"long"},{"name":"reason","type":"flags.0?PhoneCallDiscardReason"},{"name":"duration","type":"flags.1?int"}],"type":"MessageAction"},{"id":"2054952868","predicate":"inputMessagesFilterRoundVoice","params":[],"type":"MessagesFilter"},{"id":"-1253451181","predicate":"inputMessagesFilterRoundVideo","params":[],"type":"MessagesFilter"},{"id":"-1997373508","predicate":"sendMessageRecordRoundAction","params":[],"type":"SendMessageAction"},{"id":"608050278","predicate":"sendMessageUploadRoundAction","params":[{"name":"progress","type":"int"}],"type":"SendMessageAction"},{"id":"-363659686","predicate":"upload.fileCdnRedirect","params":[{"name":"dc_id","type":"int"},{"name":"file_token","type":"bytes"},{"name":"encryption_key","type":"bytes"},{"name":"encryption_iv","type":"bytes"},{"name":"cdn_file_hashes","type":"Vector<CdnFileHash>"}],"type":"upload.File"},{"id":"-290921362","predicate":"upload.cdnFileReuploadNeeded","params":[{"name":"request_token","type":"bytes"}],"type":"upload.CdnFile"},{"id":"-1449145777","predicate":"upload.cdnFile","params":[{"name":"bytes","type":"bytes"}],"type":"upload.CdnFile"},{"id":"-914167110","predicate":"cdnPublicKey","params":[{"name":"dc_id","type":"int"},{"name":"public_key","type":"string"}],"type":"CdnPublicKey"},{"id":"1462101002","predicate":"cdnConfig","params":[{"name":"public_keys","type":"Vector<CdnPublicKey>"}],"type":"CdnConfig"},{"id":"-283684427","predicate":"pageBlockChannel","params":[{"name":"channel","type":"Chat"}],"type":"PageBlock"},{"id":"-892239370","predicate":"langPackString","params":[{"name":"key","type":"string"},{"name":"value","type":"string"}],"type":"LangPackString"},{"id":"1816636575","predicate":"langPackStringPluralized","params":[{"name":"flags","type":"#"},{"name":"key","type":"string"},{"name":"zero_value","type":"flags.0?string"},{"name":"one_value","type":"flags.1?string"},{"name":"two_value","type":"flags.2?string"},{"name":"few_value","type":"flags.3?string"},{"name":"many_value","type":"flags.4?string"},{"name":"other_value","type":"string"}],"type":"LangPackString"},{"id":"695856818","predicate":"langPackStringDeleted","params":[{"name":"key","type":"string"}],"type":"LangPackString"},{"id":"-209337866","predicate":"langPackDifference","params":[{"name":"lang_code","type":"string"},{"name":"from_version","type":"int"},{"name":"version","type":"int"},{"name":"strings","type":"Vector<LangPackString>"}],"type":"LangPackDifference"},{"id":"292985073","predicate":"langPackLanguage","params":[{"name":"name","type":"string"},{"name":"native_name","type":"string"},{"name":"lang_code","type":"string"}],"type":"LangPackLanguage"},{"id":"281165899","predicate":"updateLangPackTooLong","params":[],"type":"Update"},{"id":"1442983757","predicate":"updateLangPack","params":[{"name":"difference","type":"LangPackDifference"}],"type":"Update"},{"id":"1568467877","predicate":"channelAdminRights","params":[{"name":"flags","type":"#"},{"name":"change_info","type":"flags.0?true"},{"name":"post_messages","type":"flags.1?true"},{"name":"edit_messages","type":"flags.2?true"},{"name":"delete_messages","type":"flags.3?true"},{"name":"ban_users","type":"flags.4?true"},{"name":"invite_users","type":"flags.5?true"},{"name":"invite_link","type":"flags.6?true"},{"name":"pin_messages","type":"flags.7?true"},{"name":"add_admins","type":"flags.9?true"},{"name":"manage_call","type":"flags.10?true"}],"type":"ChannelAdminRights"},{"id":"1489977929","predicate":"channelBannedRights","params":[{"name":"flags","type":"#"},{"name":"view_messages","type":"flags.0?true"},{"name":"send_messages","type":"flags.1?true"},{"name":"send_media","type":"flags.2?true"},{"name":"send_stickers","type":"flags.3?true"},{"name":"send_gifs","type":"flags.4?true"},{"name":"send_games","type":"flags.5?true"},{"name":"send_inline","type":"flags.6?true"},{"name":"embed_links","type":"flags.7?true"},{"name":"until_date","type":"int"}],"type":"ChannelBannedRights"},{"id":"-1473271656","predicate":"channelParticipantAdmin","params":[{"name":"flags","type":"#"},{"name":"can_edit","type":"flags.0?true"},{"name":"user_id","type":"int"},{"name":"inviter_id","type":"int"},{"name":"promoted_by","type":"int"},{"name":"date","type":"int"},{"name":"admin_rights","type":"ChannelAdminRights"}],"type":"ChannelParticipant"},{"id":"573315206","predicate":"channelParticipantBanned","params":[{"name":"flags","type":"#"},{"name":"left","type":"flags.0?true"},{"name":"user_id","type":"int"},{"name":"kicked_by","type":"int"},{"name":"date","type":"int"},{"name":"banned_rights","type":"ChannelBannedRights"}],"type":"ChannelParticipant"},{"id":"338142689","predicate":"channelParticipantsBanned","params":[{"name":"q","type":"string"}],"type":"ChannelParticipantsFilter"},{"id":"106343499","predicate":"channelParticipantsSearch","params":[{"name":"q","type":"string"}],"type":"ChannelParticipantsFilter"},{"id":"-421545947","predicate":"channelAdminLogEventActionChangeTitle","params":[{"name":"prev_value","type":"string"},{"name":"new_value","type":"string"}],"type":"ChannelAdminLogEventAction"},{"id":"1427671598","predicate":"channelAdminLogEventActionChangeAbout","params":[{"name":"prev_value","type":"string"},{"name":"new_value","type":"string"}],"type":"ChannelAdminLogEventAction"},{"id":"1783299128","predicate":"channelAdminLogEventActionChangeUsername","params":[{"name":"prev_value","type":"string"},{"name":"new_value","type":"string"}],"type":"ChannelAdminLogEventAction"},{"id":"-1204857405","predicate":"channelAdminLogEventActionChangePhoto","params":[{"name":"prev_photo","type":"ChatPhoto"},{"name":"new_photo","type":"ChatPhoto"}],"type":"ChannelAdminLogEventAction"},{"id":"460916654","predicate":"channelAdminLogEventActionToggleInvites","params":[{"name":"new_value","type":"Bool"}],"type":"ChannelAdminLogEventAction"},{"id":"648939889","predicate":"channelAdminLogEventActionToggleSignatures","params":[{"name":"new_value","type":"Bool"}],"type":"ChannelAdminLogEventAction"},{"id":"-370660328","predicate":"channelAdminLogEventActionUpdatePinned","params":[{"name":"message","type":"Message"}],"type":"ChannelAdminLogEventAction"},{"id":"1889215493","predicate":"channelAdminLogEventActionEditMessage","params":[{"name":"prev_message","type":"Message"},{"name":"new_message","type":"Message"}],"type":"ChannelAdminLogEventAction"},{"id":"1121994683","predicate":"channelAdminLogEventActionDeleteMessage","params":[{"name":"message","type":"Message"}],"type":"ChannelAdminLogEventAction"},{"id":"405815507","predicate":"channelAdminLogEventActionParticipantJoin","params":[],"type":"ChannelAdminLogEventAction"},{"id":"-124291086","predicate":"channelAdminLogEventActionParticipantLeave","params":[],"type":"ChannelAdminLogEventAction"},{"id":"-484690728","predicate":"channelAdminLogEventActionParticipantInvite","params":[{"name":"participant","type":"ChannelParticipant"}],"type":"ChannelAdminLogEventAction"},{"id":"-422036098","predicate":"channelAdminLogEventActionParticipantToggleBan","params":[{"name":"prev_participant","type":"ChannelParticipant"},{"name":"new_participant","type":"ChannelParticipant"}],"type":"ChannelAdminLogEventAction"},{"id":"-714643696","predicate":"channelAdminLogEventActionParticipantToggleAdmin","params":[{"name":"prev_participant","type":"ChannelParticipant"},{"name":"new_participant","type":"ChannelParticipant"}],"type":"ChannelAdminLogEventAction"},{"id":"995769920","predicate":"channelAdminLogEvent","params":[{"name":"id","type":"long"},{"name":"date","type":"int"},{"name":"user_id","type":"int"},{"name":"action","type":"ChannelAdminLogEventAction"}],"type":"ChannelAdminLogEvent"},{"id":"-309659827","predicate":"channels.adminLogResults","params":[{"name":"events","type":"Vector<ChannelAdminLogEvent>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"channels.AdminLogResults"},{"id":"-368018716","predicate":"channelAdminLogEventsFilter","params":[{"name":"flags","type":"#"},{"name":"join","type":"flags.0?true"},{"name":"leave","type":"flags.1?true"},{"name":"invite","type":"flags.2?true"},{"name":"ban","type":"flags.3?true"},{"name":"unban","type":"flags.4?true"},{"name":"kick","type":"flags.5?true"},{"name":"unkick","type":"flags.6?true"},{"name":"promote","type":"flags.7?true"},{"name":"demote","type":"flags.8?true"},{"name":"info","type":"flags.9?true"},{"name":"settings","type":"flags.10?true"},{"name":"pinned","type":"flags.11?true"},{"name":"edit","type":"flags.12?true"},{"name":"delete","type":"flags.13?true"}],"type":"ChannelAdminLogEventsFilter"},{"id":"511092620","predicate":"topPeerCategoryPhoneCalls","params":[],"type":"TopPeerCategory"},{"id":"834148991","predicate":"pageBlockAudio","params":[{"name":"audio_id","type":"long"},{"name":"caption","type":"RichText"}],"type":"PageBlock"},{"id":"1558266229","predicate":"popularContact","params":[{"name":"client_id","type":"long"},{"name":"importers","type":"int"}],"type":"PopularContact"},{"id":"2012136335","predicate":"cdnFileHash","params":[{"name":"offset","type":"int"},{"name":"limit","type":"int"},{"name":"hash","type":"bytes"}],"type":"CdnFileHash"},{"id":"1200788123","predicate":"messageActionScreenshotTaken","params":[],"type":"MessageAction"},{"id":"-1634752813","predicate":"messages.favedStickersNotModified","params":[],"type":"messages.FavedStickers"},{"id":"-209768682","predicate":"messages.favedStickers","params":[{"name":"hash","type":"int"},{"name":"packs","type":"Vector<StickerPack>"},{"name":"stickers","type":"Vector<Document>"}],"type":"messages.FavedStickers"},{"id":"-451831443","predicate":"updateFavedStickers","params":[],"type":"Update"},{"id":"-1987495099","predicate":"updateChannelReadMessagesContents","params":[{"name":"channel_id","type":"int"},{"name":"messages","type":"Vector<int>"}],"type":"Update"},{"id":"-1040652646","predicate":"inputMessagesFilterMyMentions","params":[],"type":"MessagesFilter"},{"id":"1887741886","predicate":"updateContactsReset","params":[],"type":"Update"},{"id":"-1312568665","predicate":"channelAdminLogEventActionChangeStickerSet","params":[{"name":"prev_stickerset","type":"InputStickerSet"},{"name":"new_stickerset","type":"InputStickerSet"}],"type":"ChannelAdminLogEventAction"},{"id":"-85549226","predicate":"messageActionCustomAction","params":[{"name":"message","type":"string"}],"type":"MessageAction"},{"id":"178373535","predicate":"inputPaymentCredentialsApplePay","params":[{"name":"payment_data","type":"DataJSON"}],"type":"InputPaymentCredentials"},{"id":"-905587442","predicate":"inputPaymentCredentialsAndroidPay","params":[{"name":"payment_token","type":"DataJSON"},{"name":"google_transaction_id","type":"string"}],"type":"InputPaymentCredentials"},{"id":"-419271411","predicate":"inputMessagesFilterGeo","params":[],"type":"MessagesFilter"},{"id":"-530392189","predicate":"inputMessagesFilterContacts","params":[],"type":"MessagesFilter"},{"id":"1893427255","predicate":"updateChannelAvailableMessages","params":[{"name":"channel_id","type":"int"},{"name":"available_min_id","type":"int"}],"type":"Update"},{"id":"1599903217","predicate":"channelAdminLogEventActionTogglePreHistoryHidden","params":[{"name":"new_value","type":"Bool"}],"type":"ChannelAdminLogEventAction"},{"id":"2065305999","predicate":"inputMediaGeoLive","params":[{"name":"geo_point","type":"InputGeoPoint"},{"name":"period","type":"int"}],"type":"InputMedia"},{"id":"2084316681","predicate":"messageMediaGeoLive","params":[{"name":"geo","type":"GeoPoint"},{"name":"period","type":"int"}],"type":"MessageMedia"},{"id":"1189204285","predicate":"recentMeUrlUnknown","params":[{"name":"url","type":"string"}],"type":"RecentMeUrl"},{"id":"-1917045962","predicate":"recentMeUrlUser","params":[{"name":"url","type":"string"},{"name":"user_id","type":"int"}],"type":"RecentMeUrl"},{"id":"-1608834311","predicate":"recentMeUrlChat","params":[{"name":"url","type":"string"},{"name":"chat_id","type":"int"}],"type":"RecentMeUrl"},{"id":"-347535331","predicate":"recentMeUrlChatInvite","params":[{"name":"url","type":"string"},{"name":"chat_invite","type":"ChatInvite"}],"type":"RecentMeUrl"},{"id":"-1140172836","predicate":"recentMeUrlStickerSet","params":[{"name":"url","type":"string"},{"name":"set","type":"StickerSetCovered"}],"type":"RecentMeUrl"},{"id":"235081943","predicate":"help.recentMeUrls","params":[{"name":"urls","type":"Vector<RecentMeUrl>"},{"name":"chats","type":"Vector<Chat>"},{"name":"users","type":"Vector<User>"}],"type":"help.RecentMeUrls"},{"id":"-266911767","predicate":"channels.channelParticipantsNotModified","params":[],"type":"channels.ChannelParticipants"},{"id":"1951620897","predicate":"messages.messagesNotModified","params":[{"name":"count","type":"int"}],"type":"messages.Messages"},{"id":"1588230153","predicate":"inputSingleMedia","params":[{"name":"media","type":"InputMedia"},{"name":"random_id","type":"long"}],"type":"InputSingleMedia"}],"methods":[{"id":"-878758099","method":"invokeAfterMsg","params":[{"name":"msg_id","type":"long"},{"name":"query","type":"!X"}],"type":"X"},{"id":"1036301552","method":"invokeAfterMsgs","params":[{"name":"msg_ids","type":"Vector<long>"},{"name":"query","type":"!X"}],"type":"X"},{"id":"1877286395","method":"auth.checkPhone","params":[{"name":"phone_number","type":"string"}],"type":"auth.CheckedPhone"},{"id":"-2035355412","method":"auth.sendCode","params":[{"name":"flags","type":"#"},{"name":"allow_flashcall","type":"flags.0?true"},{"name":"phone_number","type":"string"},{"name":"current_number","type":"flags.0?Bool"},{"name":"api_id","type":"int"},{"name":"api_hash","type":"string"}],"type":"auth.SentCode"},{"id":"453408308","method":"auth.signUp","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"},{"name":"phone_code","type":"string"},{"name":"first_name","type":"string"},{"name":"last_name","type":"string"}],"type":"auth.Authorization"},{"id":"-1126886015","method":"auth.signIn","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"},{"name":"phone_code","type":"string"}],"type":"auth.Authorization"},{"id":"1461180992","method":"auth.logOut","params":[],"type":"Bool"},{"id":"-1616179942","method":"auth.resetAuthorizations","params":[],"type":"Bool"},{"id":"-440401971","method":"auth.exportAuthorization","params":[{"name":"dc_id","type":"int"}],"type":"auth.ExportedAuthorization"},{"id":"-470837741","method":"auth.importAuthorization","params":[{"name":"id","type":"int"},{"name":"bytes","type":"bytes"}],"type":"auth.Authorization"},{"id":"-841733627","method":"auth.bindTempAuthKey","params":[{"name":"perm_auth_key_id","type":"long"},{"name":"nonce","type":"long"},{"name":"expires_at","type":"int"},{"name":"encrypted_message","type":"bytes"}],"type":"Bool"},{"id":"1280460","method":"account.registerDevice","params":[{"name":"token_type","type":"int"},{"name":"token","type":"string"},{"name":"app_sandbox","type":"Bool"},{"name":"other_uids","type":"Vector<int>"}],"type":"Bool"},{"id":"813089983","method":"account.unregisterDevice","params":[{"name":"token_type","type":"int"},{"name":"token","type":"string"},{"name":"other_uids","type":"Vector<int>"}],"type":"Bool"},{"id":"-2067899501","method":"account.updateNotifySettings","params":[{"name":"peer","type":"InputNotifyPeer"},{"name":"settings","type":"InputPeerNotifySettings"}],"type":"Bool"},{"id":"313765169","method":"account.getNotifySettings","params":[{"name":"peer","type":"InputNotifyPeer"}],"type":"PeerNotifySettings"},{"id":"-612493497","method":"account.resetNotifySettings","params":[],"type":"Bool"},{"id":"2018596725","method":"account.updateProfile","params":[{"name":"flags","type":"#"},{"name":"first_name","type":"flags.0?string"},{"name":"last_name","type":"flags.1?string"},{"name":"about","type":"flags.2?string"}],"type":"User"},{"id":"1713919532","method":"account.updateStatus","params":[{"name":"offline","type":"Bool"}],"type":"Bool"},{"id":"-1068696894","method":"account.getWallPapers","params":[],"type":"Vector<WallPaper>"},{"id":"-1374118561","method":"account.reportPeer","params":[{"name":"peer","type":"InputPeer"},{"name":"reason","type":"ReportReason"}],"type":"Bool"},{"id":"227648840","method":"users.getUsers","params":[{"name":"id","type":"Vector<InputUser>"}],"type":"Vector<User>"},{"id":"-902781519","method":"users.getFullUser","params":[{"name":"id","type":"InputUser"}],"type":"UserFull"},{"id":"-995929106","method":"contacts.getStatuses","params":[],"type":"Vector<ContactStatus>"},{"id":"-1071414113","method":"contacts.getContacts","params":[{"name":"hash","type":"int"}],"type":"contacts.Contacts"},{"id":"746589157","method":"contacts.importContacts","params":[{"name":"contacts","type":"Vector<InputContact>"}],"type":"contacts.ImportedContacts"},{"id":"-1902823612","method":"contacts.deleteContact","params":[{"name":"id","type":"InputUser"}],"type":"contacts.Link"},{"id":"1504393374","method":"contacts.deleteContacts","params":[{"name":"id","type":"Vector<InputUser>"}],"type":"Bool"},{"id":"858475004","method":"contacts.block","params":[{"name":"id","type":"InputUser"}],"type":"Bool"},{"id":"-448724803","method":"contacts.unblock","params":[{"name":"id","type":"InputUser"}],"type":"Bool"},{"id":"-176409329","method":"contacts.getBlocked","params":[{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"contacts.Blocked"},{"id":"-2065352905","method":"contacts.exportCard","params":[],"type":"Vector<int>"},{"id":"1340184318","method":"contacts.importCard","params":[{"name":"export_card","type":"Vector<int>"}],"type":"User"},{"id":"1109588596","method":"messages.getMessages","params":[{"name":"id","type":"Vector<int>"}],"type":"messages.Messages"},{"id":"421243333","method":"messages.getDialogs","params":[{"name":"flags","type":"#"},{"name":"exclude_pinned","type":"flags.0?true"},{"name":"offset_date","type":"int"},{"name":"offset_id","type":"int"},{"name":"offset_peer","type":"InputPeer"},{"name":"limit","type":"int"}],"type":"messages.Dialogs"},{"id":"-591691168","method":"messages.getHistory","params":[{"name":"peer","type":"InputPeer"},{"name":"offset_id","type":"int"},{"name":"offset_date","type":"int"},{"name":"add_offset","type":"int"},{"name":"limit","type":"int"},{"name":"max_id","type":"int"},{"name":"min_id","type":"int"},{"name":"hash","type":"int"}],"type":"messages.Messages"},{"id":"60726944","method":"messages.search","params":[{"name":"flags","type":"#"},{"name":"peer","type":"InputPeer"},{"name":"q","type":"string"},{"name":"from_id","type":"flags.0?InputUser"},{"name":"filter","type":"MessagesFilter"},{"name":"min_date","type":"int"},{"name":"max_date","type":"int"},{"name":"offset_id","type":"int"},{"name":"add_offset","type":"int"},{"name":"limit","type":"int"},{"name":"max_id","type":"int"},{"name":"min_id","type":"int"}],"type":"messages.Messages"},{"id":"238054714","method":"messages.readHistory","params":[{"name":"peer","type":"InputPeer"},{"name":"max_id","type":"int"}],"type":"messages.AffectedMessages"},{"id":"469850889","method":"messages.deleteHistory","params":[{"name":"flags","type":"#"},{"name":"just_clear","type":"flags.0?true"},{"name":"peer","type":"InputPeer"},{"name":"max_id","type":"int"}],"type":"messages.AffectedHistory"},{"id":"-443640366","method":"messages.deleteMessages","params":[{"name":"flags","type":"#"},{"name":"revoke","type":"flags.0?true"},{"name":"id","type":"Vector<int>"}],"type":"messages.AffectedMessages"},{"id":"94983360","method":"messages.receivedMessages","params":[{"name":"max_id","type":"int"}],"type":"Vector<ReceivedNotifyMessage>"},{"id":"-1551737264","method":"messages.setTyping","params":[{"name":"peer","type":"InputPeer"},{"name":"action","type":"SendMessageAction"}],"type":"Bool"},{"id":"-91733382","method":"messages.sendMessage","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.1?true"},{"name":"silent","type":"flags.5?true"},{"name":"background","type":"flags.6?true"},{"name":"clear_draft","type":"flags.7?true"},{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"message","type":"string"},{"name":"random_id","type":"long"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"},{"name":"entities","type":"flags.3?Vector<MessageEntity>"}],"type":"Updates"},{"id":"-923703407","method":"messages.sendMedia","params":[{"name":"flags","type":"#"},{"name":"silent","type":"flags.5?true"},{"name":"background","type":"flags.6?true"},{"name":"clear_draft","type":"flags.7?true"},{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"media","type":"InputMedia"},{"name":"random_id","type":"long"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"}],"type":"Updates"},{"id":"1888354709","method":"messages.forwardMessages","params":[{"name":"flags","type":"#"},{"name":"silent","type":"flags.5?true"},{"name":"background","type":"flags.6?true"},{"name":"with_my_score","type":"flags.8?true"},{"name":"grouped","type":"flags.9?true"},{"name":"from_peer","type":"InputPeer"},{"name":"id","type":"Vector<int>"},{"name":"random_id","type":"Vector<long>"},{"name":"to_peer","type":"InputPeer"}],"type":"Updates"},{"id":"-820669733","method":"messages.reportSpam","params":[{"name":"peer","type":"InputPeer"}],"type":"Bool"},{"id":"-1460572005","method":"messages.hideReportSpam","params":[{"name":"peer","type":"InputPeer"}],"type":"Bool"},{"id":"913498268","method":"messages.getPeerSettings","params":[{"name":"peer","type":"InputPeer"}],"type":"PeerSettings"},{"id":"-1115507112","method":"messages.report","params":[{"name":"peer","type":"InputPeer"},{"name":"id","type":"Vector<int>"},{"name":"reason","type":"ReportReason"}],"type":"Bool"},{"id":"1013621127","method":"messages.getChats","params":[{"name":"id","type":"Vector<int>"}],"type":"messages.Chats"},{"id":"998448230","method":"messages.getFullChat","params":[{"name":"chat_id","type":"int"}],"type":"messages.ChatFull"},{"id":"-599447467","method":"messages.editChatTitle","params":[{"name":"chat_id","type":"int"},{"name":"title","type":"string"}],"type":"Updates"},{"id":"-900957736","method":"messages.editChatPhoto","params":[{"name":"chat_id","type":"int"},{"name":"photo","type":"InputChatPhoto"}],"type":"Updates"},{"id":"-106911223","method":"messages.addChatUser","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"InputUser"},{"name":"fwd_limit","type":"int"}],"type":"Updates"},{"id":"-530505962","method":"messages.deleteChatUser","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"InputUser"}],"type":"Updates"},{"id":"164303470","method":"messages.createChat","params":[{"name":"users","type":"Vector<InputUser>"},{"name":"title","type":"string"}],"type":"Updates"},{"id":"-304838614","method":"updates.getState","params":[],"type":"updates.State"},{"id":"630429265","method":"updates.getDifference","params":[{"name":"flags","type":"#"},{"name":"pts","type":"int"},{"name":"pts_total_limit","type":"flags.0?int"},{"name":"date","type":"int"},{"name":"qts","type":"int"}],"type":"updates.Difference"},{"id":"-256159406","method":"photos.updateProfilePhoto","params":[{"name":"id","type":"InputPhoto"}],"type":"UserProfilePhoto"},{"id":"1328726168","method":"photos.uploadProfilePhoto","params":[{"name":"file","type":"InputFile"}],"type":"photos.Photo"},{"id":"-2016444625","method":"photos.deletePhotos","params":[{"name":"id","type":"Vector<InputPhoto>"}],"type":"Vector<long>"},{"id":"-1291540959","method":"upload.saveFilePart","params":[{"name":"file_id","type":"long"},{"name":"file_part","type":"int"},{"name":"bytes","type":"bytes"}],"type":"Bool"},{"id":"-475607115","method":"upload.getFile","params":[{"name":"location","type":"InputFileLocation"},{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"upload.File"},{"id":"-990308245","method":"help.getConfig","params":[],"type":"Config"},{"id":"531836966","method":"help.getNearestDc","params":[],"type":"NearestDc"},{"id":"-1372724842","method":"help.getAppUpdate","params":[],"type":"help.AppUpdate"},{"id":"1862465352","method":"help.saveAppLog","params":[{"name":"events","type":"Vector<InputAppEvent>"}],"type":"Bool"},{"id":"1295590211","method":"help.getInviteText","params":[],"type":"help.InviteText"},{"id":"-1848823128","method":"photos.getUserPhotos","params":[{"name":"user_id","type":"InputUser"},{"name":"offset","type":"int"},{"name":"max_id","type":"long"},{"name":"limit","type":"int"}],"type":"photos.Photos"},{"id":"651135312","method":"messages.getDhConfig","params":[{"name":"version","type":"int"},{"name":"random_length","type":"int"}],"type":"messages.DhConfig"},{"id":"-162681021","method":"messages.requestEncryption","params":[{"name":"user_id","type":"InputUser"},{"name":"random_id","type":"int"},{"name":"g_a","type":"bytes"}],"type":"EncryptedChat"},{"id":"1035731989","method":"messages.acceptEncryption","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"g_b","type":"bytes"},{"name":"key_fingerprint","type":"long"}],"type":"EncryptedChat"},{"id":"-304536635","method":"messages.discardEncryption","params":[{"name":"chat_id","type":"int"}],"type":"Bool"},{"id":"2031374829","method":"messages.setEncryptedTyping","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"typing","type":"Bool"}],"type":"Bool"},{"id":"2135648522","method":"messages.readEncryptedHistory","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"max_date","type":"int"}],"type":"Bool"},{"id":"-1451792525","method":"messages.sendEncrypted","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"random_id","type":"long"},{"name":"data","type":"bytes"}],"type":"messages.SentEncryptedMessage"},{"id":"-1701831834","method":"messages.sendEncryptedFile","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"random_id","type":"long"},{"name":"data","type":"bytes"},{"name":"file","type":"InputEncryptedFile"}],"type":"messages.SentEncryptedMessage"},{"id":"852769188","method":"messages.sendEncryptedService","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"random_id","type":"long"},{"name":"data","type":"bytes"}],"type":"messages.SentEncryptedMessage"},{"id":"1436924774","method":"messages.receivedQueue","params":[{"name":"max_qts","type":"int"}],"type":"Vector<long>"},{"id":"1259113487","method":"messages.reportEncryptedSpam","params":[{"name":"peer","type":"InputEncryptedChat"}],"type":"Bool"},{"id":"-562337987","method":"upload.saveBigFilePart","params":[{"name":"file_id","type":"long"},{"name":"file_part","type":"int"},{"name":"file_total_parts","type":"int"},{"name":"bytes","type":"bytes"}],"type":"Bool"},{"id":"-951575130","method":"initConnection","params":[{"name":"api_id","type":"int"},{"name":"device_model","type":"string"},{"name":"system_version","type":"string"},{"name":"app_version","type":"string"},{"name":"system_lang_code","type":"string"},{"name":"lang_pack","type":"string"},{"name":"lang_code","type":"string"},{"name":"query","type":"!X"}],"type":"X"},{"id":"-1663104819","method":"help.getSupport","params":[],"type":"help.Support"},{"id":"916930423","method":"messages.readMessageContents","params":[{"name":"id","type":"Vector<int>"}],"type":"messages.AffectedMessages"},{"id":"655677548","method":"account.checkUsername","params":[{"name":"username","type":"string"}],"type":"Bool"},{"id":"1040964988","method":"account.updateUsername","params":[{"name":"username","type":"string"}],"type":"User"},{"id":"301470424","method":"contacts.search","params":[{"name":"q","type":"string"},{"name":"limit","type":"int"}],"type":"contacts.Found"},{"id":"-623130288","method":"account.getPrivacy","params":[{"name":"key","type":"InputPrivacyKey"}],"type":"account.PrivacyRules"},{"id":"-906486552","method":"account.setPrivacy","params":[{"name":"key","type":"InputPrivacyKey"},{"name":"rules","type":"Vector<InputPrivacyRule>"}],"type":"account.PrivacyRules"},{"id":"1099779595","method":"account.deleteAccount","params":[{"name":"reason","type":"string"}],"type":"Bool"},{"id":"150761757","method":"account.getAccountTTL","params":[],"type":"AccountDaysTTL"},{"id":"608323678","method":"account.setAccountTTL","params":[{"name":"ttl","type":"AccountDaysTTL"}],"type":"Bool"},{"id":"-627372787","method":"invokeWithLayer","params":[{"name":"layer","type":"int"},{"name":"query","type":"!X"}],"type":"X"},{"id":"-113456221","method":"contacts.resolveUsername","params":[{"name":"username","type":"string"}],"type":"contacts.ResolvedPeer"},{"id":"149257707","method":"account.sendChangePhoneCode","params":[{"name":"flags","type":"#"},{"name":"allow_flashcall","type":"flags.0?true"},{"name":"phone_number","type":"string"},{"name":"current_number","type":"flags.0?Bool"}],"type":"auth.SentCode"},{"id":"1891839707","method":"account.changePhone","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"},{"name":"phone_code","type":"string"}],"type":"User"},{"id":"-1373446075","method":"messages.getStickers","params":[{"name":"emoticon","type":"string"},{"name":"hash","type":"string"}],"type":"messages.Stickers"},{"id":"479598769","method":"messages.getAllStickers","params":[{"name":"hash","type":"int"}],"type":"messages.AllStickers"},{"id":"954152242","method":"account.updateDeviceLocked","params":[{"name":"period","type":"int"}],"type":"Bool"},{"id":"1738800940","method":"auth.importBotAuthorization","params":[{"name":"flags","type":"int"},{"name":"api_id","type":"int"},{"name":"api_hash","type":"string"},{"name":"bot_auth_token","type":"string"}],"type":"auth.Authorization"},{"id":"623001124","method":"messages.getWebPagePreview","params":[{"name":"message","type":"string"}],"type":"MessageMedia"},{"id":"-484392616","method":"account.getAuthorizations","params":[],"type":"account.Authorizations"},{"id":"-545786948","method":"account.resetAuthorization","params":[{"name":"hash","type":"long"}],"type":"Bool"},{"id":"1418342645","method":"account.getPassword","params":[],"type":"account.Password"},{"id":"-1131605573","method":"account.getPasswordSettings","params":[{"name":"current_password_hash","type":"bytes"}],"type":"account.PasswordSettings"},{"id":"-92517498","method":"account.updatePasswordSettings","params":[{"name":"current_password_hash","type":"bytes"},{"name":"new_settings","type":"account.PasswordInputSettings"}],"type":"Bool"},{"id":"174260510","method":"auth.checkPassword","params":[{"name":"password_hash","type":"bytes"}],"type":"auth.Authorization"},{"id":"-661144474","method":"auth.requestPasswordRecovery","params":[],"type":"auth.PasswordRecovery"},{"id":"1319464594","method":"auth.recoverPassword","params":[{"name":"code","type":"string"}],"type":"auth.Authorization"},{"id":"-1080796745","method":"invokeWithoutUpdates","params":[{"name":"query","type":"!X"}],"type":"X"},{"id":"2106086025","method":"messages.exportChatInvite","params":[{"name":"chat_id","type":"int"}],"type":"ExportedChatInvite"},{"id":"1051570619","method":"messages.checkChatInvite","params":[{"name":"hash","type":"string"}],"type":"ChatInvite"},{"id":"1817183516","method":"messages.importChatInvite","params":[{"name":"hash","type":"string"}],"type":"Updates"},{"id":"639215886","method":"messages.getStickerSet","params":[{"name":"stickerset","type":"InputStickerSet"}],"type":"messages.StickerSet"},{"id":"-946871200","method":"messages.installStickerSet","params":[{"name":"stickerset","type":"InputStickerSet"},{"name":"archived","type":"Bool"}],"type":"messages.StickerSetInstallResult"},{"id":"-110209570","method":"messages.uninstallStickerSet","params":[{"name":"stickerset","type":"InputStickerSet"}],"type":"Bool"},{"id":"-421563528","method":"messages.startBot","params":[{"name":"bot","type":"InputUser"},{"name":"peer","type":"InputPeer"},{"name":"random_id","type":"long"},{"name":"start_param","type":"string"}],"type":"Updates"},{"id":"-1877938321","method":"help.getAppChangelog","params":[{"name":"prev_app_version","type":"string"}],"type":"Updates"},{"id":"-993483427","method":"messages.getMessagesViews","params":[{"name":"peer","type":"InputPeer"},{"name":"id","type":"Vector<int>"},{"name":"increment","type":"Bool"}],"type":"Vector<int>"},{"id":"-871347913","method":"channels.readHistory","params":[{"name":"channel","type":"InputChannel"},{"name":"max_id","type":"int"}],"type":"Bool"},{"id":"-2067661490","method":"channels.deleteMessages","params":[{"name":"channel","type":"InputChannel"},{"name":"id","type":"Vector<int>"}],"type":"messages.AffectedMessages"},{"id":"-787622117","method":"channels.deleteUserHistory","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"}],"type":"messages.AffectedHistory"},{"id":"-32999408","method":"channels.reportSpam","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"},{"name":"id","type":"Vector<int>"}],"type":"Bool"},{"id":"-1814580409","method":"channels.getMessages","params":[{"name":"channel","type":"InputChannel"},{"name":"id","type":"Vector<int>"}],"type":"messages.Messages"},{"id":"306054633","method":"channels.getParticipants","params":[{"name":"channel","type":"InputChannel"},{"name":"filter","type":"ChannelParticipantsFilter"},{"name":"offset","type":"int"},{"name":"limit","type":"int"},{"name":"hash","type":"int"}],"type":"channels.ChannelParticipants"},{"id":"1416484774","method":"channels.getParticipant","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"}],"type":"channels.ChannelParticipant"},{"id":"176122811","method":"channels.getChannels","params":[{"name":"id","type":"Vector<InputChannel>"}],"type":"messages.Chats"},{"id":"141781513","method":"channels.getFullChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"messages.ChatFull"},{"id":"-192332417","method":"channels.createChannel","params":[{"name":"flags","type":"#"},{"name":"broadcast","type":"flags.0?true"},{"name":"megagroup","type":"flags.1?true"},{"name":"title","type":"string"},{"name":"about","type":"string"}],"type":"Updates"},{"id":"333610782","method":"channels.editAbout","params":[{"name":"channel","type":"InputChannel"},{"name":"about","type":"string"}],"type":"Bool"},{"id":"548962836","method":"channels.editAdmin","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"},{"name":"admin_rights","type":"ChannelAdminRights"}],"type":"Updates"},{"id":"1450044624","method":"channels.editTitle","params":[{"name":"channel","type":"InputChannel"},{"name":"title","type":"string"}],"type":"Updates"},{"id":"-248621111","method":"channels.editPhoto","params":[{"name":"channel","type":"InputChannel"},{"name":"photo","type":"InputChatPhoto"}],"type":"Updates"},{"id":"283557164","method":"channels.checkUsername","params":[{"name":"channel","type":"InputChannel"},{"name":"username","type":"string"}],"type":"Bool"},{"id":"890549214","method":"channels.updateUsername","params":[{"name":"channel","type":"InputChannel"},{"name":"username","type":"string"}],"type":"Bool"},{"id":"615851205","method":"channels.joinChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"Updates"},{"id":"-130635115","method":"channels.leaveChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"Updates"},{"id":"429865580","method":"channels.inviteToChannel","params":[{"name":"channel","type":"InputChannel"},{"name":"users","type":"Vector<InputUser>"}],"type":"Updates"},{"id":"-950663035","method":"channels.exportInvite","params":[{"name":"channel","type":"InputChannel"}],"type":"ExportedChatInvite"},{"id":"-1072619549","method":"channels.deleteChannel","params":[{"name":"channel","type":"InputChannel"}],"type":"Updates"},{"id":"51854712","method":"updates.getChannelDifference","params":[{"name":"flags","type":"#"},{"name":"force","type":"flags.0?true"},{"name":"channel","type":"InputChannel"},{"name":"filter","type":"ChannelMessagesFilter"},{"name":"pts","type":"int"},{"name":"limit","type":"int"}],"type":"updates.ChannelDifference"},{"id":"-326379039","method":"messages.toggleChatAdmins","params":[{"name":"chat_id","type":"int"},{"name":"enabled","type":"Bool"}],"type":"Updates"},{"id":"-1444503762","method":"messages.editChatAdmin","params":[{"name":"chat_id","type":"int"},{"name":"user_id","type":"InputUser"},{"name":"is_admin","type":"Bool"}],"type":"Bool"},{"id":"363051235","method":"messages.migrateChat","params":[{"name":"chat_id","type":"int"}],"type":"Updates"},{"id":"-1640190800","method":"messages.searchGlobal","params":[{"name":"q","type":"string"},{"name":"offset_date","type":"int"},{"name":"offset_peer","type":"InputPeer"},{"name":"offset_id","type":"int"},{"name":"limit","type":"int"}],"type":"messages.Messages"},{"id":"889286899","method":"help.getTermsOfService","params":[],"type":"help.TermsOfService"},{"id":"2016638777","method":"messages.reorderStickerSets","params":[{"name":"flags","type":"#"},{"name":"masks","type":"flags.0?true"},{"name":"order","type":"Vector<long>"}],"type":"Bool"},{"id":"864953444","method":"messages.getDocumentByHash","params":[{"name":"sha256","type":"bytes"},{"name":"size","type":"int"},{"name":"mime_type","type":"string"}],"type":"Document"},{"id":"-1080395925","method":"messages.searchGifs","params":[{"name":"q","type":"string"},{"name":"offset","type":"int"}],"type":"messages.FoundGifs"},{"id":"-2084618926","method":"messages.getSavedGifs","params":[{"name":"hash","type":"int"}],"type":"messages.SavedGifs"},{"id":"846868683","method":"messages.saveGif","params":[{"name":"id","type":"InputDocument"},{"name":"unsave","type":"Bool"}],"type":"Bool"},{"id":"1364105629","method":"messages.getInlineBotResults","params":[{"name":"flags","type":"#"},{"name":"bot","type":"InputUser"},{"name":"peer","type":"InputPeer"},{"name":"geo_point","type":"flags.0?InputGeoPoint"},{"name":"query","type":"string"},{"name":"offset","type":"string"}],"type":"messages.BotResults"},{"id":"-346119674","method":"messages.setInlineBotResults","params":[{"name":"flags","type":"#"},{"name":"gallery","type":"flags.0?true"},{"name":"private","type":"flags.1?true"},{"name":"query_id","type":"long"},{"name":"results","type":"Vector<InputBotInlineResult>"},{"name":"cache_time","type":"int"},{"name":"next_offset","type":"flags.2?string"},{"name":"switch_pm","type":"flags.3?InlineBotSwitchPM"}],"type":"Bool"},{"id":"-1318189314","method":"messages.sendInlineBotResult","params":[{"name":"flags","type":"#"},{"name":"silent","type":"flags.5?true"},{"name":"background","type":"flags.6?true"},{"name":"clear_draft","type":"flags.7?true"},{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"random_id","type":"long"},{"name":"query_id","type":"long"},{"name":"id","type":"string"}],"type":"Updates"},{"id":"1231065863","method":"channels.toggleInvites","params":[{"name":"channel","type":"InputChannel"},{"name":"enabled","type":"Bool"}],"type":"Updates"},{"id":"-826838685","method":"channels.exportMessageLink","params":[{"name":"channel","type":"InputChannel"},{"name":"id","type":"int"},{"name":"grouped","type":"Bool"}],"type":"ExportedMessageLink"},{"id":"527021574","method":"channels.toggleSignatures","params":[{"name":"channel","type":"InputChannel"},{"name":"enabled","type":"Bool"}],"type":"Updates"},{"id":"-1490162350","method":"channels.updatePinnedMessage","params":[{"name":"flags","type":"#"},{"name":"silent","type":"flags.0?true"},{"name":"channel","type":"InputChannel"},{"name":"id","type":"int"}],"type":"Updates"},{"id":"1056025023","method":"auth.resendCode","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"}],"type":"auth.SentCode"},{"id":"520357240","method":"auth.cancelCode","params":[{"name":"phone_number","type":"string"},{"name":"phone_code_hash","type":"string"}],"type":"Bool"},{"id":"-39416522","method":"messages.getMessageEditData","params":[{"name":"peer","type":"InputPeer"},{"name":"id","type":"int"}],"type":"messages.MessageEditData"},{"id":"97630429","method":"messages.editMessage","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.1?true"},{"name":"stop_geo_live","type":"flags.12?true"},{"name":"peer","type":"InputPeer"},{"name":"id","type":"int"},{"name":"message","type":"flags.11?string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"},{"name":"entities","type":"flags.3?Vector<MessageEntity>"},{"name":"geo_point","type":"flags.13?InputGeoPoint"}],"type":"Updates"},{"id":"-1327463869","method":"messages.editInlineBotMessage","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.1?true"},{"name":"stop_geo_live","type":"flags.12?true"},{"name":"id","type":"InputBotInlineMessageID"},{"name":"message","type":"flags.11?string"},{"name":"reply_markup","type":"flags.2?ReplyMarkup"},{"name":"entities","type":"flags.3?Vector<MessageEntity>"},{"name":"geo_point","type":"flags.13?InputGeoPoint"}],"type":"Bool"},{"id":"-2130010132","method":"messages.getBotCallbackAnswer","params":[{"name":"flags","type":"#"},{"name":"game","type":"flags.1?true"},{"name":"peer","type":"InputPeer"},{"name":"msg_id","type":"int"},{"name":"data","type":"flags.0?bytes"}],"type":"messages.BotCallbackAnswer"},{"id":"-712043766","method":"messages.setBotCallbackAnswer","params":[{"name":"flags","type":"#"},{"name":"alert","type":"flags.1?true"},{"name":"query_id","type":"long"},{"name":"message","type":"flags.0?string"},{"name":"url","type":"flags.2?string"},{"name":"cache_time","type":"int"}],"type":"Bool"},{"id":"-728224331","method":"contacts.getTopPeers","params":[{"name":"flags","type":"#"},{"name":"correspondents","type":"flags.0?true"},{"name":"bots_pm","type":"flags.1?true"},{"name":"bots_inline","type":"flags.2?true"},{"name":"phone_calls","type":"flags.3?true"},{"name":"groups","type":"flags.10?true"},{"name":"channels","type":"flags.15?true"},{"name":"offset","type":"int"},{"name":"limit","type":"int"},{"name":"hash","type":"int"}],"type":"contacts.TopPeers"},{"id":"451113900","method":"contacts.resetTopPeerRating","params":[{"name":"category","type":"TopPeerCategory"},{"name":"peer","type":"InputPeer"}],"type":"Bool"},{"id":"764901049","method":"messages.getPeerDialogs","params":[{"name":"peers","type":"Vector<InputPeer>"}],"type":"messages.PeerDialogs"},{"id":"-1137057461","method":"messages.saveDraft","params":[{"name":"flags","type":"#"},{"name":"no_webpage","type":"flags.1?true"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"peer","type":"InputPeer"},{"name":"message","type":"string"},{"name":"entities","type":"flags.3?Vector<MessageEntity>"}],"type":"Bool"},{"id":"1782549861","method":"messages.getAllDrafts","params":[],"type":"Updates"},{"id":"766298703","method":"messages.getFeaturedStickers","params":[{"name":"hash","type":"int"}],"type":"messages.FeaturedStickers"},{"id":"1527873830","method":"messages.readFeaturedStickers","params":[{"name":"id","type":"Vector<long>"}],"type":"Bool"},{"id":"1587647177","method":"messages.getRecentStickers","params":[{"name":"flags","type":"#"},{"name":"attached","type":"flags.0?true"},{"name":"hash","type":"int"}],"type":"messages.RecentStickers"},{"id":"958863608","method":"messages.saveRecentSticker","params":[{"name":"flags","type":"#"},{"name":"attached","type":"flags.0?true"},{"name":"id","type":"InputDocument"},{"name":"unsave","type":"Bool"}],"type":"Bool"},{"id":"-1986437075","method":"messages.clearRecentStickers","params":[{"name":"flags","type":"#"},{"name":"attached","type":"flags.0?true"}],"type":"Bool"},{"id":"1475442322","method":"messages.getArchivedStickers","params":[{"name":"flags","type":"#"},{"name":"masks","type":"flags.0?true"},{"name":"offset_id","type":"long"},{"name":"limit","type":"int"}],"type":"messages.ArchivedStickers"},{"id":"353818557","method":"account.sendConfirmPhoneCode","params":[{"name":"flags","type":"#"},{"name":"allow_flashcall","type":"flags.0?true"},{"name":"hash","type":"string"},{"name":"current_number","type":"flags.0?Bool"}],"type":"auth.SentCode"},{"id":"1596029123","method":"account.confirmPhone","params":[{"name":"phone_code_hash","type":"string"},{"name":"phone_code","type":"string"}],"type":"Bool"},{"id":"-1920105769","method":"channels.getAdminedPublicChannels","params":[],"type":"messages.Chats"},{"id":"1706608543","method":"messages.getMaskStickers","params":[{"name":"hash","type":"int"}],"type":"messages.AllStickers"},{"id":"-866424884","method":"messages.getAttachedStickers","params":[{"name":"media","type":"InputStickeredMedia"}],"type":"Vector<StickerSetCovered>"},{"id":"-1907842680","method":"auth.dropTempAuthKeys","params":[{"name":"except_auth_keys","type":"Vector<long>"}],"type":"Bool"},{"id":"-1896289088","method":"messages.setGameScore","params":[{"name":"flags","type":"#"},{"name":"edit_message","type":"flags.0?true"},{"name":"force","type":"flags.1?true"},{"name":"peer","type":"InputPeer"},{"name":"id","type":"int"},{"name":"user_id","type":"InputUser"},{"name":"score","type":"int"}],"type":"Updates"},{"id":"363700068","method":"messages.setInlineGameScore","params":[{"name":"flags","type":"#"},{"name":"edit_message","type":"flags.0?true"},{"name":"force","type":"flags.1?true"},{"name":"id","type":"InputBotInlineMessageID"},{"name":"user_id","type":"InputUser"},{"name":"score","type":"int"}],"type":"Bool"},{"id":"-400399203","method":"messages.getGameHighScores","params":[{"name":"peer","type":"InputPeer"},{"name":"id","type":"int"},{"name":"user_id","type":"InputUser"}],"type":"messages.HighScores"},{"id":"258170395","method":"messages.getInlineGameHighScores","params":[{"name":"id","type":"InputBotInlineMessageID"},{"name":"user_id","type":"InputUser"}],"type":"messages.HighScores"},{"id":"218777796","method":"messages.getCommonChats","params":[{"name":"user_id","type":"InputUser"},{"name":"max_id","type":"int"},{"name":"limit","type":"int"}],"type":"messages.Chats"},{"id":"-341307408","method":"messages.getAllChats","params":[{"name":"except_ids","type":"Vector<int>"}],"type":"messages.Chats"},{"id":"-333262899","method":"help.setBotUpdatesStatus","params":[{"name":"pending_updates_count","type":"int"},{"name":"message","type":"string"}],"type":"Bool"},{"id":"852135825","method":"messages.getWebPage","params":[{"name":"url","type":"string"},{"name":"hash","type":"int"}],"type":"WebPage"},{"id":"847887978","method":"messages.toggleDialogPin","params":[{"name":"flags","type":"#"},{"name":"pinned","type":"flags.0?true"},{"name":"peer","type":"InputPeer"}],"type":"Bool"},{"id":"-1784678844","method":"messages.reorderPinnedDialogs","params":[{"name":"flags","type":"#"},{"name":"force","type":"flags.0?true"},{"name":"order","type":"Vector<InputPeer>"}],"type":"Bool"},{"id":"-497756594","method":"messages.getPinnedDialogs","params":[],"type":"messages.PeerDialogs"},{"id":"-1440257555","method":"bots.sendCustomRequest","params":[{"name":"custom_method","type":"string"},{"name":"params","type":"DataJSON"}],"type":"DataJSON"},{"id":"-434028723","method":"bots.answerWebhookJSONQuery","params":[{"name":"query_id","type":"long"},{"name":"data","type":"DataJSON"}],"type":"Bool"},{"id":"619086221","method":"upload.getWebFile","params":[{"name":"location","type":"InputWebFileLocation"},{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"upload.WebFile"},{"id":"-1712285883","method":"payments.getPaymentForm","params":[{"name":"msg_id","type":"int"}],"type":"payments.PaymentForm"},{"id":"-1601001088","method":"payments.getPaymentReceipt","params":[{"name":"msg_id","type":"int"}],"type":"payments.PaymentReceipt"},{"id":"1997180532","method":"payments.validateRequestedInfo","params":[{"name":"flags","type":"#"},{"name":"save","type":"flags.0?true"},{"name":"msg_id","type":"int"},{"name":"info","type":"PaymentRequestedInfo"}],"type":"payments.ValidatedRequestedInfo"},{"id":"730364339","method":"payments.sendPaymentForm","params":[{"name":"flags","type":"#"},{"name":"msg_id","type":"int"},{"name":"requested_info_id","type":"flags.0?string"},{"name":"shipping_option_id","type":"flags.1?string"},{"name":"credentials","type":"InputPaymentCredentials"}],"type":"payments.PaymentResult"},{"id":"1250046590","method":"account.getTmpPassword","params":[{"name":"password_hash","type":"bytes"},{"name":"period","type":"int"}],"type":"account.TmpPassword"},{"id":"578650699","method":"payments.getSavedInfo","params":[],"type":"payments.SavedInfo"},{"id":"-667062079","method":"payments.clearSavedInfo","params":[{"name":"flags","type":"#"},{"name":"credentials","type":"flags.0?true"},{"name":"info","type":"flags.1?true"}],"type":"Bool"},{"id":"-436833542","method":"messages.setBotShippingResults","params":[{"name":"flags","type":"#"},{"name":"query_id","type":"long"},{"name":"error","type":"flags.0?string"},{"name":"shipping_options","type":"flags.1?Vector<ShippingOption>"}],"type":"Bool"},{"id":"163765653","method":"messages.setBotPrecheckoutResults","params":[{"name":"flags","type":"#"},{"name":"success","type":"flags.1?true"},{"name":"query_id","type":"long"},{"name":"error","type":"flags.0?string"}],"type":"Bool"},{"id":"-1680314774","method":"stickers.createStickerSet","params":[{"name":"flags","type":"#"},{"name":"masks","type":"flags.0?true"},{"name":"user_id","type":"InputUser"},{"name":"title","type":"string"},{"name":"short_name","type":"string"},{"name":"stickers","type":"Vector<InputStickerSetItem>"}],"type":"messages.StickerSet"},{"id":"-143257775","method":"stickers.removeStickerFromSet","params":[{"name":"sticker","type":"InputDocument"}],"type":"messages.StickerSet"},{"id":"-4795190","method":"stickers.changeStickerPosition","params":[{"name":"sticker","type":"InputDocument"},{"name":"position","type":"int"}],"type":"messages.StickerSet"},{"id":"-2041315650","method":"stickers.addStickerToSet","params":[{"name":"stickerset","type":"InputStickerSet"},{"name":"sticker","type":"InputStickerSetItem"}],"type":"messages.StickerSet"},{"id":"1369162417","method":"messages.uploadMedia","params":[{"name":"peer","type":"InputPeer"},{"name":"media","type":"InputMedia"}],"type":"MessageMedia"},{"id":"1430593449","method":"phone.getCallConfig","params":[],"type":"DataJSON"},{"id":"1536537556","method":"phone.requestCall","params":[{"name":"user_id","type":"InputUser"},{"name":"random_id","type":"int"},{"name":"g_a_hash","type":"bytes"},{"name":"protocol","type":"PhoneCallProtocol"}],"type":"phone.PhoneCall"},{"id":"1003664544","method":"phone.acceptCall","params":[{"name":"peer","type":"InputPhoneCall"},{"name":"g_b","type":"bytes"},{"name":"protocol","type":"PhoneCallProtocol"}],"type":"phone.PhoneCall"},{"id":"788404002","method":"phone.confirmCall","params":[{"name":"peer","type":"InputPhoneCall"},{"name":"g_a","type":"bytes"},{"name":"key_fingerprint","type":"long"},{"name":"protocol","type":"PhoneCallProtocol"}],"type":"phone.PhoneCall"},{"id":"399855457","method":"phone.receivedCall","params":[{"name":"peer","type":"InputPhoneCall"}],"type":"Bool"},{"id":"2027164582","method":"phone.discardCall","params":[{"name":"peer","type":"InputPhoneCall"},{"name":"duration","type":"int"},{"name":"reason","type":"PhoneCallDiscardReason"},{"name":"connection_id","type":"long"}],"type":"Updates"},{"id":"475228724","method":"phone.setCallRating","params":[{"name":"peer","type":"InputPhoneCall"},{"name":"rating","type":"int"},{"name":"comment","type":"string"}],"type":"Updates"},{"id":"662363518","method":"phone.saveCallDebug","params":[{"name":"peer","type":"InputPhoneCall"},{"name":"debug","type":"DataJSON"}],"type":"Bool"},{"id":"536919235","method":"upload.getCdnFile","params":[{"name":"file_token","type":"bytes"},{"name":"offset","type":"int"},{"name":"limit","type":"int"}],"type":"upload.CdnFile"},{"id":"452533257","method":"upload.reuploadCdnFile","params":[{"name":"file_token","type":"bytes"},{"name":"request_token","type":"bytes"}],"type":"Vector<CdnFileHash>"},{"id":"1375900482","method":"help.getCdnConfig","params":[],"type":"CdnConfig"},{"id":"-1699363442","method":"langpack.getLangPack","params":[{"name":"lang_code","type":"string"}],"type":"LangPackDifference"},{"id":"773776152","method":"langpack.getStrings","params":[{"name":"lang_code","type":"string"},{"name":"keys","type":"Vector<string>"}],"type":"Vector<LangPackString>"},{"id":"187583869","method":"langpack.getDifference","params":[{"name":"from_version","type":"int"}],"type":"LangPackDifference"},{"id":"-2146445955","method":"langpack.getLanguages","params":[],"type":"Vector<LangPackLanguage>"},{"id":"-1076292147","method":"channels.editBanned","params":[{"name":"channel","type":"InputChannel"},{"name":"user_id","type":"InputUser"},{"name":"banned_rights","type":"ChannelBannedRights"}],"type":"Updates"},{"id":"870184064","method":"channels.getAdminLog","params":[{"name":"flags","type":"#"},{"name":"channel","type":"InputChannel"},{"name":"q","type":"string"},{"name":"events_filter","type":"flags.0?ChannelAdminLogEventsFilter"},{"name":"admins","type":"flags.1?Vector<InputUser>"},{"name":"max_id","type":"long"},{"name":"min_id","type":"long"},{"name":"limit","type":"int"}],"type":"channels.AdminLogResults"},{"id":"-149567365","method":"upload.getCdnFileHashes","params":[{"name":"file_token","type":"bytes"},{"name":"offset","type":"int"}],"type":"Vector<CdnFileHash>"},{"id":"-914493408","method":"messages.sendScreenshotNotification","params":[{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"int"},{"name":"random_id","type":"long"}],"type":"Updates"},{"id":"-359881479","method":"channels.setStickers","params":[{"name":"channel","type":"InputChannel"},{"name":"stickerset","type":"InputStickerSet"}],"type":"Bool"},{"id":"567151374","method":"messages.getFavedStickers","params":[{"name":"hash","type":"int"}],"type":"messages.FavedStickers"},{"id":"-1174420133","method":"messages.faveSticker","params":[{"name":"id","type":"InputDocument"},{"name":"unfave","type":"Bool"}],"type":"Bool"},{"id":"-357180360","method":"channels.readMessageContents","params":[{"name":"channel","type":"InputChannel"},{"name":"id","type":"Vector<int>"}],"type":"Bool"},{"id":"-2020263951","method":"contacts.resetSaved","params":[],"type":"Bool"},{"id":"1180140658","method":"messages.getUnreadMentions","params":[{"name":"peer","type":"InputPeer"},{"name":"offset_id","type":"int"},{"name":"add_offset","type":"int"},{"name":"limit","type":"int"},{"name":"max_id","type":"int"},{"name":"min_id","type":"int"}],"type":"messages.Messages"},{"id":"-1355375294","method":"channels.deleteHistory","params":[{"name":"channel","type":"InputChannel"},{"name":"max_id","type":"int"}],"type":"Bool"},{"id":"1036054804","method":"help.getRecentMeUrls","params":[{"name":"referer","type":"string"}],"type":"help.RecentMeUrls"},{"id":"-356796084","method":"channels.togglePreHistoryHidden","params":[{"name":"channel","type":"InputChannel"},{"name":"enabled","type":"Bool"}],"type":"Updates"},{"id":"251759059","method":"messages.readMentions","params":[{"name":"peer","type":"InputPeer"}],"type":"messages.AffectedHistory"},{"id":"613691874","method":"messages.getRecentLocations","params":[{"name":"peer","type":"InputPeer"},{"name":"limit","type":"int"}],"type":"messages.Messages"},{"id":"546656559","method":"messages.sendMultiMedia","params":[{"name":"flags","type":"#"},{"name":"silent","type":"flags.5?true"},{"name":"background","type":"flags.6?true"},{"name":"clear_draft","type":"flags.7?true"},{"name":"peer","type":"InputPeer"},{"name":"reply_to_msg_id","type":"flags.0?int"},{"name":"multi_media","type":"Vector<InputSingleMedia>"}],"type":"Updates"},{"id":"1347929239","method":"messages.uploadEncryptedFile","params":[{"name":"peer","type":"InputEncryptedChat"},{"name":"file","type":"InputEncryptedFile"}],"type":"EncryptedFile"}]};
 
-Config.Schema.API.layer = 45;
+Config.Schema.API.constructors.push({"id":"1474462241","predicate":"account.contentSettings","params":[{"name":"flags","type":"#"},{"name":"sensitive_enabled","type":"flags.0?true"},{"name":"sensitive_can_change","type":"flags.1?true"}],"type":"account.ContentSettings"});
+Config.Schema.API.methods.push({"id":"-1250643605","method":"account.setContentSettings","params":[{"name":"flags","type":"#"},{"name":"sensitive_enabled","type":"flags.0?true"}],"type":"Bool"});
+Config.Schema.API.methods.push({"id":"-1952756306","method":"account.getContentSettings","params":[],"type":"account.ContentSettings"});
+
+Config.Schema.API.layer = 74;
+
 
 // ConfigStorage
 (function (window) {
@@ -1763,7 +4340,6 @@ if (!Function.prototype.bind) {
 
   this.createBuffer();
 
-  // this.debug = options.debug !== undefined ? options.debug : Config.Modes.debug;
   this.mtproto = options.mtproto || false;
   return this;
 }
@@ -2097,7 +4673,6 @@ function TLDeserialization (buffer, options) {
   this.intView  = new Uint32Array(this.buffer);
   this.byteView = new Uint8Array(this.buffer);
 
-  // this.debug = options.debug !== undefined ? options.debug : Config.Modes.debug;
   this.mtproto = options.mtproto || false;
   return this;
 }
@@ -2452,2105 +5027,7 @@ function safeReplaceObject (wasObject, newObject) {
   }
 }
 
-function MtpApiFileManagerModule(MtpApiManager, $q) {
-    var cachedFs = false;
-    var cachedFsPromise = false;
-    var cachedSavePromises = {};
-    var cachedDownloadPromises = {};
-    var cachedDownloads = {};
-
-    var downloadPulls = {};
-    var downloadActives = {};
-
-    function downloadRequest(dcID, cb, activeDelta) {
-        if (downloadPulls[dcID] === undefined) {
-            downloadPulls[dcID] = [];
-            downloadActives[dcID] = 0
-        }
-        var downloadPull = downloadPulls[dcID];
-        var deferred = $q.defer();
-        downloadPull.push({cb: cb, deferred: deferred, activeDelta: activeDelta});
-        setZeroTimeout(function () {
-            downloadCheck(dcID);
-        });
-
-        return deferred.promise;
-    }
-
-    var index = 0;
-
-    function downloadCheck(dcID) {
-        var downloadPull = downloadPulls[dcID];
-        var downloadLimit = dcID == 'upload' ? 11 : 5;
-
-        if (downloadActives[dcID] >= downloadLimit || !downloadPull || !downloadPull.length) {
-            return false;
-        }
-
-        var data = downloadPull.shift(),
-            activeDelta = data.activeDelta || 1;
-
-        downloadActives[dcID] += activeDelta;
-
-        var a = index++;
-        data.cb()
-            .then(function (result) {
-                downloadActives[dcID] -= activeDelta;
-                downloadCheck(dcID);
-
-                data.deferred.resolve(result);
-
-            }, function (error) {
-                downloadActives[dcID] -= activeDelta;
-                downloadCheck(dcID);
-
-                data.deferred.reject(error);
-            })
-    }
-
-    function uploadFile(file) {
-        var fileSize = file.size,
-            isBigFile = fileSize >= 10485760,
-            canceled = false,
-            resolved = false,
-            doneParts = 0,
-            partSize = 262144, // 256 Kb
-            activeDelta = 2;
-
-        if (!fileSize) {
-            return $q.reject({type: 'EMPTY_FILE'});
-        }
-
-        if (fileSize > 67108864) {
-            partSize = 524288;
-            activeDelta = 4;
-        }
-        else if (fileSize < 102400) {
-            partSize = 32768;
-            activeDelta = 1;
-        }
-        var totalParts = Math.ceil(fileSize / partSize);
-
-        if (totalParts > 3000) {
-            return $q.reject({type: 'FILE_TOO_BIG'});
-        }
-
-        var fileID = [nextRandomInt(0xFFFFFFFF), nextRandomInt(0xFFFFFFFF)],
-            deferred = $q.defer(),
-            errorHandler = function (error) {
-                // console.error('Up Error', error);
-                deferred.reject(error);
-                canceled = true;
-                errorHandler = noop;
-            },
-            part = 0,
-            offset,
-            resultInputFile = {
-                _: isBigFile ? 'inputFileBig' : 'inputFile',
-                id: fileID,
-                parts: totalParts,
-                name: file.name,
-                md5_checksum: ''
-            };
-
-
-        for (offset = 0; offset < fileSize; offset += partSize) {
-            (function (offset, part) {
-                downloadRequest('upload', function () {
-                    var uploadDeferred = $q.defer();
-
-                    var reader = new FileReader();
-                    var blob = file.slice(offset, offset + partSize);
-
-                    reader.onloadend = function (e) {
-                        if (canceled) {
-                            uploadDeferred.reject();
-                            return;
-                        }
-                        if (e.target.readyState != FileReader.DONE) {
-                            return;
-                        }
-                        MtpApiManager.invokeApi(isBigFile ? 'upload.saveBigFilePart' : 'upload.saveFilePart', {
-                            file_id: fileID,
-                            file_part: part,
-                            file_total_parts: totalParts,
-                            bytes: e.target.result
-                        }, {
-                            startMaxLength: partSize + 256,
-                            fileUpload: true,
-                            singleInRequest: true
-                        }).then(function (result) {
-                            doneParts++;
-                            uploadDeferred.resolve();
-                            if (doneParts >= totalParts) {
-                                deferred.resolve(resultInputFile);
-                                resolved = true;
-                            } else {
-                                console.log(dT(), 'Progress', doneParts * partSize / fileSize);
-                                deferred.notify({done: doneParts * partSize, total: fileSize});
-                            }
-                        }, errorHandler);
-                    };
-
-                    reader.readAsArrayBuffer(blob);
-
-                    return uploadDeferred.promise;
-                }, activeDelta);
-            })(offset, part++);
-        }
-
-        deferred.promise.cancel = function () {
-            console.log('cancel upload', canceled, resolved);
-            if (!canceled && !resolved) {
-                canceled = true;
-                errorHandler({type: 'UPLOAD_CANCELED'});
-            }
-        };
-
-        return deferred.promise;
-    }
-
-    return {
-        uploadFile: uploadFile
-    };
-}
-
-MtpApiFileManagerModule.dependencies = [
-    'MtpApiManager', 
-    '$q'
-];
-
-function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpAuthorizer, Storage, TelegramMeWebService, qSync, $q) {
-    var cachedNetworkers = {},
-        cachedUploadNetworkers = {},
-        cachedExportPromise = {},
-        baseDcID = false;
-
-    var telegramMeNotified;
-
-    MtpSingleInstanceService.start();
-
-    Storage.get('dc').then(function (dcID) {
-        if (dcID) {
-            baseDcID = dcID;
-        }
-    });
-
-    function telegramMeNotify(newValue) {
-        if (telegramMeNotified !== newValue) {
-            telegramMeNotified = newValue;
-            TelegramMeWebService.setAuthorized(telegramMeNotified);
-        }
-    }
-
-    function mtpSetUserAuth(dcID, userAuth) {
-        var fullUserAuth = extend({dcID: dcID}, userAuth);
-        Storage.set({
-            dc: dcID,
-            user_auth: fullUserAuth
-        });
-        telegramMeNotify(true);
-
-        baseDcID = dcID;
-    }
-
-    function mtpLogOut() {
-        var storageKeys = [];
-        for (var dcID = 1; dcID <= 5; dcID++) {
-            storageKeys.push('dc' + dcID + '_auth_key');
-        }
-        return Storage.get.apply(Storage, storageKeys).then(function (storageResult) {
-            var logoutPromises = [];
-            for (var i = 0; i < storageResult.length; i++) {
-                if (storageResult[i]) {
-                    logoutPromises.push(mtpInvokeApi('auth.logOut', {}, {dcID: i + 1}));
-                }
-            }
-            return $q.all(logoutPromises).then(function () {
-                Storage.remove('dc', 'user_auth');
-                baseDcID = false;
-                telegramMeNotify(false);
-            }, function (error) {
-                Storage.remove.apply(storageKeys);
-                Storage.remove('dc', 'user_auth');
-                baseDcID = false;
-                error.handled = true;
-                telegramMeNotify(false);
-            });
-        });
-    }
-
-    function mtpGetNetworker(dcID, options) {
-        options = options || {};
-
-        var cache = (options.fileUpload || options.fileDownload)
-            ? cachedUploadNetworkers
-            : cachedNetworkers;
-        if (!dcID) {
-            throw new Exception('get Networker without dcID');
-        }
-
-        if (cache[dcID] !== undefined) {
-            return qSync.when(cache[dcID]);
-        }
-
-        var akk = 'dc' + dcID + '_auth_key',
-            ssk = 'dc' + dcID + '_server_salt';
-
-        return Storage.get(akk, ssk).then(function (result) {
-
-            if (cache[dcID] !== undefined) {
-                return cache[dcID];
-            }
-
-            var authKeyHex = result[0],
-                serverSaltHex = result[1];
-            // console.log('ass', dcID, authKeyHex, serverSaltHex);
-            if (authKeyHex && authKeyHex.length == 512) {
-                var authKey = bytesFromHex(authKeyHex);
-                var serverSalt = bytesFromHex(serverSaltHex);
-
-                return cache[dcID] = MtpNetworkerFactory.getNetworker(dcID, authKey, serverSalt, options);
-            }
-
-            if (!options.createNetworker) {
-                return $q.reject({type: 'AUTH_KEY_EMPTY', code: 401});
-            }
-
-            return MtpAuthorizer.auth(dcID).then(function (auth) {
-                var storeObj = {};
-                storeObj[akk] = bytesToHex(auth.authKey);
-                storeObj[ssk] = bytesToHex(auth.serverSalt);
-                Storage.set(storeObj);
-
-                return cache[dcID] = MtpNetworkerFactory.getNetworker(dcID, auth.authKey, auth.serverSalt, options);
-            }, function (error) {
-                console.log('Get networker error', error, error.stack);
-                return $q.reject(error);
-            });
-        });
-    }
-
-    function mtpInvokeApi(method, params, options) {
-        options = options || {};
-
-        var deferred = $q.defer(),
-            rejectPromise = function (error) {
-                if (!error) {
-                    error = {type: 'ERROR_EMPTY'};
-                } else if (!isObject(error)) {
-                    error = {message: error};
-                }
-                deferred.reject(error);
-
-                if (!options.noErrorBox) {
-                    error.input = method;
-                    error.stack = error.originalError && error.originalError.stack || error.stack || (new Error()).stack;
-                    setTimeout(function () {
-                        if (!error.handled) {
-                            if (error.code == 401) {
-                                mtpLogOut();
-                            }
-                            error.handled = true;
-                        }
-                    }, 100);
-                }
-            },
-            dcID,
-            networkerPromise;
-
-        var cachedNetworker;
-        var stack = (new Error()).stack;
-        if (!stack) {
-            try {
-                window.unexistingFunction();
-            } catch (e) {
-                stack = e.stack || '';
-            }
-        }
-        var performRequest = function (networker) {
-            return (cachedNetworker = networker).wrapApiCall(method, params, options).then(
-                function (result) {
-                    deferred.resolve(result);
-                },
-                function (error) {
-                    console.error(dT(), 'Error', error.code, error.type, baseDcID, dcID);
-                    if (error.code == 401 && baseDcID == dcID) {
-                        Storage.remove('dc', 'user_auth');
-                        telegramMeNotify(false);
-                        rejectPromise(error);
-                    }
-                    else if (error.code == 401 && baseDcID && dcID != baseDcID) {
-                        if (cachedExportPromise[dcID] === undefined) {
-                            var exportDeferred = $q.defer();
-
-                            mtpInvokeApi('auth.exportAuthorization', {dc_id: dcID}, {noErrorBox: true}).then(function (exportedAuth) {
-                                mtpInvokeApi('auth.importAuthorization', {
-                                    id: exportedAuth.id,
-                                    bytes: exportedAuth.bytes
-                                }, {dcID: dcID, noErrorBox: true}).then(function () {
-                                    exportDeferred.resolve();
-                                }, function (e) {
-                                    exportDeferred.reject(e);
-                                })
-                            }, function (e) {
-                                exportDeferred.reject(e)
-                            });
-
-                            cachedExportPromise[dcID] = exportDeferred.promise;
-                        }
-
-                        cachedExportPromise[dcID].then(function () {
-                            (cachedNetworker = networker).wrapApiCall(method, params, options).then(function (result) {
-                                deferred.resolve(result);
-                            }, rejectPromise);
-                        }, rejectPromise);
-                    }
-                    else if (error.code == 303) {
-                        var newDcID = error.type.match(/^(PHONE_MIGRATE_|NETWORK_MIGRATE_|USER_MIGRATE_)(\d+)/)[2];
-                        if (newDcID != dcID) {
-                            if (options.dcID) {
-                                options.dcID = newDcID;
-                            } else {
-                                Storage.set({dc: baseDcID = newDcID});
-                            }
-
-                            mtpGetNetworker(newDcID, options).then(function (networker) {
-                                networker.wrapApiCall(method, params, options).then(function (result) {
-                                    deferred.resolve(result);
-                                }, rejectPromise);
-                            }, rejectPromise);
-                        }
-                    }
-                    else if (!options.rawError && error.code == 420) {
-                        var waitTime = error.type.match(/^FLOOD_WAIT_(\d+)/)[1] || 10;
-                        if (waitTime > (options.timeout || 60)) {
-                            return rejectPromise(error);
-                        }
-                        setTimeout(function () {
-                            performRequest(cachedNetworker);
-                        }, waitTime * 1000);
-                    }
-                    else if (!options.rawError && (error.code == 500 || error.type == 'MSG_WAIT_FAILED')) {
-                        var now = tsNow();
-                        if (options.stopTime) {
-                            if (now >= options.stopTime) {
-                                return rejectPromise(error);
-                            }
-                        } else {
-                            options.stopTime = now + (options.timeout !== undefined ? options.timeout : 10) * 1000;
-                        }
-                        options.waitTime = options.waitTime ? Math.min(60, options.waitTime * 1.5) : 1;
-                        setTimeout(function () {
-                            performRequest(cachedNetworker);
-                        }, options.waitTime * 1000);
-                    }
-                    else {
-                        rejectPromise(error);
-                    }
-                });
-        };
-
-        if (dcID = (options.dcID || baseDcID)) {
-            mtpGetNetworker(dcID, options).then(performRequest, rejectPromise);
-        } else {
-            Storage.get('dc').then(function (baseDcID) {
-                mtpGetNetworker(dcID = baseDcID || 2, options).then(performRequest, rejectPromise);
-            });
-        }
-
-        return deferred.promise;
-    }
-
-    function mtpGetUserID() {
-        return Storage.get('user_auth').then(function (auth) {
-            telegramMeNotify(auth && auth.id > 0 || false);
-            return auth.id || 0;
-        });
-    }
-
-    function getBaseDcID() {
-        return baseDcID || false;
-    }
-
-    return {
-        getBaseDcID: getBaseDcID,
-        getUserID: mtpGetUserID,
-        invokeApi: mtpInvokeApi,
-        getNetworker: mtpGetNetworker,
-        setUserAuth: mtpSetUserAuth,
-        logOut: mtpLogOut
-    };
-}
-
-MtpApiManagerModule.dependencies = [
-    'MtpSingleInstanceService', 
-    'MtpNetworkerFactory', 
-    'MtpAuthorizer', 
-    'Storage', 
-    'TelegramMeWebService', 
-    'qSync', 
-    '$q'
-];
-
-function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManager, CryptoWorker, MtpSecureRandom, $q, $timeout, $http) {
-    var chromeMatches = navigator.userAgent.match(/Chrome\/(\d+(\.\d+)?)/),
-        chromeVersion = chromeMatches && parseFloat(chromeMatches[1]) || false,
-        xhrSendBuffer = !('ArrayBufferView' in window) && (!chromeVersion || chromeVersion < 30);
-
-    function mtpSendPlainRequest(dcID, requestBuffer) {
-        var requestLength = requestBuffer.byteLength,
-            requestArray = new Int32Array(requestBuffer);
-
-        var header = new TLSerialization();
-        header.storeLongP(0, 0, 'auth_key_id'); // Auth key
-        header.storeLong(MtpTimeManager.generateID(), 'msg_id'); // Msg_id
-        header.storeInt(requestLength, 'request_length');
-
-        var headerBuffer = header.getBuffer(),
-            headerArray = new Int32Array(headerBuffer),
-            headerLength = headerBuffer.byteLength;
-
-        var resultBuffer = new ArrayBuffer(headerLength + requestLength),
-            resultArray = new Int32Array(resultBuffer);
-
-        resultArray.set(headerArray);
-        resultArray.set(requestArray, headerArray.length);
-
-        var requestData = xhrSendBuffer ? resultBuffer : resultArray,
-            requestPromise;
-        var url = MtpDcConfigurator.chooseServer(dcID);
-        var baseError = {code: 406, type: 'NETWORK_BAD_RESPONSE', url: url};
-        try {
-            requestPromise = $http.post(url, requestData, {
-                responseType: 'arraybuffer',
-                transformRequest: null
-            });
-        } catch (e) {
-            requestPromise = $q.reject(extend(baseError, {originalError: e}));
-        }
-        return requestPromise.then(
-            function (result) {
-                if (!result.data || !result.data.byteLength) {
-                    return $q.reject(baseError);
-                }
-
-                try {
-                    var deserializer = new TLDeserialization(result.data, {mtproto: true});
-                    var auth_key_id = deserializer.fetchLong('auth_key_id');
-                    var msg_id = deserializer.fetchLong('msg_id');
-                    var msg_len = deserializer.fetchInt('msg_len');
-
-                } catch (e) {
-                    return $q.reject(extend(baseError, {originalError: e}));
-                }
-
-                return deserializer;
-            },
-            function (error) {
-                if (!error.message && !error.type) {
-                    error = extend(baseError, {originalError: error});
-                }
-                return $q.reject(error);
-            }
-        );
-    }
-
-    function mtpSendReqPQ(auth) {
-        var deferred = auth.deferred;
-
-        var request = new TLSerialization({mtproto: true});
-
-        request.storeMethod('req_pq', {nonce: auth.nonce});
-
-        console.log(dT(), 'Send req_pq', bytesToHex(auth.nonce));
-        mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
-            var response = deserializer.fetchObject('ResPQ');
-
-            if (response._ != 'resPQ') {
-                throw new Error('resPQ response invalid: ' + response._);
-            }
-
-            if (!bytesCmp(auth.nonce, response.nonce)) {
-                throw new Error('resPQ nonce mismatch');
-            }
-
-            auth.serverNonce = response.server_nonce;
-            auth.pq = response.pq;
-            auth.fingerprints = response.server_public_key_fingerprints;
-
-            console.log(dT(), 'Got ResPQ', bytesToHex(auth.serverNonce), bytesToHex(auth.pq), auth.fingerprints);
-
-            auth.publicKey = MtpRsaKeysManager.select(auth.fingerprints);
-
-            if (!auth.publicKey) {
-                throw new Error('No public key found');
-            }
-
-            console.log(dT(), 'PQ factorization start', auth.pq);
-            CryptoWorker.factorize(auth.pq).then(function (pAndQ) {
-                auth.p = pAndQ[0];
-                auth.q = pAndQ[1];
-                console.log(dT(), 'PQ factorization done', pAndQ[2]);
-                mtpSendReqDhParams(auth);
-            }, function (error) {
-                console.log('Worker error', error, error.stack);
-                deferred.reject(error);
-            });
-        }, function (error) {
-            console.error(dT(), 'req_pq error', error.message);
-            deferred.reject(error);
-        });
-
-        $timeout(function () {
-            MtpRsaKeysManager.prepare();
-        });
-    }
-
-    function mtpSendReqDhParams(auth) {
-        var deferred = auth.deferred;
-
-        auth.newNonce = new Array(32);
-        MtpSecureRandom.nextBytes(auth.newNonce);
-
-        var data = new TLSerialization({mtproto: true});
-        data.storeObject({
-            _: 'p_q_inner_data',
-            pq: auth.pq,
-            p: auth.p,
-            q: auth.q,
-            nonce: auth.nonce,
-            server_nonce: auth.serverNonce,
-            new_nonce: auth.newNonce
-        }, 'P_Q_inner_data', 'DECRYPTED_DATA');
-
-        var dataWithHash = sha1BytesSync(data.getBuffer()).concat(data.getBytes());
-
-        var request = new TLSerialization({mtproto: true});
-        request.storeMethod('req_DH_params', {
-            nonce: auth.nonce,
-            server_nonce: auth.serverNonce,
-            p: auth.p,
-            q: auth.q,
-            public_key_fingerprint: auth.publicKey.fingerprint,
-            encrypted_data: rsaEncrypt(auth.publicKey, dataWithHash)
-        });
-
-        console.log(dT(), 'Send req_DH_params');
-        mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
-            var response = deserializer.fetchObject('Server_DH_Params', 'RESPONSE');
-
-            if (response._ != 'server_DH_params_fail' && response._ != 'server_DH_params_ok') {
-                deferred.reject(new Error('Server_DH_Params response invalid: ' + response._));
-                return false;
-            }
-
-            if (!bytesCmp(auth.nonce, response.nonce)) {
-                deferred.reject(new Error('Server_DH_Params nonce mismatch'));
-                return false;
-            }
-
-            if (!bytesCmp(auth.serverNonce, response.server_nonce)) {
-                deferred.reject(new Error('Server_DH_Params server_nonce mismatch'));
-                return false;
-            }
-
-            if (response._ == 'server_DH_params_fail') {
-                var newNonceHash = sha1BytesSync(auth.newNonce).slice(-16);
-                if (!bytesCmp(newNonceHash, response.new_nonce_hash)) {
-                    deferred.reject(new Error('server_DH_params_fail new_nonce_hash mismatch'));
-                    return false;
-                }
-                deferred.reject(new Error('server_DH_params_fail'));
-                return false;
-            }
-
-            try {
-                mtpDecryptServerDhDataAnswer(auth, response.encrypted_answer);
-            } catch (e) {
-                deferred.reject(e);
-                return false;
-            }
-
-            mtpSendSetClientDhParams(auth);
-        }, function (error) {
-            deferred.reject(error);
-        });
-    }
-
-    function mtpDecryptServerDhDataAnswer(auth, encryptedAnswer) {
-        auth.localTime = tsNow();
-
-        auth.tmpAesKey = sha1BytesSync(auth.newNonce.concat(auth.serverNonce)).concat(sha1BytesSync(auth.serverNonce.concat(auth.newNonce)).slice(0, 12));
-        auth.tmpAesIv = sha1BytesSync(auth.serverNonce.concat(auth.newNonce)).slice(12).concat(sha1BytesSync([].concat(auth.newNonce, auth.newNonce)), auth.newNonce.slice(0, 4));
-
-        var answerWithHash = aesDecryptSync(encryptedAnswer, auth.tmpAesKey, auth.tmpAesIv);
-
-        var hash = answerWithHash.slice(0, 20);
-        var answerWithPadding = answerWithHash.slice(20);
-        var buffer = bytesToArrayBuffer(answerWithPadding);
-
-        var deserializer = new TLDeserialization(buffer, {mtproto: true});
-        var response = deserializer.fetchObject('Server_DH_inner_data');
-
-        if (response._ != 'server_DH_inner_data') {
-            throw new Error('server_DH_inner_data response invalid: ' + constructor);
-        }
-
-        if (!bytesCmp(auth.nonce, response.nonce)) {
-            throw new Error('server_DH_inner_data nonce mismatch');
-        }
-
-        if (!bytesCmp(auth.serverNonce, response.server_nonce)) {
-            throw new Error('server_DH_inner_data serverNonce mismatch');
-        }
-
-        console.log(dT(), 'Done decrypting answer');
-        auth.g = response.g;
-        auth.dhPrime = response.dh_prime;
-        auth.gA = response.g_a;
-        auth.serverTime = response.server_time;
-        auth.retry = 0;
-
-        var offset = deserializer.getOffset();
-
-        if (!bytesCmp(hash, sha1BytesSync(answerWithPadding.slice(0, offset)))) {
-            throw new Error('server_DH_inner_data SHA1-hash mismatch');
-        }
-
-        MtpTimeManager.applyServerTime(auth.serverTime, auth.localTime);
-    }
-
-    function mtpSendSetClientDhParams(auth) {
-        var deferred = auth.deferred,
-            gBytes = bytesFromHex(auth.g.toString(16));
-
-        auth.b = new Array(256);
-        MtpSecureRandom.nextBytes(auth.b);
-
-        CryptoWorker.modPow(gBytes, auth.b, auth.dhPrime).then(function (gB) {
-            var data = new TLSerialization({mtproto: true});
-            data.storeObject({
-                _: 'client_DH_inner_data',
-                nonce: auth.nonce,
-                server_nonce: auth.serverNonce,
-                retry_id: [0, auth.retry++],
-                g_b: gB,
-            }, 'Client_DH_Inner_Data');
-
-            var dataWithHash = sha1BytesSync(data.getBuffer()).concat(data.getBytes());
-
-            var encryptedData = aesEncryptSync(dataWithHash, auth.tmpAesKey, auth.tmpAesIv);
-
-            var request = new TLSerialization({mtproto: true});
-            request.storeMethod('set_client_DH_params', {
-                nonce: auth.nonce,
-                server_nonce: auth.serverNonce,
-                encrypted_data: encryptedData
-            });
-
-            console.log(dT(), 'Send set_client_DH_params');
-            mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
-                var response = deserializer.fetchObject('Set_client_DH_params_answer');
-
-                if (response._ != 'dh_gen_ok' && response._ != 'dh_gen_retry' && response._ != 'dh_gen_fail') {
-                    deferred.reject(new Error('Set_client_DH_params_answer response invalid: ' + response._));
-                    return false;
-                }
-
-                if (!bytesCmp(auth.nonce, response.nonce)) {
-                    deferred.reject(new Error('Set_client_DH_params_answer nonce mismatch'));
-                    return false
-                }
-
-                if (!bytesCmp(auth.serverNonce, response.server_nonce)) {
-                    deferred.reject(new Error('Set_client_DH_params_answer server_nonce mismatch'));
-                    return false;
-                }
-
-                CryptoWorker.modPow(auth.gA, auth.b, auth.dhPrime).then(function (authKey) {
-                    var authKeyHash = sha1BytesSync(authKey),
-                        authKeyAux = authKeyHash.slice(0, 8),
-                        authKeyID = authKeyHash.slice(-8);
-
-                    console.log(dT(), 'Got Set_client_DH_params_answer', response._);
-                    switch (response._) {
-                        case 'dh_gen_ok':
-                            var newNonceHash1 = sha1BytesSync(auth.newNonce.concat([1], authKeyAux)).slice(-16);
-
-                            if (!bytesCmp(newNonceHash1, response.new_nonce_hash1)) {
-                                deferred.reject(new Error('Set_client_DH_params_answer new_nonce_hash1 mismatch'));
-                                return false;
-                            }
-
-                            var serverSalt = bytesXor(auth.newNonce.slice(0, 8), auth.serverNonce.slice(0, 8));
-                            // console.log('Auth successfull!', authKeyID, authKey, serverSalt);
-
-                            auth.authKeyID = authKeyID;
-                            auth.authKey = authKey;
-                            auth.serverSalt = serverSalt;
-
-                            deferred.resolve(auth);
-                            break;
-
-                        case 'dh_gen_retry':
-                            var newNonceHash2 = sha1BytesSync(auth.newNonce.concat([2], authKeyAux)).slice(-16);
-                            if (!bytesCmp(newNonceHash2, response.new_nonce_hash2)) {
-                                deferred.reject(new Error('Set_client_DH_params_answer new_nonce_hash2 mismatch'));
-                                return false;
-                            }
-
-                            return mtpSendSetClientDhParams(auth);
-
-                        case 'dh_gen_fail':
-                            var newNonceHash3 = sha1BytesSync(auth.newNonce.concat([3], authKeyAux)).slice(-16);
-                            if (!bytesCmp(newNonceHash3, response.new_nonce_hash3)) {
-                                deferred.reject(new Error('Set_client_DH_params_answer new_nonce_hash3 mismatch'));
-                                return false;
-                            }
-
-                            deferred.reject(new Error('Set_client_DH_params_answer fail'));
-                            return false;
-                    }
-                }, function (error) {
-                    deferred.reject(error);
-                })
-            }, function (error) {
-                deferred.reject(error);
-            });
-        }, function (error) {
-            deferred.reject(error);
-        })
-    }
-
-    var cached = {};
-
-    function mtpAuth(dcID) {
-        if (cached[dcID] !== undefined) {
-            return cached[dcID];
-        }
-
-        var nonce = [];
-        for (var i = 0; i < 16; i++) {
-            nonce.push(nextRandomInt(0xFF));
-        }
-
-        if (!MtpDcConfigurator.chooseServer(dcID)) {
-            return $q.reject(new Error('No server found for dc ' + dcID));
-        }
-
-        var auth = {
-            dcID: dcID,
-            nonce: nonce,
-            deferred: $q.defer()
-        };
-
-        $timeout(function () {
-            mtpSendReqPQ(auth);
-        });
-
-        cached[dcID] = auth.deferred.promise;
-
-        cached[dcID]['fail'](function () {
-            delete cached[dcID];
-        });
-
-        return cached[dcID];
-    }
-
-    return {
-        auth: mtpAuth
-    };
-}
-
-MtpAuthorizerModule.dependencies = [
-    'MtpTimeManager', 
-    'MtpDcConfigurator', 
-    'MtpRsaKeysManager', 
-    'CryptoWorker', 
-    'MtpSecureRandom', 
-    '$q', 
-    '$timeout', 
-    '$http'
-];
-
-function MtpDcConfiguratorModule() {
-    var chosenServers = {};
-
-    function chooseServer(dcID, upload) {
-        var dcOptions = Config.Modes.test ? Config.Server.Test : Config.Server.Production;
-
-        if (chosenServers[dcID] === undefined) {
-            var chosenServer = false,
-                i, dcOption;
-
-            for (i = 0; i < dcOptions.length; i++) {
-                dcOption = dcOptions[i];
-                if (dcOption.id == dcID) {
-                    chosenServer = chooseProtocol() + '//' + dcOption.host + (dcOption.port != 80 ? ':' + dcOption.port : '') + '/apiw1';
-                    break;
-                }
-            }
-            chosenServers[dcID] = chosenServer;
-        }
-
-        return chosenServers[dcID];
-    }
-
-    function chooseProtocol() {
-        if (location.protocol.indexOf('http') != -1) {
-            return location.protocol;
-        }
-
-        return 'http:';
-    }
-
-    return {
-        chooseServer: chooseServer
-    };
-}
-
-MtpDcConfiguratorModule.dependencies = [];
-
-function MtpNetworkerFactoryModule(MtpSecureRandom, MtpTimeManager, Storage, CryptoWorker, MtpDcConfigurator, $timeout, $interval, $q, $http) {
-    var updatesProcessor,
-        akStopped = false,
-        chromeMatches = navigator.userAgent.match(/Chrome\/(\d+(\.\d+)?)/),
-        chromeVersion = chromeMatches && parseFloat(chromeMatches[1]) || false,
-        xhrSendBuffer = !('ArrayBufferView' in window) && (!chromeVersion || chromeVersion < 30);
-
-    var subscriptions = {};
-
-    function subscribe(id, handler) {
-        if (typeof handler == 'function') {
-            subscriptions[id] = handler;
-        }
-    }
-
-    function unSubscribe(id) {
-        delete subscriptions[id];
-    }
-
-    function MtpNetworker(dcID, authKey, serverSalt, options) {
-        options = options || {};
-
-        this.dcID = dcID;
-
-        this.authKey = authKey;
-        this.authKeyUint8 = convertToUint8Array(authKey);
-        this.authKeyID = sha1BytesSync(authKey).slice(-8);
-
-        this.serverSalt = serverSalt;
-
-        this.upload = options.fileUpload || options.fileDownload || false;
-
-        this.updateSession();
-
-        this.checkConnectionPeriod = 0;
-
-        this.sentMessages = {};
-        this.serverMessages = [];
-
-        this.pendingMessages = {};
-        this.pendingAcks = [];
-        this.pendingResends = [];
-        this.connectionInited = false;
-
-        $interval(this.checkLongPoll.bind(this), 10000);
-
-        this.checkLongPoll();
-    }
-
-    MtpNetworker.prototype.updateSession = function () {
-        this.seqNo = 0;
-        this.sessionID = new Array(8);
-        MtpSecureRandom.nextBytes(this.sessionID);
-    };
-
-    MtpNetworker.prototype.updateSentMessage = function (sentMessageID) {
-        var sentMessage = this.sentMessages[sentMessageID];
-        if (!sentMessage) {
-            return false;
-        }
-        var self = this;
-        if (sentMessage.container) {
-            var newInner = [];
-            forEach(sentMessage.inner, function (innerSentMessageID) {
-                var innerSentMessage = self.updateSentMessage(innerSentMessageID);
-                if (innerSentMessage) {
-                    newInner.push(innerSentMessage.msg_id);
-                }
-            });
-            sentMessage.inner = newInner;
-        }
-
-        sentMessage.msg_id = MtpTimeManager.generateID();
-        sentMessage.seq_no = this.generateSeqNo(
-            sentMessage.notContentRelated ||
-            sentMessage.container
-        );
-        this.sentMessages[sentMessage.msg_id] = sentMessage;
-        delete self.sentMessages[sentMessageID];
-
-        return sentMessage;
-    };
-
-    MtpNetworker.prototype.generateSeqNo = function (notContentRelated) {
-        var seqNo = this.seqNo * 2;
-
-        if (!notContentRelated) {
-            seqNo++;
-            this.seqNo++;
-        }
-
-        return seqNo;
-    };
-
-    MtpNetworker.prototype.wrapMtpCall = function (method, params, options) {
-        var serializer = new TLSerialization({mtproto: true});
-
-        serializer.storeMethod(method, params);
-
-        var messageID = MtpTimeManager.generateID(),
-            seqNo = this.generateSeqNo(),
-            message = {
-                msg_id: messageID,
-                seq_no: seqNo,
-                body: serializer.getBytes()
-            };
-
-        if (Config.Modes.debug) {
-            console.log(dT(), 'MT call', method, params, messageID, seqNo);
-        }
-
-        return this.pushMessage(message, options);
-    };
-
-    MtpNetworker.prototype.wrapMtpMessage = function (object, options) {
-        options = options || {};
-
-        var serializer = new TLSerialization({mtproto: true});
-        serializer.storeObject(object, 'Object');
-
-        var messageID = MtpTimeManager.generateID(),
-            seqNo = this.generateSeqNo(options.notContentRelated),
-            message = {
-                msg_id: messageID,
-                seq_no: seqNo,
-                body: serializer.getBytes()
-            };
-
-        if (Config.Modes.debug) {
-            console.log(dT(), 'MT message', object, messageID, seqNo);
-        }
-
-        return this.pushMessage(message, options);
-    };
-
-    MtpNetworker.prototype.wrapApiCall = function (method, params, options) {
-        var serializer = new TLSerialization(options);
-
-        if (!this.connectionInited) {
-            serializer.storeInt(0xda9b0d0d, 'invokeWithLayer');
-            serializer.storeInt(Config.Schema.API.layer, 'layer');
-            serializer.storeInt(0x69796de9, 'initConnection');
-            serializer.storeInt(Config.App.id, 'api_id');
-            serializer.storeString(navigator.userAgent || 'Unknown UserAgent', 'device_model');
-            serializer.storeString(navigator.platform || 'Unknown Platform', 'system_version');
-            serializer.storeString(Config.App.version, 'app_version');
-            serializer.storeString(navigator.language || 'en', 'lang_code');
-        }
-
-        if (options.afterMessageID) {
-            serializer.storeInt(0xcb9f372d, 'invokeAfterMsg');
-            serializer.storeLong(options.afterMessageID, 'msg_id');
-        }
-
-        options.resultType = serializer.storeMethod(method, params);
-
-        var messageID = MtpTimeManager.generateID(),
-            seqNo = this.generateSeqNo(),
-            message = {
-                msg_id: messageID,
-                seq_no: seqNo,
-                body: serializer.getBytes(true),
-                isAPI: true
-            };
-
-        if (Config.Modes.debug) {
-            console.log(dT(), 'Api call', method, params, messageID, seqNo, options);
-        } else {
-            console.log(dT(), 'Api call', method);
-        }
-
-        return this.pushMessage(message, options);
-    };
-
-    MtpNetworker.prototype.checkLongPoll = function (force) {
-        var isClean = this.cleanupSent();
-        // console.log('Check lp', this.longPollPending, tsNow(), this.dcID, isClean);
-        if (this.longPollPending && tsNow() < this.longPollPending ||
-            this.offline ||
-            akStopped) {
-            return false;
-        }
-        var self = this;
-        Storage.get('dc').then(function (baseDcID) {
-            if (isClean && (
-                    baseDcID != self.dcID ||
-                    self.upload ||
-                    self.sleepAfter && tsNow() > self.sleepAfter
-                )) {
-                // console.warn(dT(), 'Send long-poll for DC is delayed', self.dcID, self.sleepAfter);
-                return;
-            }
-            self.sendLongPoll();
-        });
-    };
-
-    MtpNetworker.prototype.sendLongPoll = function () {
-        var maxWait = 25000,
-            self = this;
-
-        this.longPollPending = tsNow() + maxWait;
-        // console.log('Set lp', this.longPollPending, tsNow());
-
-        this.wrapMtpCall('http_wait', {
-            max_delay: 500,
-            wait_after: 150,
-            max_wait: maxWait
-        }, {
-            noResponse: true,
-            longPoll: true
-        }).then(function () {
-            delete self.longPollPending;
-            setZeroTimeout(self.checkLongPoll.bind(self));
-        }, function () {
-            console.log('Long-poll failed');
-        });
-
-    };
-
-    MtpNetworker.prototype.pushMessage = function (message, options) {
-        var deferred = $q.defer();
-
-        this.sentMessages[message.msg_id] = extend(message, options || {}, {deferred: deferred});
-        this.pendingMessages[message.msg_id] = 0;
-
-        if (!options || !options.noShedule) {
-            this.sheduleRequest();
-        }
-        if (isObject(options)) {
-            options.messageID = message.msg_id;
-        }
-
-        return deferred.promise;
-    };
-
-    MtpNetworker.prototype.pushResend = function (messageID, delay) {
-        var value = delay ? tsNow() + delay : 0;
-        var sentMessage = this.sentMessages[messageID];
-        if (sentMessage.container) {
-            for (var i = 0; i < sentMessage.inner.length; i++) {
-                this.pendingMessages[sentMessage.inner[i]] = value;
-            }
-        } else {
-            this.pendingMessages[messageID] = value;
-        }
-
-        // console.log('Resend due', messageID, this.pendingMessages);
-
-        this.sheduleRequest(delay);
-    };
-
-    MtpNetworker.prototype.getMsgKeyIv = function (msgKey, isOut) {
-        var authKey = this.authKeyUint8,
-            x = isOut ? 0 : 8,
-            sha1aText = new Uint8Array(48),
-            sha1bText = new Uint8Array(48),
-            sha1cText = new Uint8Array(48),
-            sha1dText = new Uint8Array(48),
-            promises = {};
-
-        sha1aText.set(msgKey, 0);
-        sha1aText.set(authKey.subarray(x, x + 32), 16);
-        promises.sha1a = CryptoWorker.sha1Hash(sha1aText);
-
-        sha1bText.set(authKey.subarray(x + 32, x + 48), 0);
-        sha1bText.set(msgKey, 16);
-        sha1bText.set(authKey.subarray(x + 48, x + 64), 32);
-        promises.sha1b = CryptoWorker.sha1Hash(sha1bText);
-
-        sha1cText.set(authKey.subarray(x + 64, x + 96), 0);
-        sha1cText.set(msgKey, 32);
-        promises.sha1c = CryptoWorker.sha1Hash(sha1cText);
-
-        sha1dText.set(msgKey, 0);
-        sha1dText.set(authKey.subarray(x + 96, x + 128), 16);
-        promises.sha1d = CryptoWorker.sha1Hash(sha1dText);
-
-        return $q.all(promises).then(function (result) {
-            var aesKey = new Uint8Array(32),
-                aesIv = new Uint8Array(32),
-                sha1a = new Uint8Array(result.sha1a),
-                sha1b = new Uint8Array(result.sha1b),
-                sha1c = new Uint8Array(result.sha1c),
-                sha1d = new Uint8Array(result.sha1d);
-
-            aesKey.set(sha1a.subarray(0, 8));
-            aesKey.set(sha1b.subarray(8, 20), 8);
-            aesKey.set(sha1c.subarray(4, 16), 20);
-
-            aesIv.set(sha1a.subarray(8, 20));
-            aesIv.set(sha1b.subarray(0, 8), 12);
-            aesIv.set(sha1c.subarray(16, 20), 20);
-            aesIv.set(sha1d.subarray(0, 8), 24);
-
-            return [aesKey, aesIv];
-        });
-    };
-
-    MtpNetworker.prototype.checkConnection = function (event) {
-        console.log(dT(), 'Check connection', event);
-        $timeout.cancel(this.checkConnectionPromise);
-
-        var serializer = new TLSerialization({mtproto: true}),
-            pingID = [nextRandomInt(0xFFFFFFFF), nextRandomInt(0xFFFFFFFF)];
-
-        serializer.storeMethod('ping', {ping_id: pingID});
-
-        var pingMessage = {
-            msg_id: MtpTimeManager.generateID(),
-            seq_no: this.generateSeqNo(true),
-            body: serializer.getBytes()
-        };
-
-        var self = this;
-        this.sendEncryptedRequest(pingMessage, {timeout: 15000}).then(function (result) {
-            self.toggleOffline(false);
-        }, function () {
-            console.log(dT(), 'Delay ', self.checkConnectionPeriod * 1000);
-            self.checkConnectionPromise = $timeout(self.checkConnection.bind(self), parseInt(self.checkConnectionPeriod * 1000));
-            self.checkConnectionPeriod = Math.min(60, self.checkConnectionPeriod * 1.5);
-        })
-    };
-
-    MtpNetworker.prototype.toggleOffline = function (enabled) {
-        // console.log('toggle ', enabled, this.dcID, this.iii);
-        if (this.offline !== undefined && this.offline == enabled) {
-            return false;
-        }
-
-        this.offline = enabled;
-
-        if (this.offline) {
-            $timeout.cancel(this.nextReqPromise);
-            delete this.nextReq;
-
-            if (this.checkConnectionPeriod < 1.5) {
-                this.checkConnectionPeriod = 0;
-            }
-
-            this.checkConnectionPromise = $timeout(this.checkConnection.bind(this), parseInt(this.checkConnectionPeriod * 1000));
-            this.checkConnectionPeriod = Math.min(30, (1 + this.checkConnectionPeriod) * 1.5);
-
-            this.onOnlineCb = this.checkConnection.bind(this);
-
-            $(document.body).on('online focus', this.onOnlineCb);
-        } else {
-            delete this.longPollPending;
-            this.checkLongPoll();
-            this.sheduleRequest();
-
-            if (this.onOnlineCb) {
-                $(document.body).off('online focus', this.onOnlineCb);
-            }
-            $timeout.cancel(this.checkConnectionPromise);
-        }
-
-    };
-
-    MtpNetworker.prototype.performSheduledRequest = function () {
-        // console.log(dT(), 'sheduled', this.dcID, this.iii);
-        if (this.offline || akStopped) {
-            console.log(dT(), 'Cancel sheduled');
-            return false;
-        }
-        delete this.nextReq;
-        if (this.pendingAcks.length) {
-            var ackMsgIDs = [];
-            for (var i = 0; i < this.pendingAcks.length; i++) {
-                ackMsgIDs.push(this.pendingAcks[i]);
-            }
-            // console.log('acking messages', ackMsgIDs);
-            this.wrapMtpMessage({_: 'msgs_ack', msg_ids: ackMsgIDs}, {notContentRelated: true, noShedule: true});
-        }
-
-        if (this.pendingResends.length) {
-            var resendMsgIDs = [],
-                resendOpts = {noShedule: true, notContentRelated: true};
-            for (var i = 0; i < this.pendingResends.length; i++) {
-                resendMsgIDs.push(this.pendingResends[i]);
-            }
-            // console.log('resendReq messages', resendMsgIDs);
-            this.wrapMtpMessage({_: 'msg_resend_req', msg_ids: resendMsgIDs}, resendOpts);
-            this.lastResendReq = {req_msg_id: resendOpts.messageID, resend_msg_ids: resendMsgIDs};
-        }
-
-        var messages = [],
-            message,
-            messagesByteLen = 0,
-            currentTime = tsNow(),
-            hasApiCall = false,
-            hasHttpWait = false,
-            lengthOverflow = false,
-            singlesCount = 0,
-            self = this;
-
-        forEach(this.pendingMessages, function (value, messageID) {
-            if (!value || value >= currentTime) {
-                if (message = self.sentMessages[messageID]) {
-                    var messageByteLength = (message.body.byteLength || message.body.length) + 32;
-                    if (!message.notContentRelated &&
-                        lengthOverflow) {
-                        return;
-                    }
-                    if (!message.notContentRelated &&
-                        messagesByteLen &&
-                        messagesByteLen + messageByteLength > 655360) { // 640 Kb
-                        lengthOverflow = true;
-                        return;
-                    }
-                    if (message.singleInRequest) {
-                        singlesCount++;
-                        if (singlesCount > 1) {
-                            return;
-                        }
-                    }
-                    messages.push(message);
-                    messagesByteLen += messageByteLength;
-                    if (message.isAPI) {
-                        hasApiCall = true;
-                    }
-                    else if (message.longPoll) {
-                        hasHttpWait = true;
-                    }
-                } else {
-                    // console.log(message, messageID);
-                }
-                delete self.pendingMessages[messageID];
-            }
-        });
-
-        if (hasApiCall && !hasHttpWait) {
-            var serializer = new TLSerialization({mtproto: true});
-            serializer.storeMethod('http_wait', {
-                max_delay: 500,
-                wait_after: 150,
-                max_wait: 3000
-            });
-            messages.push({
-                msg_id: MtpTimeManager.generateID(),
-                seq_no: this.generateSeqNo(),
-                body: serializer.getBytes()
-            });
-        }
-
-        if (!messages.length) {
-            // console.log('no sheduled messages');
-            return;
-        }
-
-        var noResponseMsgs = [];
-
-        if (messages.length > 1) {
-            var container = new TLSerialization({mtproto: true, startMaxLength: messagesByteLen + 64});
-            container.storeInt(0x73f1f8dc, 'CONTAINER[id]');
-            container.storeInt(messages.length, 'CONTAINER[count]');
-            var onloads = [];
-            var innerMessages = [];
-            for (var i = 0; i < messages.length; i++) {
-                container.storeLong(messages[i].msg_id, 'CONTAINER[' + i + '][msg_id]');
-                innerMessages.push(messages[i].msg_id);
-                container.storeInt(messages[i].seq_no, 'CONTAINER[' + i + '][seq_no]');
-                container.storeInt(messages[i].body.length, 'CONTAINER[' + i + '][bytes]');
-                container.storeRawBytes(messages[i].body, 'CONTAINER[' + i + '][body]');
-                if (messages[i].noResponse) {
-                    noResponseMsgs.push(messages[i].msg_id);
-                }
-            }
-
-            var containerSentMessage = {
-                msg_id: MtpTimeManager.generateID(),
-                seq_no: this.generateSeqNo(true),
-                container: true,
-                inner: innerMessages
-            };
-
-            message = extend({body: container.getBytes(true)}, containerSentMessage);
-
-            this.sentMessages[message.msg_id] = containerSentMessage;
-
-            if (Config.Modes.debug) {
-                console.log(dT(), 'Container', innerMessages, message.msg_id, message.seq_no);
-            }
-        } else {
-            if (message.noResponse) {
-                noResponseMsgs.push(message.msg_id);
-            }
-            this.sentMessages[message.msg_id] = message;
-        }
-
-        this.pendingAcks = [];
-
-        var self = this;
-        this.sendEncryptedRequest(message).then(function (result) {
-            self.toggleOffline(false);
-            // console.log('parse for', message);
-            self.parseResponse(result.data).then(function (response) {
-                if (Config.Modes.debug) {
-                    console.log(dT(), 'Server response', self.dcID, response);
-                }
-
-                self.processMessage(response.response, response.messageID, response.sessionID);
-
-                for (var k in subscriptions) {
-                    subscriptions[k](response.response);
-                }
-
-                forEach(noResponseMsgs, function (msgID) {
-                    if (self.sentMessages[msgID]) {
-                        var deferred = self.sentMessages[msgID].deferred;
-                        delete self.sentMessages[msgID];
-                        deferred.resolve();
-                    }
-                });
-
-                self.checkLongPoll();
-
-                this.checkConnectionPeriod = Math.max(1.1, Math.sqrt(this.checkConnectionPeriod));
-
-            });
-        }, function (error) {
-            console.log('Encrypted request failed', error);
-
-            if (message.container) {
-                forEach(message.inner, function (msgID) {
-                    self.pendingMessages[msgID] = 0;
-                });
-                delete self.sentMessages[message.msg_id];
-            } else {
-                self.pendingMessages[message.msg_id] = 0;
-            }
-
-            forEach(noResponseMsgs, function (msgID) {
-                if (self.sentMessages[msgID]) {
-                    var deferred = self.sentMessages[msgID].deferred;
-                    delete self.sentMessages[msgID];
-                    delete self.pendingMessages[msgID];
-                    deferred.reject();
-                }
-            });
-
-            self.toggleOffline(true);
-        });
-
-        if (lengthOverflow || singlesCount > 1) {
-            this.sheduleRequest()
-        }
-    };
-
-    MtpNetworker.prototype.getEncryptedMessage = function (bytes) {
-        var self = this;
-
-        // console.log(dT(), 'Start encrypt', bytes.byteLength);
-        return CryptoWorker.sha1Hash(bytes).then(function (bytesHash) {
-            // console.log(dT(), 'after hash');
-            var msgKey = new Uint8Array(bytesHash).subarray(4, 20);
-            return self.getMsgKeyIv(msgKey, true).then(function (keyIv) {
-                // console.log(dT(), 'after msg key iv');
-                return CryptoWorker.aesEncrypt(bytes, keyIv[0], keyIv[1]).then(function (encryptedBytes) {
-                    // console.log(dT(), 'Finish encrypt');
-                    return {
-                        bytes: encryptedBytes,
-                        msgKey: msgKey
-                    };
-                })
-            })
-        })
-    };
-
-    MtpNetworker.prototype.getDecryptedMessage = function (msgKey, encryptedData) {
-        // console.log(dT(), 'get decrypted start');
-        return this.getMsgKeyIv(msgKey, false).then(function (keyIv) {
-            // console.log(dT(), 'after msg key iv');
-            return CryptoWorker.aesDecrypt(encryptedData, keyIv[0], keyIv[1]);
-        });
-    };
-
-    MtpNetworker.prototype.sendEncryptedRequest = function (message, options) {
-        var self = this;
-        options = options || {};
-        // console.log(dT(), 'Send encrypted'/*, message*/);
-        // console.trace();
-        var data = new TLSerialization({startMaxLength: message.body.length + 64});
-
-        data.storeIntBytes(this.serverSalt, 64, 'salt');
-        data.storeIntBytes(this.sessionID, 64, 'session_id');
-
-        data.storeLong(message.msg_id, 'message_id');
-        data.storeInt(message.seq_no, 'seq_no');
-
-        data.storeInt(message.body.length, 'message_data_length');
-        data.storeRawBytes(message.body, 'message_data');
-
-        return this.getEncryptedMessage(data.getBuffer()).then(function (encryptedResult) {
-            // console.log(dT(), 'Got encrypted out message'/*, encryptedResult*/);
-            var request = new TLSerialization({startMaxLength: encryptedResult.bytes.byteLength + 256});
-            request.storeIntBytes(self.authKeyID, 64, 'auth_key_id');
-            request.storeIntBytes(encryptedResult.msgKey, 128, 'msg_key');
-            request.storeRawBytes(encryptedResult.bytes, 'encrypted_data');
-
-            var requestData = xhrSendBuffer ? request.getBuffer() : request.getArray();
-
-            var requestPromise;
-            var url = MtpDcConfigurator.chooseServer(self.dcID, self.upload);
-            var baseError = {code: 406, type: 'NETWORK_BAD_RESPONSE', url: url};
-
-            try {
-                options = extend(options || {}, {
-                    responseType: 'arraybuffer',
-                    transformRequest: null
-                });
-                requestPromise = $http.post(url, requestData, options);
-            } catch (e) {
-                requestPromise = $q.reject(e);
-            }
-            return requestPromise.then(
-                function (result) {
-                    if (!result.data || !result.data.byteLength) {
-                        return $q.reject(baseError);
-                    }
-                    return result;
-                },
-                function (error) {
-                    if (error.status == 404 &&
-                        (error.data || '').indexOf('nginx/0.3.33') != -1) {
-                        Storage.remove(
-                            'dc' + self.dcID + '_server_salt',
-                            'dc' + self.dcID + '_auth_key'
-                        ).then(function () {
-                            window.location.reload();
-                        });
-                    }
-                    if (!error.message && !error.type) {
-                        error = extend(baseError, {type: 'NETWORK_BAD_REQUEST', originalError: error});
-                    }
-                    return $q.reject(error);
-                }
-            );
-        });
-    };
-
-    MtpNetworker.prototype.parseResponse = function (responseBuffer) {
-        // console.log(dT(), 'Start parsing response');
-        var self = this;
-
-        var deserializer = new TLDeserialization(responseBuffer);
-
-        var authKeyID = deserializer.fetchIntBytes(64, false, 'auth_key_id');
-        if (!bytesCmp(authKeyID, this.authKeyID)) {
-            throw new Error('Invalid server auth_key_id: ' + bytesToHex(authKeyID));
-        }
-        var msgKey = deserializer.fetchIntBytes(128, true, 'msg_key'),
-            encryptedData = deserializer.fetchRawBytes(responseBuffer.byteLength - deserializer.getOffset(), true, 'encrypted_data');
-
-        return this.getDecryptedMessage(msgKey, encryptedData).then(function (dataWithPadding) {
-            // console.log(dT(), 'after decrypt');
-            var deserializer = new TLDeserialization(dataWithPadding, {mtproto: true});
-
-            var salt = deserializer.fetchIntBytes(64, false, 'salt');
-            var sessionID = deserializer.fetchIntBytes(64, false, 'session_id');
-            var messageID = deserializer.fetchLong('message_id');
-
-            var seqNo = deserializer.fetchInt('seq_no');
-
-            var messageBody = deserializer.fetchRawBytes(false, true, 'message_data');
-
-            // console.log(dT(), 'before hash');
-            var hashData = convertToUint8Array(dataWithPadding).subarray(0, deserializer.getOffset());
-
-            return CryptoWorker.sha1Hash(hashData).then(function (dataHash) {
-                if (!bytesCmp(msgKey, bytesFromArrayBuffer(dataHash).slice(-16))) {
-                    console.warn(msgKey, bytesFromArrayBuffer(dataHash));
-                    throw new Error('server msgKey mismatch');
-                }
-
-                var buffer = bytesToArrayBuffer(messageBody);
-                var deserializerOptions = {
-                    mtproto: true,
-                    override: {
-                        mt_message: function (result, field) {
-                            result.msg_id = this.fetchLong(field + '[msg_id]');
-                            result.seqno = this.fetchInt(field + '[seqno]');
-                            result.bytes = this.fetchInt(field + '[bytes]');
-
-                            var offset = this.getOffset();
-
-                            try {
-                                result.body = this.fetchObject('Object', field + '[body]');
-                            } catch (e) {
-                                console.error(dT(), 'parse error', e.message, e.stack);
-                                result.body = {_: 'parse_error', error: e};
-                            }
-                            if (this.offset != offset + result.bytes) {
-                                // console.warn(dT(), 'set offset', this.offset, offset, result.bytes);
-                                // console.log(dT(), result);
-                                this.offset = offset + result.bytes;
-                            }
-                            // console.log(dT(), 'override message', result);
-                        },
-                        mt_rpc_result: function (result, field) {
-                            result.req_msg_id = this.fetchLong(field + '[req_msg_id]');
-
-                            var sentMessage = self.sentMessages[result.req_msg_id],
-                                type = sentMessage && sentMessage.resultType || 'Object';
-
-                            if (result.req_msg_id && !sentMessage) {
-                                // console.warn(dT(), 'Result for unknown message', result);
-                                return;
-                            }
-                            result.result = this.fetchObject(type, field + '[result]');
-                            // console.log(dT(), 'override rpc_result', sentMessage, type, result);
-                        }
-                    }
-                };
-                var deserializer = new TLDeserialization(buffer, deserializerOptions);
-                var response = deserializer.fetchObject('', 'INPUT');
-
-                return {
-                    response: response,
-                    messageID: messageID,
-                    sessionID: sessionID,
-                    seqNo: seqNo
-                };
-            });
-        });
-    };
-
-    MtpNetworker.prototype.applyServerSalt = function (newServerSalt) {
-        var serverSalt = longToBytes(newServerSalt);
-
-        var storeObj = {};
-        storeObj['dc' + this.dcID + '_server_salt'] = bytesToHex(serverSalt);
-        Storage.set(storeObj);
-
-        this.serverSalt = serverSalt;
-        return true;
-    };
-
-    MtpNetworker.prototype.sheduleRequest = function (delay) {
-        if (this.offline) {
-            this.checkConnection('forced shedule');
-        }
-        var nextReq = tsNow() + delay;
-
-        if (delay && this.nextReq && this.nextReq <= nextReq) {
-            return false;
-        }
-
-        // console.log(dT(), 'shedule req', delay);
-        // console.trace();
-
-        $timeout.cancel(this.nextReqPromise);
-        if (delay > 0) {
-            this.nextReqPromise = $timeout(this.performSheduledRequest.bind(this), delay || 0);
-        } else {
-            setZeroTimeout(this.performSheduledRequest.bind(this))
-        }
-
-        this.nextReq = nextReq;
-    };
-
-    MtpNetworker.prototype.ackMessage = function (msgID) {
-        // console.log('ack message', msgID);
-        this.pendingAcks.push(msgID);
-        this.sheduleRequest(30000);
-    };
-
-    MtpNetworker.prototype.reqResendMessage = function (msgID) {
-        console.log(dT(), 'Req resend', msgID);
-        this.pendingResends.push(msgID);
-        this.sheduleRequest(100);
-    };
-
-    MtpNetworker.prototype.cleanupSent = function () {
-        var self = this;
-        var notEmpty = false;
-        // console.log('clean start', this.dcID/*, this.sentMessages*/);
-        forEach(this.sentMessages, function (message, msgID) {
-            // console.log('clean iter', msgID, message);
-            if (message.notContentRelated && self.pendingMessages[msgID] === undefined) {
-                // console.log('clean notContentRelated', msgID);
-                delete self.sentMessages[msgID];
-            }
-            else if (message.container) {
-                for (var i = 0; i < message.inner.length; i++) {
-                    if (self.sentMessages[message.inner[i]] !== undefined) {
-                        // console.log('clean failed, found', msgID, message.inner[i], self.sentMessages[message.inner[i]].seq_no);
-                        notEmpty = true;
-                        return;
-                    }
-                }
-                // console.log('clean container', msgID);
-                delete self.sentMessages[msgID];
-            } else {
-                notEmpty = true;
-            }
-        });
-
-        return !notEmpty;
-    };
-
-
-    MtpNetworker.prototype.processMessageAck = function (messageID) {
-        var sentMessage = this.sentMessages[messageID];
-        if (sentMessage && !sentMessage.acked) {
-            delete sentMessage.body;
-            sentMessage.acked = true;
-
-            return true;
-        }
-
-        return false;
-    };
-
-    MtpNetworker.prototype.processError = function (rawError) {
-        var matches = (rawError.error_message || '').match(/^([A-Z_0-9]+\b)(: (.+))?/) || [];
-        rawError.error_code = uintToInt(rawError.error_code);
-
-        return {
-            code: !rawError.error_code || rawError.error_code <= 0 ? 500 : rawError.error_code,
-            type: matches[1] || 'UNKNOWN',
-            description: matches[3] || ('CODE#' + rawError.error_code + ' ' + rawError.error_message),
-            originalError: rawError
-        };
-    };
-
-
-    MtpNetworker.prototype.processMessage = function (message, messageID, sessionID) {
-        // console.log('process message', message, messageID, sessionID);
-        switch (message._) {
-            case 'msg_container':
-                var len = message.messages.length;
-                for (var i = 0; i < len; i++) {
-                    this.processMessage(message.messages[i], messageID, sessionID);
-                }
-                break;
-
-            case 'bad_server_salt':
-                console.log(dT(), 'Bad server salt', message);
-                var sentMessage = this.sentMessages[message.bad_msg_id];
-                if (!sentMessage || sentMessage.seq_no != message.bad_msg_seqno) {
-                    console.log(message.bad_msg_id, message.bad_msg_seqno);
-                    throw new Error('Bad server salt for invalid message');
-                }
-
-                this.applyServerSalt(message.new_server_salt);
-                this.pushResend(message.bad_msg_id);
-                this.ackMessage(messageID);
-                break;
-
-            case 'bad_msg_notification':
-                console.log(dT(), 'Bad msg notification', message);
-                var sentMessage = this.sentMessages[message.bad_msg_id];
-                if (!sentMessage || sentMessage.seq_no != message.bad_msg_seqno) {
-                    console.log(message.bad_msg_id, message.bad_msg_seqno);
-                    throw new Error('Bad msg notification for invalid message');
-                }
-
-                if (message.error_code == 16 || message.error_code == 17) {
-                    if (MtpTimeManager.applyServerTime(
-                            bigStringInt(messageID).shiftRight(32).toString(10)
-                        )) {
-                        console.log(dT(), 'Update session');
-                        this.updateSession();
-                    }
-                    var badMessage = this.updateSentMessage(message.bad_msg_id);
-                    this.pushResend(badMessage.msg_id);
-                    this.ackMessage(messageID);
-                }
-                break;
-
-            case 'message':
-                this.serverMessages.push(message.msg_id);
-                this.processMessage(message.body, message.msg_id, sessionID);
-                break;
-
-            case 'new_session_created':
-                this.ackMessage(messageID);
-
-                this.processMessageAck(message.first_msg_id);
-                this.applyServerSalt(message.server_salt);
-
-                var self = this;
-                Storage.get('dc').then(function (baseDcID) {
-                    if (baseDcID == self.dcID && !self.upload && updatesProcessor) {
-                        updatesProcessor(message);
-                    }
-                });
-                break;
-
-            case 'msgs_ack':
-                for (var i = 0; i < message.msg_ids.length; i++) {
-                    this.processMessageAck(message.msg_ids[i]);
-                }
-                break;
-
-            case 'msg_detailed_info':
-                if (!this.sentMessages[message.msg_id]) {
-                    this.ackMessage(message.answer_msg_id);
-                    break;
-                }
-            case 'msg_new_detailed_info':
-                // this.ackMessage(message.answer_msg_id);
-                this.reqResendMessage(message.answer_msg_id);
-                break;
-
-            case 'msgs_state_info':
-                this.ackMessage(message.answer_msg_id);
-                if (this.lastResendReq && this.lastResendReq.req_msg_id == message.req_msg_id && this.pendingResends.length) {
-                    var i, badMsgID, pos;
-                    for (i = 0; i < this.lastResendReq.resend_msg_ids.length; i++) {
-                        badMsgID = this.lastResendReq.resend_msg_ids[i];
-                        pos = this.pendingResends.indexOf(badMsgID);
-                        if (pos != -1) {
-                            this.pendingResends.splice(pos, 1);
-                        }
-                    }
-                }
-                break;
-
-            case 'rpc_result':
-                this.ackMessage(messageID);
-
-                var sentMessageID = message.req_msg_id,
-                    sentMessage = this.sentMessages[sentMessageID];
-
-                this.processMessageAck(sentMessageID);
-                if (sentMessage) {
-                    var deferred = sentMessage.deferred;
-                    if (message.result._ == 'rpc_error') {
-                        var error = this.processError(message.result);
-                        console.log(dT(), 'Rpc error', error)
-                        if (deferred) {
-                            deferred.reject(error)
-                        }
-                    } else {
-                        if (deferred) {
-                            if (Config.Modes.debug) {
-                                console.log(dT(), 'Rpc response', message.result);
-                            } else {
-                                var dRes = message.result._;
-                                if (!dRes) {
-                                    if (message.result.length > 5) {
-                                        dRes = '[..' + message.result.length + '..]';
-                                    } else {
-                                        dRes = message.result;
-                                    }
-                                }
-                                console.log(dT(), 'Rpc response', dRes);
-                            }
-                            sentMessage.deferred.resolve(message.result);
-                        }
-                        if (sentMessage.isAPI) {
-                            this.connectionInited = true;
-                        }
-                    }
-
-                    delete this.sentMessages[sentMessageID];
-                }
-                break;
-
-            default:
-                this.ackMessage(messageID);
-
-                // console.log('Update', message);
-                if (updatesProcessor) {
-                    updatesProcessor(message);
-                }
-                break;
-
-        }
-    };
-
-    function startAll() {
-        if (akStopped) {
-            akStopped = false;
-            updatesProcessor({_: 'new_session_created'});
-        }
-    }
-
-    function stopAll() {
-        akStopped = true;
-    }
-
-    return {
-        getNetworker: function (dcID, authKey, serverSalt, options) {
-            return new MtpNetworker(dcID, authKey, serverSalt, options);
-        },
-        setUpdatesProcessor: function (callback) {
-            updatesProcessor = callback;
-        },
-        stopAll: stopAll,
-        startAll: startAll,
-
-        subscribe: subscribe,
-        unSubscribe: unSubscribe
-    };
-}
-
-MtpNetworkerFactoryModule.dependencies = [
-    'MtpSecureRandom',
-    'MtpTimeManager',
-    'Storage',
-    'CryptoWorker',
-    'MtpDcConfigurator',
-    '$timeout',
-    '$interval',
-    '$q',
-    '$http'
-];
-
-function MtpRsaKeysManagerModule() {
-    /**
-     *  Server public key, obtained from here: https://core.telegram.org/api/obtaining_api_id
-     *
-     * -----BEGIN RSA PUBLIC KEY-----
-     * MIIBCgKCAQEAwVACPi9w23mF3tBkdZz+zwrzKOaaQdr01vAbU4E1pvkfj4sqDsm6
-     * lyDONS789sVoD/xCS9Y0hkkC3gtL1tSfTlgCMOOul9lcixlEKzwKENj1Yz/s7daS
-     * an9tqw3bfUV/nqgbhGX81v/+7RFAEd+RwFnK7a+XYl9sluzHRyVVaTTveB2GazTw
-     * Efzk2DWgkBluml8OREmvfraX3bkHZJTKX4EQSjBbbdJ2ZXIsRrYOXfaA+xayEGB+
-     * 8hdlLmAjbCVfaigxX0CDqWeR1yFL9kwd9P0NsZRPsmoqVwMbMu7mStFai6aIhc3n
-     * Slv8kg9qv1m6XHVQY3PnEw+QQtqSIXklHwIDAQAB
-     * -----END RSA PUBLIC KEY-----
-     */
-
-    var publisKeysHex = [{
-        modulus: 'c150023e2f70db7985ded064759cfecf0af328e69a41daf4d6f01b538135a6f91f8f8b2a0ec9ba9720ce352efcf6c5680ffc424bd634864902de0b4bd6d49f4e580230e3ae97d95c8b19442b3c0a10d8f5633fecedd6926a7f6dab0ddb7d457f9ea81b8465fcd6fffeed114011df91c059caedaf97625f6c96ecc74725556934ef781d866b34f011fce4d835a090196e9a5f0e4449af7eb697ddb9076494ca5f81104a305b6dd27665722c46b60e5df680fb16b210607ef217652e60236c255f6a28315f4083a96791d7214bf64c1df4fd0db1944fb26a2a57031b32eee64ad15a8ba68885cde74a5bfc920f6abf59ba5c75506373e7130f9042da922179251f',
-        exponent: '010001'
-    }];
-
-    var publicKeysParsed = {};
-    var prepared = false;
-
-    function prepareRsaKeys() {
-        if (prepared) {
-            return;
-        }
-
-        for (var i = 0; i < publisKeysHex.length; i++) {
-            var keyParsed = publisKeysHex[i];
-
-            var RSAPublicKey = new TLSerialization();
-            RSAPublicKey.storeBytes(bytesFromHex(keyParsed.modulus), 'n');
-            RSAPublicKey.storeBytes(bytesFromHex(keyParsed.exponent), 'e');
-
-            var buffer = RSAPublicKey.getBuffer();
-
-            var fingerprintBytes = sha1BytesSync(buffer).slice(-8);
-            fingerprintBytes.reverse();
-
-            publicKeysParsed[bytesToHex(fingerprintBytes)] = {
-                modulus: keyParsed.modulus,
-                exponent: keyParsed.exponent
-            };
-        }
-
-        prepared = true;
-    }
-
-    function selectRsaKeyByFingerPrint(fingerprints) {
-        prepareRsaKeys();
-
-        var fingerprintHex, foundKey, i;
-        for (i = 0; i < fingerprints.length; i++) {
-            fingerprintHex = bigStringInt(fingerprints[i]).toString(16);
-            if (foundKey = publicKeysParsed[fingerprintHex]) {
-                return extend({fingerprint: fingerprints[i]}, foundKey);
-            }
-        }
-
-        return false;
-    }
-
-    return {
-        prepare: prepareRsaKeys,
-        select: selectRsaKeyByFingerPrint
-    };
-}
-
-MtpRsaKeysManagerModule.dependencies = [];
-
-function MtpSecureRandomModule($) {
-    $(window).on('click keydown', rng_seed_time);
-    return new SecureRandom();
-}
-
-MtpSecureRandomModule.dependencies = [
-    'jQuery'
-];
-
-function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactory, $interval, $rootScope, $timeout, $) {
-    var instanceID = nextRandomInt(0xFFFFFFFF);
-    var started = false;
-    var masterInstance = false;
-    var deactivatePromise = false;
-    var deactivated = false;
-
-    function start() {
-        if (!started && !Config.Navigator.mobile) {
-            started = true;
-
-            IdleManager.start();
-
-            $interval(checkInstance, 5000);
-            checkInstance();
-
-            try {
-                $(window).on('beforeunload', clearInstance);
-            } catch (e) {
-            }
-        }
-    }
-
-    function clearInstance() {
-        Storage.remove(masterInstance ? 'xt_instance' : 'xt_idle_instance');
-    }
-
-    function deactivateInstance() {
-        if (masterInstance || deactivated) {
-            return false;
-        }
-        console.log(dT(), 'deactivate');
-        deactivatePromise = false;
-        deactivated = true;
-        clearInstance();
-
-        $rootScope.idle.deactivated = true;
-    }
-
-    function checkInstance() {
-        if (deactivated) {
-            return false;
-        }
-        var time = tsNow();
-        var idle = $rootScope.idle && $rootScope.idle.isIDLE;
-        var newInstance = {id: instanceID, idle: idle, time: time};
-
-        Storage.get('xt_instance', 'xt_idle_instance').then(function (result) {
-            var curInstance = result[0],
-                idleInstance = result[1];
-
-            // console.log(dT(), 'check instance', newInstance, curInstance, idleInstance);
-            if (!idle || !curInstance ||
-                curInstance.id == instanceID ||
-                curInstance.time < time - 60000) {
-
-                if (idleInstance &&
-                    idleInstance.id == instanceID) {
-                    Storage.remove('xt_idle_instance');
-                }
-                Storage.set({xt_instance: newInstance});
-                if (!masterInstance) {
-                    MtpNetworkerFactory.startAll();
-                    console.warn(dT(), 'now master instance', newInstance);
-                }
-                masterInstance = true;
-                if (deactivatePromise) {
-                    $timeout.cancel(deactivatePromise);
-                    deactivatePromise = false;
-                }
-            } else {
-                Storage.set({xt_idle_instance: newInstance});
-                if (masterInstance) {
-                    MtpNetworkerFactory.stopAll();
-                    console.warn(dT(), 'now idle instance', newInstance);
-                    if (!deactivatePromise) {
-                        deactivatePromise = $timeout(deactivateInstance, 30000);
-                    }
-                }
-                masterInstance = false;
-            }
-        });
-    }
-
-    return {
-        start: start
-    };
-}
-
-MtpSingleInstanceServiceModule.dependencies = [
-    'IdleManager', 
-    'Storage',
-    'MtpNetworkerFactory',
-    '$interval', 
-    '$rootScope', 
-    '$timeout',
-    'jQuery'
-];
-
-function MtpTimeManagerModule(Storage) {
-    var lastMessageID = [0, 0],
-        timeOffset = 0;
-
-    Storage.get('server_time_offset').then(function (to) {
-        if (to) {
-            timeOffset = to;
-        }
-    });
-
-    function generateMessageID() {
-        var timeTicks = tsNow(),
-            timeSec = Math.floor(timeTicks / 1000) + timeOffset,
-            timeMSec = timeTicks % 1000,
-            random = nextRandomInt(0xFFFF);
-
-        var messageID = [timeSec, (timeMSec << 21) | (random << 3) | 4];
-        if (lastMessageID[0] > messageID[0] ||
-            lastMessageID[0] == messageID[0] && lastMessageID[1] >= messageID[1]) {
-
-            messageID = [lastMessageID[0], lastMessageID[1] + 4];
-        }
-
-        lastMessageID = messageID;
-
-        return longFromInts(messageID[0], messageID[1]);
-    }
-
-    function applyServerTime(serverTime, localTime) {
-        var newTimeOffset = serverTime - Math.floor((localTime || tsNow()) / 1000),
-            changed = Math.abs(timeOffset - newTimeOffset) > 10;
-        Storage.set({server_time_offset: newTimeOffset});
-
-        lastMessageID = [0, 0];
-        timeOffset = newTimeOffset;
-        console.log(dT(), 'Apply server time', serverTime, localTime, newTimeOffset, changed);
-
-        return changed;
-    }
-
-    return {
-        generateID: generateMessageID,
-        applyServerTime: applyServerTime
-    };
-}
-
-MtpTimeManagerModule.dependencies = [
-    'Storage'
-];
-
-function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, AppUsersManager, AppProfileManager, AppChatsManager, MtpNetworkerFactory, FileSaver, $q, $timeout) {
+function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, AppUsersManager, AppProfileManager, AppChatsManager, MtpNetworkerFactory, FileSaver, queryService, timeoutService) {
     var options = {dcID: 2, createNetworker: true};
 
     MtpNetworkerFactory.setUpdatesProcessor(function(message) {
@@ -4596,11 +5073,12 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         subscribe: subscribe,
         unSubscribe: unSubscribe,
         logOut: logOut,
+        checkPasswordHash: checkPasswordHash,
 
         invokeApi: invokeApi,
         dT: dT,
 
-        VERSION: '1.2.9'
+        VERSION: '1.0.0'
     };
 
     /**
@@ -4648,6 +5126,25 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
                 id: result.user.id
             });
         });
+    }
+
+    function checkPasswordHash(salt, password) {
+        const deferred = queryService.defer();
+        MtpApiManager.makePasswordHash(salt, password).then((passwordHash) => {
+            MtpApiManager.invokeApi('auth.checkPassword', { password_hash: passwordHash }, this.options).then(function(){
+                MtpApiManager.invokeApi('users.getFullUser', { id: {_: 'inputUserSelf'} }).then(function(result){
+                    MtpApiManager.setUserAuth(options.dcID, {
+                        id: result.user.id
+                    });
+                });
+                deferred.resolve();
+            }, (error) => {
+                console.error('check password error', error);
+                deferred.reject(error);
+            });
+        });
+
+        return deferred.promise;
     }
 
     /**
@@ -4745,12 +5242,9 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
 
         Config.Server.Test = config.server.test;
         Config.Server.Production = config.server.production;
+        Config.Server.Https = config.server.https;
 
-        MtpApiManager.invokeApi('help.getNearestDc', {}, options).then(function(nearestDcResult) {
-            if (nearestDcResult.nearest_dc != nearestDcResult.this_dc) {
-                MtpApiManager.getNetworker(nearestDcResult.nearest_dc, {createNetworker: true});
-            }
-        });
+        MtpApiManager.getNetworker(options.dcID, {createNetworker: true});
     }
 
     /**
@@ -4999,7 +5493,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         var size = 15728640;
         var limit = 524288;
         var offset = 0;
-        var done = $q.defer();
+        var done = queryService.defer();
         var bytes = [];
 
         if (doc.size > size) {
@@ -5038,7 +5532,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
             }
         }
 
-        $timeout(download);
+        timeoutService(download);
 
         return done.promise;
     }
@@ -5115,8 +5609,9 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         return MtpApiManager.invokeApi('messages.getFullChat', {chat_id: chat_id});
     }
 
-    function downloadPhoto(photo, progress, autosave) {
-        var photoSize = photo.sizes[photo.sizes.length - 1];
+    function downloadPhoto(photo, progress, autosave, sizeOffset) {
+        var sizeOffset = sizeOffset ? sizeOffset : 1;
+        var photoSize = photo.sizes[photo.sizes.length - sizeOffset];
         var location = {
             _: 'inputFileLocation',
             local_id: photoSize.location.local_id,
@@ -5132,7 +5627,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         var size = 15728640;
         var limit = 524288;
         var offset = 0;
-        var done = $q.defer();
+        var done = queryService.defer();
         var bytes = [];
 
         if (photoSize.size > size) {
@@ -5165,7 +5660,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
             }
         }
 
-        $timeout(download);
+        timeoutService(download);
 
         return done.promise;
     }
@@ -5201,7 +5696,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         }
 
         var peer = AppPeersManager.getPeer(id);
-        var defer = $q.defer();
+        var defer = queryService.defer();
 
         if (!peer.deleted) {
             return defer.resolve(peer).promise;
@@ -5345,8 +5840,8 @@ TelegramApiModule.dependencies = [
     'AppChatsManager',
     'MtpNetworkerFactory',
     'FileSaver',
-    '$q',
-    '$timeout'
+    'queryService',
+    'timeoutService'
 ];
 
 // Create container
@@ -5369,12 +5864,12 @@ builder.register('MtpSecureRandom', MtpSecureRandomModule);
 builder.register('MtpSingleInstanceService', MtpSingleInstanceServiceModule);
 builder.register('MtpTimeManager', MtpTimeManagerModule);
 
-// Register Angular modules
-builder.register('$http', $httpModule);
-builder.register('$interval', $intervalModule);
-builder.register('$q', $qModule);
-builder.register('$rootScope', $rootScopeModule);
-builder.register('$timeout', $timeoutModule);
+// Register helps modules
+builder.register('httpService', httpServiceModule);
+builder.register('intervalService', intervalServiceModule);
+builder.register('queryService', queryServiceModule);
+builder.register('rootService', rootServiceModule);
+builder.register('timeoutService', timeoutServiceModule);
 
 // Register other modules
 builder.register('CryptoWorker', CryptoWorkerModule);
@@ -5382,7 +5877,6 @@ builder.register('IdleManager', IdleManagerModule);
 builder.register('qSync', qSyncModule);
 builder.register('Storage', StorageModule);
 builder.register('TelegramMeWebService', TelegramMeWebServiceModule);
-builder.register('jQuery', jQueryModule);
 builder.register('FileSaver', FileSaverModule);
 
 // Register TelegramApi module
