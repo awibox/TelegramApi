@@ -18,12 +18,12 @@ builder.register('MtpSecureRandom', MtpSecureRandomModule);
 builder.register('MtpSingleInstanceService', MtpSingleInstanceServiceModule);
 builder.register('MtpTimeManager', MtpTimeManagerModule);
 
-// Register Angular modules
-builder.register('$http', $httpModule);
-builder.register('$interval', $intervalModule);
-builder.register('$q', $qModule);
-builder.register('$rootScope', $rootScopeModule);
-builder.register('$timeout', $timeoutModule);
+// Register helps modules
+builder.register('httpService', httpServiceModule);
+builder.register('intervalService', intervalServiceModule);
+builder.register('queryService', queryServiceModule);
+builder.register('rootService', rootServiceModule);
+builder.register('timeoutService', timeoutServiceModule);
 
 // Register other modules
 builder.register('CryptoWorker', CryptoWorkerModule);
@@ -31,7 +31,6 @@ builder.register('IdleManager', IdleManagerModule);
 builder.register('qSync', qSyncModule);
 builder.register('Storage', StorageModule);
 builder.register('TelegramMeWebService', TelegramMeWebServiceModule);
-builder.register('jQuery', jQueryModule);
 builder.register('FileSaver', FileSaverModule);
 
 // Register TelegramApi module

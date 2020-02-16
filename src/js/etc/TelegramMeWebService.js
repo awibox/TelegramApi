@@ -1,5 +1,5 @@
-function TelegramMeWebServiceModule(Storage, $) {
-    var disabled = location.protocol != 'http:' && location.protocol != 'https:';
+function TelegramMeWebServiceModule(Storage) {
+    var disabled = Config.Modes.test || location.protocol != 'http:' && location.protocol != 'https:';
 
     function sendAsyncRequest(canRedirect) {
         if (disabled) {
@@ -16,11 +16,12 @@ function TelegramMeWebServiceModule(Storage, $) {
             }
             Storage.set({tgme_sync: {canRedirect: canRedirect, ts: ts}});
 
-            var script = $('<script>').appendTo('body')
-                .on('load error', function () {
-                    script.remove();
-                })
-                .attr('src', '//telegram.me/_websync_?authed=' + (canRedirect ? '1' : '0'));
+            var script = document.createElement('script');
+            script.src = '//telegram.me/_websync_?authed=' + (canRedirect ? '1' : '0');
+            script.onerror = () => {
+                document.body.removeChild(script);
+            };
+            document.body.append(script);
         });
     }
 
@@ -31,5 +32,4 @@ function TelegramMeWebServiceModule(Storage, $) {
 
 TelegramMeWebServiceModule.dependencies = [
     'Storage',
-    'jQuery'
 ];

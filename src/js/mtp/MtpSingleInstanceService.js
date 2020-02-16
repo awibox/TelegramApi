@@ -1,4 +1,4 @@
-function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactory, $interval, $rootScope, $timeout, $) {
+function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactory, intervalService, rootService, timeoutService) {
     var instanceID = nextRandomInt(0xFFFFFFFF);
     var started = false;
     var masterInstance = false;
@@ -11,11 +11,11 @@ function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactor
 
             IdleManager.start();
 
-            $interval(checkInstance, 5000);
+            intervalService(checkInstance, 5000);
             checkInstance();
 
             try {
-                $(window).on('beforeunload', clearInstance);
+                window.addEventListener('beforeunload', clearInstance)
             } catch (e) {
             }
         }
@@ -29,12 +29,11 @@ function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactor
         if (masterInstance || deactivated) {
             return false;
         }
-        console.log(dT(), 'deactivate');
         deactivatePromise = false;
         deactivated = true;
         clearInstance();
 
-        $rootScope.idle.deactivated = true;
+        rootService.idle.deactivated = true;
     }
 
     function checkInstance() {
@@ -42,14 +41,13 @@ function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactor
             return false;
         }
         var time = tsNow();
-        var idle = $rootScope.idle && $rootScope.idle.isIDLE;
+        var idle = rootService.idle && rootService.idle.isIDLE;
         var newInstance = {id: instanceID, idle: idle, time: time};
 
         Storage.get('xt_instance', 'xt_idle_instance').then(function (result) {
             var curInstance = result[0],
                 idleInstance = result[1];
 
-            // console.log(dT(), 'check instance', newInstance, curInstance, idleInstance);
             if (!idle || !curInstance ||
                 curInstance.id == instanceID ||
                 curInstance.time < time - 60000) {
@@ -65,7 +63,7 @@ function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactor
                 }
                 masterInstance = true;
                 if (deactivatePromise) {
-                    $timeout.cancel(deactivatePromise);
+                    timeoutService.cancel(deactivatePromise);
                     deactivatePromise = false;
                 }
             } else {
@@ -74,7 +72,7 @@ function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactor
                     MtpNetworkerFactory.stopAll();
                     console.warn(dT(), 'now idle instance', newInstance);
                     if (!deactivatePromise) {
-                        deactivatePromise = $timeout(deactivateInstance, 30000);
+                        deactivatePromise = timeoutService(deactivateInstance, 30000);
                     }
                 }
                 masterInstance = false;
@@ -88,11 +86,10 @@ function MtpSingleInstanceServiceModule(IdleManager, Storage, MtpNetworkerFactor
 }
 
 MtpSingleInstanceServiceModule.dependencies = [
-    'IdleManager', 
+    'IdleManager',
     'Storage',
     'MtpNetworkerFactory',
-    '$interval', 
-    '$rootScope', 
-    '$timeout',
-    'jQuery'
+    'intervalService',
+    'rootService',
+    'timeoutService',
 ];

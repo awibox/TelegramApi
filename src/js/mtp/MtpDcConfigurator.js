@@ -2,7 +2,7 @@ function MtpDcConfiguratorModule() {
     var chosenServers = {};
 
     function chooseServer(dcID, upload) {
-        var dcOptions = Config.Modes.test ? Config.Server.Test : Config.Server.Production;
+        var dcOptions = Config.Modes.test ? Config.Server.Test : chooseProtocol() === 'https:' ? Config.Server.Https : Config.Server.Production;
 
         if (chosenServers[dcID] === undefined) {
             var chosenServer = false,
