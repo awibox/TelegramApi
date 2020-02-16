@@ -1,4 +1,4 @@
-function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, AppUsersManager, AppProfileManager, AppChatsManager, MtpNetworkerFactory, FileSaver, $q, $timeout) {
+function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, AppUsersManager, AppProfileManager, AppChatsManager, MtpNetworkerFactory, FileSaver, queryService, timeoutService) {
     var options = {dcID: 2, createNetworker: true};
 
     MtpNetworkerFactory.setUpdatesProcessor(function(message) {
@@ -44,6 +44,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         subscribe: subscribe,
         unSubscribe: unSubscribe,
         logOut: logOut,
+        checkPasswordHash: checkPasswordHash,
 
         invokeApi: invokeApi,
         dT: dT,
@@ -96,6 +97,25 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
                 id: result.user.id
             });
         });
+    }
+
+    function checkPasswordHash(salt, password) {
+        const deferred = queryService.defer();
+        MtpApiManager.makePasswordHash(salt, password).then((passwordHash) => {
+            MtpApiManager.invokeApi('auth.checkPassword', { password_hash: passwordHash }, this.options).then(function(){
+                MtpApiManager.invokeApi('users.getFullUser', { id: {_: 'inputUserSelf'} }).then(function(result){
+                    MtpApiManager.setUserAuth(options.dcID, {
+                        id: result.user.id
+                    });
+                });
+                deferred.resolve();
+            }, (error) => {
+                console.error('check password error', error);
+                deferred.reject(error);
+            });
+        });
+
+        return deferred.promise;
     }
 
     /**
@@ -193,12 +213,9 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
 
         Config.Server.Test = config.server.test;
         Config.Server.Production = config.server.production;
+        Config.Server.Https = config.server.https;
 
-        MtpApiManager.invokeApi('help.getNearestDc', {}, options).then(function(nearestDcResult) {
-            if (nearestDcResult.nearest_dc != nearestDcResult.this_dc) {
-                MtpApiManager.getNetworker(nearestDcResult.nearest_dc, {createNetworker: true});
-            }
-        });
+        MtpApiManager.getNetworker(options.dcID, {createNetworker: true});
     }
 
     /**
@@ -447,7 +464,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         var size = 15728640;
         var limit = 524288;
         var offset = 0;
-        var done = $q.defer();
+        var done = queryService.defer();
         var bytes = [];
 
         if (doc.size > size) {
@@ -486,7 +503,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
             }
         }
 
-        $timeout(download);
+        timeoutService(download);
 
         return done.promise;
     }
@@ -563,8 +580,9 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         return MtpApiManager.invokeApi('messages.getFullChat', {chat_id: chat_id});
     }
 
-    function downloadPhoto(photo, progress, autosave) {
-        var photoSize = photo.sizes[photo.sizes.length - 1];
+    function downloadPhoto(photo, progress, autosave, sizeOffset) {
+        var sizeOffset = sizeOffset ? sizeOffset : 1;
+        var photoSize = photo.sizes[photo.sizes.length - sizeOffset];
         var location = {
             _: 'inputFileLocation',
             local_id: photoSize.location.local_id,
@@ -580,7 +598,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         var size = 15728640;
         var limit = 524288;
         var offset = 0;
-        var done = $q.defer();
+        var done = queryService.defer();
         var bytes = [];
 
         if (photoSize.size > size) {
@@ -613,7 +631,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
             }
         }
 
-        $timeout(download);
+        timeoutService(download);
 
         return done.promise;
     }
@@ -649,7 +667,7 @@ function TelegramApiModule(MtpApiManager, AppPeersManager, MtpApiFileManager, Ap
         }
 
         var peer = AppPeersManager.getPeer(id);
-        var defer = $q.defer();
+        var defer = queryService.defer();
 
         if (!peer.deleted) {
             return defer.resolve(peer).promise;
@@ -793,6 +811,6 @@ TelegramApiModule.dependencies = [
     'AppChatsManager',
     'MtpNetworkerFactory',
     'FileSaver',
-    '$q',
-    '$timeout'
+    'queryService',
+    'timeoutService'
 ];

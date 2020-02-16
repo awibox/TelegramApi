@@ -1,16 +1,17 @@
-# TelegramApi
+# telegram-mtproto-javascript
+This repository contains an improved version [**TelegramApi**](https://github.com/sunriselink/TelegramApi) that based on [**webogram**](https://github.com/zhukov/webogram).
 
-Based on [**webogram**](https://github.com/zhukov/webogram)
+List of improvements:
+1. No more dependency on jQuery
+2. Password verification implemented
+3. Added support for HTTPS
+
 
 ## Getting started
 
 1) Install package via npm
 ```
-npm install telegram-api-js
-```
-Or bower
-```
-bower install telegram-api-js
+npm install telegram-mtproto-javascript
 ```
 
 2) Add a ```<script>``` to your index.html
@@ -20,7 +21,6 @@ bower install telegram-api-js
     <title>My amazing app</title>
 </head>
 <body>
-    <script src="js/jquery.js"></script>
     <script src="node_modules/telegram-api-js/dist/telegramApi.js"></script>
 <body>
 </html>
@@ -37,18 +37,23 @@ telegramApi.setConfig({
   },
   server: {
     test: [
-      {
-        id: 2, /* DC ID */
-        host: '0.0.0.0',
-        port: 443
-      }
+        { id: 1, host: '149.154.175.10', port: 80 },
+        { id: 2, host: '149.154.167.40', port: 443 },
+        { id: 3, host: '149.154.175.117', port: 80 },
     ],
     production: [
-      {
-        id: 2, /* DC ID */
-        host: '0.0.0.0',
-        port: 123
-      }
+        { id: 1, host: '149.154.175.50', port: 80 },
+        { id: 2, host: '149.154.167.50', port: 80 },
+        { id: 3, host: '149.154.175.100', port: 80 },
+        { id: 4, host: '1149.154.167.50', port: 80 },
+        { id: 5, host: '149.154.171.5', port: 80 },
+    ],
+    https: [
+        { id: 1, host: 'pluto.web.telegram.org', port: 80 },
+        { id: 2, host: 'venus.web.telegram.org', port: 80 },
+        { id: 3, host: 'aurora.web.telegram.org', port: 80 },
+        { id: 4, host: 'vesta.web.telegram.org', port: 80 },
+        { id: 5, host: 'flora.web.telegram.org', port: 80 },
     ]
   }
 });

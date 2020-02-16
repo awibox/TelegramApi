@@ -1,9 +1,12 @@
-function StorageModule($q) {
+function StorageModule(queryService) {
     var methods = {};
 
     forEach(['get', 'set', 'remove'], function (methodName) {
+        if(Config.Modes.test) {
+            ConfigStorage.prefix('t_');
+        }
         methods[methodName] = function () {
-            var deferred = $q.defer(),
+            var deferred = queryService.defer(),
                 args = toArray(arguments);
 
             args.push(function (result) {
@@ -20,5 +23,5 @@ function StorageModule($q) {
 }
 
 StorageModule.dependencies = [
-    '$q'
+    'queryService'
 ];

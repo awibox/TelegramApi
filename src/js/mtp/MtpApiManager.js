@@ -1,4 +1,4 @@
-function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpAuthorizer, Storage, TelegramMeWebService, qSync, $q) {
+function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpAuthorizer, Storage, TelegramMeWebService, qSync, queryService, CryptoWorker) {
     var cachedNetworkers = {},
         cachedUploadNetworkers = {},
         cachedExportPromise = {},
@@ -28,7 +28,6 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
             user_auth: fullUserAuth
         });
         telegramMeNotify(true);
-
         baseDcID = dcID;
     }
 
@@ -44,7 +43,7 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
                     logoutPromises.push(mtpInvokeApi('auth.logOut', {}, {dcID: i + 1}));
                 }
             }
-            return $q.all(logoutPromises).then(function () {
+            return queryService.all(logoutPromises).then(function () {
                 Storage.remove('dc', 'user_auth');
                 baseDcID = false;
                 telegramMeNotify(false);
@@ -83,7 +82,6 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
 
             var authKeyHex = result[0],
                 serverSaltHex = result[1];
-            // console.log('ass', dcID, authKeyHex, serverSaltHex);
             if (authKeyHex && authKeyHex.length == 512) {
                 var authKey = bytesFromHex(authKeyHex);
                 var serverSalt = bytesFromHex(serverSaltHex);
@@ -92,7 +90,7 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
             }
 
             if (!options.createNetworker) {
-                return $q.reject({type: 'AUTH_KEY_EMPTY', code: 401});
+                return queryService.reject({type: 'AUTH_KEY_EMPTY', code: 401});
             }
 
             return MtpAuthorizer.auth(dcID).then(function (auth) {
@@ -103,8 +101,7 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
 
                 return cache[dcID] = MtpNetworkerFactory.getNetworker(dcID, auth.authKey, auth.serverSalt, options);
             }, function (error) {
-                console.log('Get networker error', error, error.stack);
-                return $q.reject(error);
+                return queryService.reject(error);
             });
         });
     }
@@ -112,27 +109,27 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
     function mtpInvokeApi(method, params, options) {
         options = options || {};
 
-        var deferred = $q.defer(),
+        var deferred = queryService.defer(),
             rejectPromise = function (error) {
-                if (!error) {
-                    error = {type: 'ERROR_EMPTY'};
-                } else if (!isObject(error)) {
-                    error = {message: error};
-                }
+                // if (!error) {
+                //     error = {type: 'ERROR_EMPTY'};
+                // } else if (!isObject(error)) {
+                //     error = {message: error};
+                // }
                 deferred.reject(error);
 
-                if (!options.noErrorBox) {
-                    error.input = method;
-                    error.stack = error.originalError && error.originalError.stack || error.stack || (new Error()).stack;
-                    setTimeout(function () {
-                        if (!error.handled) {
-                            if (error.code == 401) {
-                                mtpLogOut();
-                            }
-                            error.handled = true;
-                        }
-                    }, 100);
-                }
+                // if (!options.noErrorBox) {
+                //     error.input = method;
+                //     error.stack = error.originalError && error.originalError.stack || error.stack || (new Error()).stack;
+                //     setTimeout(function () {
+                //         if (!error.handled) {
+                //             if (error.code == 401) {
+                //                 mtpLogOut();
+                //             }
+                //             error.handled = true;
+                //         }
+                //     }, 100);
+                // }
             },
             dcID,
             networkerPromise;
@@ -160,7 +157,7 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
                     }
                     else if (error.code == 401 && baseDcID && dcID != baseDcID) {
                         if (cachedExportPromise[dcID] === undefined) {
-                            var exportDeferred = $q.defer();
+                            var exportDeferred = queryService.defer();
 
                             mtpInvokeApi('auth.exportAuthorization', {dc_id: dcID}, {noErrorBox: true}).then(function (exportedAuth) {
                                 mtpInvokeApi('auth.importAuthorization', {
@@ -240,6 +237,38 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
         return deferred.promise;
     }
 
+    // function mtpInvokeApi(method, params, options) {
+    //     options = options || {};
+    //
+    //     var deferred = queryService.defer();
+    //
+    //     var rejectPromise = function (error) {
+    //         deferred.reject(error);
+    //     };
+    //
+    //     var performRequest = function (networker) {
+    //         var performRequestPromise = (networker).wrapApiCall(method, params, options);
+    //
+    //         return performRequestPromise.then(
+    //           function (result) {
+    //               deferred.resolve(result);
+    //           },
+    //           function (error) {
+    //               rejectPromise(error);
+    //           });
+    //     };
+    //     mtpGetNetworker(baseDcID || 2, options).then(performRequest, rejectPromise);
+    //     // if (dcID = (options.dcID || baseDcID)) {
+    //     //     mtpGetNetworker(dcID, options).then(performRequest, rejectPromise);
+    //     // } else {
+    //     //     Storage.get('dc').then(function (baseDcID) {
+    //     //         mtpGetNetworker(dcID = baseDcID || 2, options).then(performRequest, rejectPromise);
+    //     //     });
+    //     // }
+    //
+    //     return deferred.promise;
+    // }
+
     function mtpGetUserID() {
         return Storage.get('user_auth').then(function (auth) {
             telegramMeNotify(auth && auth.id > 0 || false);
@@ -251,22 +280,37 @@ function MtpApiManagerModule(MtpSingleInstanceService, MtpNetworkerFactory, MtpA
         return baseDcID || false;
     }
 
+    function makePasswordHash (salt, password) {
+        var passwordUTF8 = unescape(encodeURIComponent(password));
+
+        var buffer = new ArrayBuffer(passwordUTF8.length);
+        var byteView = new Uint8Array(buffer);
+        for (var i = 0, len = passwordUTF8.length; i < len; i++) {
+            byteView[i] = passwordUTF8.charCodeAt(i);
+        }
+        buffer = bufferConcat(bufferConcat(salt, byteView), salt);
+
+        return CryptoWorker.sha256Hash(buffer);
+    }
+
     return {
         getBaseDcID: getBaseDcID,
         getUserID: mtpGetUserID,
         invokeApi: mtpInvokeApi,
         getNetworker: mtpGetNetworker,
         setUserAuth: mtpSetUserAuth,
-        logOut: mtpLogOut
+        logOut: mtpLogOut,
+        makePasswordHash: makePasswordHash,
     };
 }
 
 MtpApiManagerModule.dependencies = [
-    'MtpSingleInstanceService', 
-    'MtpNetworkerFactory', 
-    'MtpAuthorizer', 
-    'Storage', 
-    'TelegramMeWebService', 
-    'qSync', 
-    '$q'
+    'MtpSingleInstanceService',
+    'MtpNetworkerFactory',
+    'MtpAuthorizer',
+    'Storage',
+    'TelegramMeWebService',
+    'qSync',
+    'queryService',
+    'CryptoWorker'
 ];

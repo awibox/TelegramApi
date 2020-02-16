@@ -1,4 +1,4 @@
-function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManager, CryptoWorker, MtpSecureRandom, $q, $timeout, $http) {
+function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManager, CryptoWorker, MtpSecureRandom, queryService, timeoutService, httpService) {
     var chromeMatches = navigator.userAgent.match(/Chrome\/(\d+(\.\d+)?)/),
         chromeVersion = chromeMatches && parseFloat(chromeMatches[1]) || false,
         xhrSendBuffer = !('ArrayBufferView' in window) && (!chromeVersion || chromeVersion < 30);
@@ -27,17 +27,17 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
         var url = MtpDcConfigurator.chooseServer(dcID);
         var baseError = {code: 406, type: 'NETWORK_BAD_RESPONSE', url: url};
         try {
-            requestPromise = $http.post(url, requestData, {
+            requestPromise = httpService.post(url, requestData, {
                 responseType: 'arraybuffer',
                 transformRequest: null
             });
         } catch (e) {
-            requestPromise = $q.reject(extend(baseError, {originalError: e}));
+            requestPromise = queryService.reject(extend(baseError, {originalError: e}));
         }
         return requestPromise.then(
             function (result) {
                 if (!result.data || !result.data.byteLength) {
-                    return $q.reject(baseError);
+                    return queryService.reject(baseError);
                 }
 
                 try {
@@ -47,7 +47,7 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
                     var msg_len = deserializer.fetchInt('msg_len');
 
                 } catch (e) {
-                    return $q.reject(extend(baseError, {originalError: e}));
+                    return queryService.reject(extend(baseError, {originalError: e}));
                 }
 
                 return deserializer;
@@ -56,7 +56,7 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
                 if (!error.message && !error.type) {
                     error = extend(baseError, {originalError: error});
                 }
-                return $q.reject(error);
+                return queryService.reject(error);
             }
         );
     }
@@ -68,7 +68,6 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
 
         request.storeMethod('req_pq', {nonce: auth.nonce});
 
-        console.log(dT(), 'Send req_pq', bytesToHex(auth.nonce));
         mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
             var response = deserializer.fetchObject('ResPQ');
 
@@ -83,31 +82,24 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
             auth.serverNonce = response.server_nonce;
             auth.pq = response.pq;
             auth.fingerprints = response.server_public_key_fingerprints;
-
-            console.log(dT(), 'Got ResPQ', bytesToHex(auth.serverNonce), bytesToHex(auth.pq), auth.fingerprints);
-
             auth.publicKey = MtpRsaKeysManager.select(auth.fingerprints);
 
             if (!auth.publicKey) {
                 throw new Error('No public key found');
             }
 
-            console.log(dT(), 'PQ factorization start', auth.pq);
             CryptoWorker.factorize(auth.pq).then(function (pAndQ) {
                 auth.p = pAndQ[0];
                 auth.q = pAndQ[1];
-                console.log(dT(), 'PQ factorization done', pAndQ[2]);
                 mtpSendReqDhParams(auth);
             }, function (error) {
-                console.log('Worker error', error, error.stack);
                 deferred.reject(error);
             });
         }, function (error) {
-            console.error(dT(), 'req_pq error', error.message);
             deferred.reject(error);
         });
 
-        $timeout(function () {
+        timeoutService(function () {
             MtpRsaKeysManager.prepare();
         });
     }
@@ -141,7 +133,6 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
             encrypted_data: rsaEncrypt(auth.publicKey, dataWithHash)
         });
 
-        console.log(dT(), 'Send req_DH_params');
         mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
             var response = deserializer.fetchObject('Server_DH_Params', 'RESPONSE');
 
@@ -210,7 +201,6 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
             throw new Error('server_DH_inner_data serverNonce mismatch');
         }
 
-        console.log(dT(), 'Done decrypting answer');
         auth.g = response.g;
         auth.dhPrime = response.dh_prime;
         auth.gA = response.g_a;
@@ -254,7 +244,6 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
                 encrypted_data: encryptedData
             });
 
-            console.log(dT(), 'Send set_client_DH_params');
             mtpSendPlainRequest(auth.dcID, request.getBuffer()).then(function (deserializer) {
                 var response = deserializer.fetchObject('Set_client_DH_params_answer');
 
@@ -278,7 +267,6 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
                         authKeyAux = authKeyHash.slice(0, 8),
                         authKeyID = authKeyHash.slice(-8);
 
-                    console.log(dT(), 'Got Set_client_DH_params_answer', response._);
                     switch (response._) {
                         case 'dh_gen_ok':
                             var newNonceHash1 = sha1BytesSync(auth.newNonce.concat([1], authKeyAux)).slice(-16);
@@ -341,16 +329,16 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
         }
 
         if (!MtpDcConfigurator.chooseServer(dcID)) {
-            return $q.reject(new Error('No server found for dc ' + dcID));
+            return queryService.reject(new Error('No server found for dc ' + dcID));
         }
 
         var auth = {
             dcID: dcID,
             nonce: nonce,
-            deferred: $q.defer()
+            deferred: queryService.defer()
         };
 
-        $timeout(function () {
+        timeoutService(function () {
             mtpSendReqPQ(auth);
         });
 
@@ -369,12 +357,12 @@ function MtpAuthorizerModule(MtpTimeManager, MtpDcConfigurator, MtpRsaKeysManage
 }
 
 MtpAuthorizerModule.dependencies = [
-    'MtpTimeManager', 
-    'MtpDcConfigurator', 
-    'MtpRsaKeysManager', 
-    'CryptoWorker', 
-    'MtpSecureRandom', 
-    '$q', 
-    '$timeout', 
-    '$http'
+    'MtpTimeManager',
+    'MtpDcConfigurator',
+    'MtpRsaKeysManager',
+    'CryptoWorker',
+    'MtpSecureRandom',
+    'queryService',
+    'timeoutService',
+    'httpService'
 ];

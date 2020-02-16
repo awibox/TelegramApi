@@ -1,5 +1,5 @@
-function IdleManagerModule($rootScope, $timeout, $) {
-    $rootScope.idle = {isIDLE: false};
+function IdleManagerModule(rootService, timeoutService) {
+    rootService.idle = {isIDLE: false};
 
     var toPromise, started = false;
     var hidden = 'hidden';
@@ -25,7 +25,12 @@ function IdleManagerModule($rootScope, $timeout, $) {
     function start() {
         if (!started) {
             started = true;
-            $(window).on(visibilityChange + ' blur focus keydown mousedown touchstart', onEvent);
+            window.addEventListener(visibilityChange, () => onEvent, false);
+            window.addEventListener('blur', () => onEvent);
+            window.addEventListener('focus', () => onEvent);
+            window.addEventListener('keydown', () => onEvent);
+            window.addEventListener('mousedown', () => onEvent);
+            window.addEventListener('touchstart', () => onEvent);
 
             setTimeout(function () {
                 onEvent({type: 'blur'});
@@ -34,13 +39,12 @@ function IdleManagerModule($rootScope, $timeout, $) {
     }
 
     function onEvent(e) {
-        // console.log('event', e.type);
         if (e.type == 'mousemove') {
             var e = e.originalEvent || e;
             if (e && e.movementX === 0 && e.movementY === 0) {
                 return;
             }
-            $(window).off('mousemove', onEvent);
+            window.removeEventListener('mousemove', onEvent);
         }
 
         var isIDLE = e.type == 'blur' || e.type == 'timeout' ? true : false;
@@ -48,22 +52,20 @@ function IdleManagerModule($rootScope, $timeout, $) {
             isIDLE = true;
         }
 
-        $timeout.cancel(toPromise);
+        timeoutService.cancel(toPromise);
         if (!isIDLE) {
-            // console.log('update timeout');
-            toPromise = $timeout(function () {
+            toPromise = timeoutService(function () {
                 onEvent({type: 'timeout'});
             }, 30000);
         }
 
         if (isIDLE && e.type == 'timeout') {
-            $(window).on('mousemove', onEvent);
+            window.addEventListener('mousemove', onEvent);
         }
     }
 }
 
 IdleManagerModule.dependencies = [
-    '$rootScope', 
-    '$timeout',
-    'jQuery'
+    'rootService',
+    'timeoutService',
 ];
