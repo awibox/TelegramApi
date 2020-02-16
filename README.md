@@ -5,6 +5,7 @@ List of improvements:
 1. No more dependency on jQuery
 2. Password verification implemented
 3. Added support for HTTPS
+4. Fixed the test mode
 
 
 ## Getting started
