@@ -1,6 +1,6 @@
 {
   "name": "telegram-mtproto-javascript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript library for using Telegram API.",
   "repository": {
     "type": "git",
@@ -12,8 +12,7 @@
     "telegram",
     "telegramapi",
     "webogram",
-    "infinnity",
-    "infinnitysolutions"
+    "mtproto"
   ],
   "scripts": {
     "build": "gulp build",
