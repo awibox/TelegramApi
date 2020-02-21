@@ -21,7 +21,7 @@ npm install telegram-mtproto-javascript
     <title>My amazing app</title>
 </head>
 <body>
-    <script src="node_modules/telegram-api-js/dist/telegramApi.js"></script>
+    <script src="node_modules/telegram-mtproto-javascript/dist/telegramApi.js"></script>
 <body>
 </html>
 ```
